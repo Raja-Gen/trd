@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_inherit_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherited</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[3]" position="after">
+                <page string="Leaves and EOS">
+                <group string="Leaves and end of service indiminity" >
+                    <label for="anual_leave_salary" />
+                    <div class="o_row" style="border: 2px dashed orange;padding:2px;padding-bottom:0px;" >
+                        <field name="anual_leave_salary" nolabel="1"/>
+                        Based on <field name="anual_leave_days" nolabel="1"/> Worked Days <br/><strong> -&gt; [<field name="leave_taken" nolabel="1"/> Leave taken ]</strong>
+                        
+                    </div>
+                    <label for="eos_indiminity" />
+                    <div class="o_row" >
+                        <field name="eos_indiminity" nolabel="1"/>
+                        Based on <field name="eos_indiminity_days" nolabel="1"/> Worked Days
+                 
+                    </div>
+                    
+                </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+ <record id="hr_employee_inherit_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherited</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[3]" position="after">
+                <page string="Leaves and EOS">
+                <group string="Leaves and end of service indiminity" >
+                    <label for="anual_leave_salary" />
+                    <div class="o_row" style="border: 2px dashed orange;padding:2px;padding-bottom:0px;"  >
+                        <field name="anual_leave_salary" nolabel="1"/>
+                        Based on <field name="anual_leave_days" nolabel="1"/> Worked Days <br/><strong> -&gt; [<field name="leave_taken" nolabel="1"/> Leave taken ]</strong>
+                        
+                    </div>
+                    <label for="eos_indiminity" />
+                    <div class="o_row"  >
+                        <field name="eos_indiminity" nolabel="1"/>
+                        Based on <field name="eos_indiminity_days" nolabel="1"/> Worked Days
+                 
+                    </div>
+                    
+                </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

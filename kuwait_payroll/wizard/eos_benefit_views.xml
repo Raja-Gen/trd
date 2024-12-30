@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- Action to open EOS Benefit Wizard -->
+        <record id="action_eos_benefit_wizard" model="ir.actions.act_window">
+            <field name="name">EOS Benefit</field>
+            <field name="res_model">eos.benefit.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Menu item to open EOS Benefit Wizard -->
+<!--        <menuitem id="menu_eos_benefit" name="EOS Benefit" parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root" sequence="100" action="action_eos_benefit_wizard"/>-->
+
+        <!-- View for EOS Benefit Wizard -->
+        <record id="view_eos_benefit_wizard_form" model="ir.ui.view">
+            <field name="name">eos.benefit.wizard.form</field>
+            <field name="model">eos.benefit.wizard</field>
+            <field name="arch" type="xml">
+                <form string="EOS Benefit Wizard">
+                    <group>
+                        <field name="contract_id" invisible="1"/>
+                        <field name="employee_id"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                    </group>
+<!--                    <group>-->
+<!--                        <field name="salary_computation_ids">-->
+<!--                            <tree create="0" edit="0" unlink="0">-->
+<!--                                <field name="name"/>-->
+<!--                                <field name="category"/>-->
+<!--                                <field name="quantity"/>-->
+<!--                                <field name="rate"/>-->
+<!--                                <field name="amount"/>-->
+<!--                                <field name="total"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
+<!--                    </group>-->
+                    <footer>
+                        <button string="Compute EOS Benefits" name="compute_eos_benefits" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+<!--        <record id="view_eos_benefit_wizard_list" model="ir.ui.view">-->
+<!--            <field name="name">salary.computation.line.tree</field>-->
+<!--            <field name="model">salary.computation.line</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="EOS Benefit Computation Results" create="0" edit="0" delete="0">-->
+<!--                    <field name="name"/>-->
+<!--                    <field name="category"/>-->
+<!--                    <field name="quantity"/>-->
+<!--                    <field name="rate"/>-->
+<!--                    <field name="amount"/>-->
+<!--                    <field name="total"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+    </data>
+</odoo>

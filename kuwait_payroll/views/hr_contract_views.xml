@@ -1,0 +1,57 @@
+<odoo>
+    <record id="hr_contract_view_form" model="ir.ui.view">
+        <field name="name">View Contract Form</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name='%(kuwait_payroll.action_eos_benefit_wizard)d' invisible="1" context="{'default_contract_id': active_id, 'default_employee_id': employee_id , 'default_date_start': date_start, 'default_date_end': date_end}" string="EOS Benefit" type="action"
+                />
+                <!-- invisible = "date_end == False or date_start == False or employee_id == False"  -->
+            </xpath>
+            <div name="button_box" position="inside">
+                <field name="eos_count" invisible="1"/>
+                <button class="oe_stat_button" name="action_open_eos" 
+                        type="object" icon="fa-dollar" invisible="1"
+                        >
+                    <field name="eos_count" string="EOS Benefits" widget="statinfo"/>
+                </button>
+                <!-- invisible = "eos_count == 0 and state == 'draft'" -->
+        
+            </div>
+            <group name="salary" position="inside" >
+                <label for="previous_leave" invisible="country_code != 'KW'"/>
+                <div class="o_row" invisible="country_code != 'KW'">
+                    <field name="previous_leave" nolabel="1" readonly="1" force_save="1"/>
+                </div>
+                <label for="anual_leave_salary" invisible="country_code != 'KW'"/>
+                <div class="o_row" style="border: 2px dashed orange;"  invisible="country_code != 'KW'">
+                    <field name="anual_leave_salary" nolabel="1"/>
+                    Based on <field name="anual_leave_days" nolabel="1"/> Worked Days <br/><strong> -&gt; [<field name="leave_taken" nolabel="1"/> Leave taken ]</strong>
+
+                </div><br/>
+                <label for="previous_balance" invisible="country_code != 'KW'"/>
+                <div class="o_row"  invisible="country_code != 'KW'">
+                    <field name="previous_balance" nolabel="1" readonly="1" force_save="1"/>
+                </div><br/>
+                <label for="eos_indiminity" invisible="country_code != 'KW'"/>
+                <div class="o_row"  invisible="country_code != 'KW'">
+                    <field name="eos_indiminity" nolabel="1"/>
+                    Based on <field name="eos_indiminity_days" nolabel="1"/> Worked Days
+
+                </div>
+
+            </group>
+            <group name="salary_info" position="after">
+                <group name="end_of_service" string="End Of Service" invisible="country_code != 'KW'">
+                    <field name="basic_number_of_days"/>
+                    <field name="housing_allowance"/>
+                    <field name="transportation_allowance"/>
+                    <field name="other_allowances"/>
+                    <field name="departure_reason_id"/>
+
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>
