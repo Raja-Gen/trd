@@ -1,0 +1,28 @@
+<odoo>
+    <record id="inherited_hr_leave_view_form_lad" model="ir.ui.view">
+        <field name="name">inherited.hr.leave.view.form</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name='%(kuwait_payroll.action_lad_wizard)d' context="{'default_leave_id': active_id, 'default_employee_id': employee_id , 'default_date_start': request_date_from, 'default_date_end': request_date_to}" string="Leave Advance Deduction" type="action"/>
+            </xpath>
+            <!-- Custom Leave Approval -->
+<!--            <xpath expr="//field[@name='state']" position="attributes">-->
+<!--              <attribute name="statusbar_visible">confirm,approve_1,approve_2,approve_3,validate</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='action_approve']" position="attributes">-->
+<!--                <attribute name="attrs">{'invisible': True}</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='action_approve']" position="after">-->
+<!--                <button string="HOD Approve" name="action_approve_1" states="confirm" type="object" class="oe_highlight"/>-->
+<!--                <button string="HR Approve" name="action_approve_2" states="approve_1" type="object" class="oe_highlight"/>-->
+<!--                <button string="Management Approve" name="action_approve_3" states="approve_2" type="object" class="oe_highlight"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//button[@name='action_refuse']" position="attributes">-->
+<!--              <attribute name="attrs">{'invisible': ['|', '|', '|', ('id', '=', False), ('active', '=', False), ('can_approve', '=', False), ('state', 'not in', ('confirm','approve_1','approve_2','approve_3','validate1','validate'))]}</attribute>-->
+<!--            </xpath>-->
+            <!-- Custom Leave Approval -->
+        </field>
+    </record>
+</odoo>

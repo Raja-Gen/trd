@@ -1,0 +1,17 @@
+<odoo>
+    <record id="hr_payslip_view_form_inherited_expense" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherited.expense</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <field name="expense_count" invisible="1"/>
+                <button class="oe_stat_button" name="action_open_expense"
+                        type="object" icon="fa-dollar"
+                        invisible="expense_count == 0 and state == 'draft'">
+                    <field name="expense_count" string="Expense" widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- Action to open LAD Wizard -->
+        <record id="action_lad_wizard" model="ir.actions.act_window">
+            <field name="name">Leave Advance Deduction</field>
+            <field name="res_model">leave.advance.deduction</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- View for LAD Wizard -->
+        <record id="view_lad_wizard_form" model="ir.ui.view">
+            <field name="name">leave.advance.deduction.form</field>
+            <field name="model">leave.advance.deduction</field>
+            <field name="arch" type="xml">
+                <form string="LAD Wizard">
+                    <group>
+<!--                        <field name="contract_id" invisible="1"/>-->
+                        <field name="currency_id" invisible="1"/>
+                        <field name="employee_id" readonly="1"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="total_leaves"/>
+                        <field name="total_amount"/>
+                        <field name="show_post_journal" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button string="POST JOURNAL ENTRIES" name="action_post_journal_entries" type="object" class="btn-primary" 
+                        invisible = "show_post_journal == False"/>
+                        <button string="REPORT IN NEXT PAYSLIP" name="action_next_payslip" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

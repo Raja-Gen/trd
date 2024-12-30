@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_indemnity_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.indemnity.wizard.view.form</field>
+        <field name="model">hr.indemnity.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="contract_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="termination_type"/>
+                            <label for="serive_start_date" string="Service Duration"/>
+                            <div class="d-inline d-inline-flex">
+                                <field name="serive_start_date"/> <span class="ms-2 me-2">To</span>
+                                <field name="serive_end_date"/>
+                            </div>
+                            <field name="tenure_years"/>
+                        </group>
+                        <group>
+                            <label for="no_of_days"/>
+                            <div class="d-inline d-inline-flex">
+                                <field name="no_of_days"/><span class="ms-2 w-100">Days / Month</span>
+                            </div>
+                            <label for="total_indemnity_days"/>
+                            <div class="d-inline d-inline-flex">
+                                <field name="total_indemnity_days"/><span class="ms-2 w-100">Days of Salary</span>
+                            </div>
+                            <field name="salary_per_month" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            <field name="indemnity_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </group>
+                    <div class="text-info">
+                        <b>Note:</b>
+                        <ul>
+                            <li>For services of <field name="indemnity_start_year"/> years or less, the employee is not entitled to any indemnity.</li>
+                            <li>The employee is entitled to a maximum indemnity of 18 months.</li>
+                            <t invisible = "termination_type == 'employer'">
+                                <li>For service of <field name="indemnity_start_year"/> to 5 years: The employee is entitled to 50% of the indemnity.</li>
+                                <li>For service of 5 to 10 years: The employee is entitled to 2/3 of the indemnity.</li>
+                                <li>For service exceeding 10 years: The employee is entitled to the full indemnity.</li>
+                            </t>
+                        </ul>
+                    </div>
+                </sheet>
+                <footer>
+                    <button string="Release Indemnity" type="object" name="action_apply_indemnity_to_salary" class="btn btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_indemnity_wizard" model="ir.actions.act_window">
+        <field name="name">Release Indemnity</field>
+        <field name="res_model">hr.indemnity.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hr_indemnity_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

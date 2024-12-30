@@ -1,0 +1,116 @@
+<odoo>
+    <data>
+    
+        <record id="kuwait_employee_payroll_structure_type" model="hr.payroll.structure.type">
+            <field name="name">kuwait Employee - ADMIN</field>
+        </record>
+
+        <record id="kuwait_employee_payroll_structure" model="hr.payroll.structure">
+            <field name="name">kuwait Employee Payroll Structure</field>
+            <field name="country_id" ref="base.kw"/>
+            <field name="type_id" ref="kuwait_payroll.kuwait_employee_payroll_structure_type"/>
+            <field name="unpaid_work_entry_type_ids" eval="[(6,0,[ref('hr_work_entry_contract.work_entry_type_unpaid_leave'),ref('hr_payroll.hr_work_entry_type_out_of_contract')])]"/>
+        </record>
+
+        <record id="kuwait_payroll.kuwait_employee_payroll_structure_type" model="hr.payroll.structure.type">
+            <field name="default_struct_id" ref="kuwait_employee_payroll_structure"/>
+        </record>
+        
+        <record id="kuwait_end_of_service_provision_salary_rule" model="hr.salary.rule">
+            <field name="name">End of Service Provision</field>
+            <field name="category_id" ref="hr_payroll.COMP"/>
+            <field name="code">EOSP</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="sequence">90</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = employee.active</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+start_date = contract.first_contract_date
+end_date = payslip.date_to
+compensation = contract.wage + contract.housing_allowance + contract.transportation_allowance + contract.other_allowances
+day_rate = float( compensation /contract.basic_number_of_days)
+worked_days = (end_date-start_date).days
+worked_years = float(worked_days /365)
+l10n_kuw_number_of_days = 0
+#before 5 years computation
+if worked_years &lt;=5 :
+    l10n_kuw_number_of_days = 15
+
+# After 5 years computing
+if worked_years >5:
+    l10n_kuw_number_of_days= 30
+
+result = (l10n_kuw_number_of_days / 12) * (compensation)/contract.basic_number_of_days
+            </field>
+            <field name="struct_id" ref="kuwait_payroll.kuwait_employee_payroll_structure"/>
+        </record>
+        
+    
+        <record id="hr_salary_rule_sick_leave" model="hr.salary.rule">
+            <field name="name">75 Days Sick Leave</field>
+            <field name="code">75_SICK_LEAVE_DEDUCTION</field>
+            <field name="sequence">20</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+
+result = payslip.contract_id.contract_type_id.name == 'Full Time'</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = compute_sick_leave_deduction(payslip, contract)</field>
+        <field name="struct_id" ref="kuwait_payroll.kuwait_employee_payroll_structure"/>
+        </record>
+
+        <!-- Sick leave -->
+        <!--record id="75_days_sick_time_off" model="hr.leave.type">
+            <field name="name">75_DAYS Sick Time Off</field>
+            <field name="requires_allocation">yes</field>
+            <field name="color_name">red</field>
+            <field name="leave_notif_subtype_id" ref="hr_holidays.mt_leave_sick"/>
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="leave_validation_type">both</field>
+            <field name="company_id" eval="False"/>
+            <field name="icon_id" ref="hr_holidays.icon_22"/>
+            <field name="color">3</field>
+            <field name="support_document">True</field>
+            <field name="work_entry_type_id" ref="hr_work_entry_contract.work_entry_type_sick_leave"></field>
+        </record-->
+
+
+        <record id="hr_salary_rule_eos_benefit" model="hr.salary.rule">
+            <field name="name">EOS Benefit</field>
+            <field name="code">EOS_BENEFIT</field>
+            <field name="sequence">20</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+
+result = payslip.is_eos</field>
+        <field name="struct_id" ref="kuwait_payroll.kuwait_employee_payroll_structure"/>
+        </record>
+
+        <record id="hr_salary_rule_leave_advance_salary" model="hr.salary.rule">
+            <field name="name">Leave Advance Salary</field>
+            <field name="code">LAD</field>
+            <field name="sequence">20</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+
+result = payslip.contract_id.contract_type_id.name == 'Full Time'</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = compute_sick_leave_deduction(payslip, contract, True)</field>
+        <field name="struct_id" ref="kuwait_payroll.kuwait_employee_payroll_structure"/>
+        </record>
+
+<!--        <record id="75_days_sick_leave_allocation" model="hr.leave.allocation">-->
+<!--            <field name="name">75_DAYS Sick Leaves Allocation</field>-->
+<!--            <field name="holiday_status_id" ref="kuwait_payroll.75_days_sick_time_off" />-->
+<!--            <field name="number_of_days">75</field>-->
+<!--            <field name="holiday_type">employee</field>-->
+<!--            <field name="mode_company_id" ref="demo_company_hk" />-->
+<!--            <field name="date_from" eval="time.strftime('%Y-01-01')" />-->
+<!--            <field name="date_to" eval="time.strftime('%Y-12-31')"/>-->
+<!--        </record>-->
+    </data>
+</odoo>

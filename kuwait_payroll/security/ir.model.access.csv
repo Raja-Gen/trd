@@ -1,0 +1,6 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_eos_benefit_wizard,access.eos.benefit.wizard,model_eos_benefit_wizard,base.group_user,1,1,1,1
+access_leave_advance_deduction,access.leave.advance.deduction,model_leave_advance_deduction,base.group_user,1,1,1,1
+access_salary_computation_line,access.salary.computation.line,model_salary_computation_line,base.group_user,1,1,1,1
+access_hr_employee_leave_approval,access.hr.employee.leave.approval,model_hr_employee_leave_approval,base.group_user,1,1,1,1
+access_hr_employee_leave_approval_line,access.hr.employee.leave.approval.line,model_hr_employee_leave_approval_line,base.group_user,1,1,1,1
