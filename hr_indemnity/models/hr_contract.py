@@ -13,6 +13,7 @@ class HRContract(models.Model):
         ],
         string="Termination Type",
         required=True,
+        default="employer"
     )
     indemnity_amount = fields.Float(string="Indemnity Amount")
     tenure_years = fields.Float(string="Tenure Years")
