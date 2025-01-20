@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_res_config_settings_inherit_attendance" model="ir.ui.view">
+        <field name="name">res.config.settings.inherit.attendance</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_attendance.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='overtime_settings']" position="inside">
+                 <setting title="Allowed Late Coming (Minutes)" string="Allowed Late Coming (Minutes)"
+                     help="Specify the number of minutes employees are allowed to check in late without it being marked as late attendance.">
+                     <field name="allow_late_coming_minutes"/>
+                 </setting>
+                 <setting title="Total Working Hours"
+                     string="Total Working Hours"
+                     help="Define the total working hours per day">
+                     <field name="total_working_hours"/>
+                 </setting>
+                 <setting title="Total Working Days Per Month"
+                     string="Total Working Days Per Month"
+                     help="Define the standard number of working days in a month for attendance and payroll calculations.">
+                     <field name="total_working_days_per_month"/>
+                 </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
