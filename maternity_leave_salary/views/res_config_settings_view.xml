@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_res_config_settings_inherit_maternity_leave" model="ir.ui.view">
+        <field name="name">res.config.settings.inherit.attendance</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_attendance.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='overtime_settings']" position="inside">
+                 <setting title="Allowed Paid Maternity Leave (Days)"
+                          string="Allowed Paid Maternity Leave (Days)"
+                          help="Specify the maximum number of days employees are allowed for Paid Maternity Leave.">
+                     <field name="allow_paid_maternity_leave_days"/>
+                 </setting>
+                 <setting title="Allowed Unpaid Maternity Leave (Days)"
+                          string="Allowed Unpaid Maternity Leave (Days)"
+                          help="Specify the maximum number of days employees are allowed for Unpaid Maternity Leave.">
+                     <field name="allow_unpaid_maternity_leave_days"/>
+                 </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
