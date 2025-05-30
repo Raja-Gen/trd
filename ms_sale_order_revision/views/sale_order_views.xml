@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ms_view_order_form_inherit_revision" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.revision</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="order_revise" readonly="1"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]/h1/field[@name='name']" position="after">
+                <field name="display_name" nolabel="1" invisible="not order_revise"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_title')]/h1/field[@name='name']" position="attributes">
+                <attribute name="invisible">order_revise</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="ms_view_order_tree_inherit_revision" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.revision</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+             <field name="name" position="before">
+                  <field name="display_name" string="Revised Number" readonly="1" decoration-bf="1"/>
+             </field>
+        </field>
+    </record>
+</odoo>
