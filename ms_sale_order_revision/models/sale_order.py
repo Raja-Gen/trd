@@ -43,7 +43,7 @@ class SaleOrder(models.Model):
                         added_products.append(_(f"{index}. {prod.name}"))
                         index += 1
                     # Post message
-                    order.message_post(body=f"Added {len(added)} products: {(", ".join(added_products))}")
+                    order.message_post(body=f"Added {len(added)} products: {", ".join(added_products)}")
                     message_passed = True
 
                 if removed:
