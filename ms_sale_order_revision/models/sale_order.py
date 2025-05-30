@@ -37,13 +37,15 @@ class SaleOrder(models.Model):
                 removed_products = []
                 added_products = []
                 message_passed = False
+                message_body = ""
                 if added:
                     index = 1
                     for prod in added:
                         added_products.append(_(f"{index}. {prod.name}"))
                         index += 1
                     # Post message
-                    order.message_post(body=f"Added {len(added)} products: {", ".join(added_products)}")
+                    message_body = f"Added {len(added)} products: {", ".join(added_products)}"
+                    order.message_post(body=message_body)
                     message_passed = True
 
                 if removed:
@@ -52,7 +54,8 @@ class SaleOrder(models.Model):
                         removed_products.append(_(f"{index}. {prod.name}"))
                         index += 1
                     # Post message
-                    order.message_post(body=f"Removed {len(removed)} products: {(", ".join(removed_products))}")
+                    message_body = f"Removed {len(removed)} products: {", ".join(removed_products)}"
+                    order.message_post(body=message_body)
                     message_passed = True
 
                 if message_passed:
