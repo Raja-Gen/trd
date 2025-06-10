@@ -6,12 +6,10 @@ import re
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    order_revise = fields.Char(string='Revision', default="")
+    order_revise = fields.Char(string='Revision', default="", copy=False)
 
     def _compute_display_name(self):
         for order in self:
-            print(f"\t\tdisplay_name = {order.display_name}")
-            print(f"\t\torder_revise = {order.order_revise}")
             if order.order_revise:
                 order.display_name = f"{order.name}-{order.order_revise}"
             else:
