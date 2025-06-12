@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Product Template Form View to add Brand -->
+        <record id="product_template_form_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field name="brand_id" placeholder="e.g. Apple, Samsung" options="{'no_create_edit': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Product Variant Form View to show Brand (it's related from template) -->
+        <record id="product_product_form_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.product.form.inherit.brand</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                     <field name="brand_id" placeholder="e.g. Apple, Samsung" options="{'no_create_edit': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Product Template Tree View to add Brand column -->
+        <record id="product_template_tree_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.tree.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='uom_id']" position="after">
+                    <field name="brand_id" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Product Template Kanban View to show Brand -->
+        <record id="product_template_kanban_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.kanban.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_kanban_details')]//strong[1]" position="after">
+                    <div>
+                        <field name="brand_id"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Product Search View to filter by Brand -->
+        <record id="product_template_search_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.search.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field name="brand_id"/>
+                </xpath>
+                <xpath expr="//filter[@name='categ_id']" position="after">
+                    <separator/>
+                    <filter string="Product Brand" name="filter_by_brand" domain="[]" context="{'group_by':'brand_id'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
