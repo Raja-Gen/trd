@@ -32,7 +32,7 @@
     'website': "https://www.cybrosys.com",
     'depends': ['base', 'hr'],
     'data': [
-        'security/concierge_views.xml',
+        'security/ir.model.access.csv',
         'views/employee_check_list_view.xml',
         'views/employee_document_view.xml',
     ],
