@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="employee_visa_view_kanban" model="ir.ui.view">
+        <field name="name">employee.visa.expire.view.kanban</field>
+        <field name="model">employee.visa.expire</field>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban" create="False" edit="False">
+                <field name="name" invisible="1"/>
+                <field name="employee_id"/>
+                <field name="visa_expire"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_color_1">
+                            <button name="open_employee_action" type="object">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <br/>
+                                    <field name="visa_expire"/>
+                                </div>
+                            </button>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

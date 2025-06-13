@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="seq_concierge_request" model="ir.sequence">
+        <field name="name">Concierge Request</field>
+        <field name="code">concierge.request</field>
+        <field name="prefix">REQ/</field>
+        <field name="padding">4</field>
+        <field name="implementation">standard</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" ref=""/>
+        <field name="use_date_range" eval="False"/>
+    </record>
+</odoo>
