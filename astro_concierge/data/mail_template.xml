@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="mail_template_deadline_alert" model="mail.template">
+        <field name="name">Concierge Deadline Alert</field>
+        <field name="model_id" ref="model_concierge_request"/>
+        <field name="subject">[ALERT] Deadline Reached for Request {{ object.name }}</field>
+        <field name="email_from">{{ user.email or 'admin@yourcompany.com' }}</field>
+        <field name="email_to">{{ object.assigned_to.email }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Hello <t t-out="object.assigned_to.name or 'User'">User</t>,
+                </p>
+
+                <p>This is a reminder that the deadline for the following concierge request has passed:</p>
+
+                <ul>
+                    <li>
+                        <strong>Request:</strong>
+                        <t t-out="object.name or ''"/>
+                    </li>
+                    <li>
+                        <strong>Description:</strong>
+                        <t t-out="object.description or ''"/>
+                    </li>
+                    <li>
+                        <strong>Deadline:</strong>
+                        <t t-out="object.deadline or ''"/>
+                    </li>
+                </ul>
+
+                <p>Please take the necessary actions.</p>
+
+                <p>Regards,<br/>ERP Concierge System
+                </p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+        <field name="lang">{{ object.assigned_to.lang or user.lang }}</field>
+    </record>
+</odoo>

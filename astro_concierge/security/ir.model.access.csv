@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_concierge_request_user,access.concierge.request.user,model_concierge_request,base.group_user,1,1,1,1
+access_concierge_feedback_user,access.concierge.feedback.user,model_concierge_feedback,base.group_user,1,1,1,1
