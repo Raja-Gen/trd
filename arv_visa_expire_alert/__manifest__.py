@@ -12,7 +12,7 @@
     'depends': ['base', 'hr'],
     'license': 'LGPL-3',
     'data': [
-        'security/concierge_views.xml',
+        'security/ir.model.access.csv',
         'views/settings.xml',
         'views/visa.xml',
         'views/employee.xml',
