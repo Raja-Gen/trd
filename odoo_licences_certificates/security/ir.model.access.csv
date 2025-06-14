@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_linces_certificate,access.linces.certificate,model_record_certificate,odoo_licences_certificates.group_licences_certificate,1,1,1,1
+access_linces_certificate_employee,access.linces.certificate.employee,model_record_certificate,base.group_user,1,0,0,0
+access_linces_certificate_type,access.linces.certificate.type,model_licences_certificate_type,odoo_licences_certificates.group_licences_certificate,1,1,1,1
+access_linces_certificate_type_employee,access.linces.certificate.type.employee,model_licences_certificate_type,base.group_user,1,0,0,0
+access_record_licences,access.record.licences,model_record_licences,odoo_licences_certificates.group_licences_certificate,1,1,1,1
+access_record_licences_employee,access.record.licences.employee,model_record_licences,base.group_user,1,0,0,0
+
+access_linces_certificate_portal,access.linces.certificate.portal,model_record_certificate,base.group_portal,1,0,0,0
+access_linces_history_portal,access.linces.history.portal,model_record_licences,base.group_portal,1,0,0,0

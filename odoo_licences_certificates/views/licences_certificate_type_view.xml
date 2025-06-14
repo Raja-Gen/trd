@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+  <record model="ir.ui.view" id="licences_certificate_type_from_view">
+          <field name="name">Licences Certificate Type</field>
+          <field name="model">licences.certificate.type</field>
+          <field name="arch" type="xml">
+              <form>
+                  <sheet>
+                      <group>
+                          <group>
+                              <field name="name"/>
+                          </group>
+                      </group>
+                  </sheet>
+              </form>
+          </field>
+  </record>
+  <record model="ir.ui.view" id="licences_certificate_type_tree_view">
+        <field name="name">Certificate Types</field>
+        <field name="model">licences.certificate.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+  </record>
+  <record model="ir.actions.act_window" id="licences_certificate_type_action">
+        <field name="name">Certificate Types</field>
+        <field name="res_model">licences.certificate.type</field>
+        <!-- <field name="view_type">form</field> -->
+        <field name="view_mode">tree,form</field>
+  </record>
+</data>
+</odoo>

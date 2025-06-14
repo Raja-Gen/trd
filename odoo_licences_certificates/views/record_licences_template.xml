@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <template id="record_licences_layout" inherit_id="portal.portal_breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'certificate' or licences" t-attf-class="breadcrumb-item #{'active' if not licences else ''}">
+                <a t-if="licences" t-attf-href="/licences/record?{{ keep_query() }}">Certificate</a>
+                <t t-else="">Certificate</t>
+            </li>
+            <li t-if="licences" class="breadcrumb-item active">
+                <t t-esc="licences.name"/>
+            </li>
+            <li t-if="page_name == 'licences' or licences_history_obj" t-attf-class="breadcrumb-item #{'active' if not licences_history_obj else ''}">
+                <a t-if="licences_history_obj" t-attf-href="/licences/record/history?{{ keep_query() }}">Licences</a>
+                <t t-else="">Licences</t>
+            </li>
+            <li t-if="licences_history_obj" class="breadcrumb-item active">
+                <t t-esc="licences_history_obj.name"/>
+            </li>
+        </xpath>
+    </template>
+    <template id="portal_licences_certificate"  inherit_id="portal.portal_my_home" priority="45">
+           <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+               <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Certificates</t>
+                    <t t-set="url" t-value="'/licences/record'"/>
+                    <!-- <t t-set="count" t-value="certificate_count"/> -->
+                    <t t-set="placeholder_count" t-value="'certificate_count'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Licences</t>
+                    <t t-set="url" t-value="'/licences/record/history'"/>
+                    <!-- <t t-set="count" t-value="licences_count"/> -->
+                    <t t-set="placeholder_count" t-value="'licences_count'"/>
+                </t>
+            </xpath>
+    </template>
+    <template id="record_licences_view" name="My Licences">
+      <t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Certificates</t>
+            </t>
+        <t t-if="licences_request" t-call="portal.portal_table">
+                <thead>
+                      <tr class="active">
+                          <th>Certificate Name</th>
+                        <th>Certificate Number</th>
+                        <th>Start Date</th>
+                        <th>Expire Date</th>
+                        <th>State</th>
+                      </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="licences_request" t-as="request">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/licences/record/#{request.id}?{{ keep_query() }}"><span t-field="request.name"/></a>
+                            </td>
+                            <td>
+                                <span t-field="request.number"/>
+                            </td>
+                            <td>
+                                <span t-field="request.start_date"/>
+                            </td>
+                            <td>
+                                <span t-field="request.end_date"/>
+                            </td>
+                            <td>
+                                <span t-field="request.state"/>
+                            </td>
+                        </tr>
+                     </t>
+                </tbody>
+        </t>
+      </t>
+    </template>
+    <template id="display_licences_request_from" name="Display Licences From">
+        <t t-call="portal.portal_layout">
+            <div id="wrap">
+                <div class="container">
+                     <t t-call="portal.portal_record_layout">
+                    <t t-set="card_header">
+                        <div class="row no-gutters">
+                            <div class="col-md">
+                                <h5 class="mb-1 mb-md-0">
+                                    <span t-field="licences.name"/>
+                                </h5>
+                            </div>
+                            <div class="col-md text-md-right">
+                                <small class="text-right">Status:</small>
+                                <span t-field="licences.state" title="Current stage of this task"/>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-set="card_body">
+                    <div class="container">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                        <div class="mb8">
+                                            <strong>Certificate Number:</strong><span t-field="licences.number"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Belongs To:</strong> <span t-field="licences.certificate_type"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Certificate Type:</strong> <span t-field="licences.type_id"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Start Date:</strong> <span t-field="licences.start_date"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Expire Date:</strong> <span t-field="licences.end_date"/>
+                                        </div>
+                                         <div class="mb8">
+                                            <strong>Issused by:</strong> <span t-field="licences.issuses_by"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb8">
+                                            <strong>Project:</strong><span t-field="licences.project_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Task:</strong> <span t-field="licences.task_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Product:</strong> <span t-field="licences.product_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Responsible User:</strong> <span t-field="licences.user_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Company:</strong> <span t-field="licences.company_id.name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <p t-field="licences.note" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+    </div>
+</div>
+</t>
+</template>
+<template id="record_licences_tree_view" name="My Licences">
+      <t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Licences</t>
+            </t>
+        <t t-if="request_history" t-call="portal.portal_table">
+                <thead>
+                      <tr class="active">
+                        <th>License Name</th>
+                        <th>License Number</th>
+                        <th>Start Date</th>
+                        <th>Expire Date</th>
+                        <th>State</th>
+                      </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="request_history" t-as="request">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/licences/record/history#{request.id}?{{ keep_query() }}"><span t-field="request.name"/></a>
+                            </td>
+                            <td>
+                                <span t-field="request.number"/>
+                            </td>
+                            <td>
+                                <span t-field="request.start_date"/>
+                            </td>
+                            <td>
+                                <span t-field="request.end_date"/>
+                            </td>
+                            <td>
+                                <span t-field="request.state"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+        </t>
+      </t>
+    </template>
+    <template id="display_licences_request_history_from" name="Display Licences From">
+        <t t-call="portal.portal_layout">
+            <div id="wrap">
+                <div class="container">
+                     <t t-call="portal.portal_record_layout">
+                    <t t-set="card_header">
+                        <div class="row no-gutters">
+                            <div class="col-md">
+                                <h5 class="mb-1 mb-md-0">
+                                    <span t-field="licences_history_obj.name"/>
+                                </h5>
+                            </div>
+                            <div class="col-md text-md-right">
+                                <small class="text-right">Status:</small>
+                                <span t-field="licences_history_obj.state" class=" badge badge-pill badge-info" title="Current stage of this task"/>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-set="card_body">
+                    <div class="container">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class='row'>
+                                    <div class="col-md-6">
+                                            <div class="mb8">
+                                                <strong>License Number:</strong><span t-field="licences_history_obj.number"/>
+                                            </div>
+                                            <div class="mb8">
+                                                <strong>Belongs To:</strong> <span t-field="licences_history_obj.certificate_type"/>
+                                            </div>
+                                            <div class="mb8">
+                                                <strong>License Type:</strong> <span t-field="licences_history_obj.type_id"/>
+                                            </div>
+                                            <div class="mb8">
+                                                <strong>Start Date:</strong> <span t-field="licences_history_obj.start_date"/>
+                                            </div>
+                                            <div class="mb8">
+                                                <strong>Expire Date:</strong> <span t-field="licences_history_obj.end_date"/>
+                                            </div>
+                                             <div class="mb8">
+                                                <strong>Issused by:</strong> <span t-field="licences_history_obj.issuses_by"/>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb8">
+                                            <strong>Project:</strong><span t-field="licences_history_obj.project_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Task:</strong> <span t-field="licences_history_obj.task_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Product:</strong> <span t-field="licences_history_obj.product_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Responsible User:</strong> <span t-field="licences_history_obj.user_id.name"/>
+                                        </div>
+                                        <div class="mb8">
+                                            <strong>Company:</strong> <span t-field="licences_history_obj.company_id.name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="container">
+                                    <p t-field="licences_history_obj.note" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+    </div>
+</div>
+</t>
+</template>
+
+</data>
+</odoo>

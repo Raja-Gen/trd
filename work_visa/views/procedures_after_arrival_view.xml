@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="procedures_after_arrival_tree_view" model="ir.ui.view">
+        <field name="name">procedures.after.arrival.tree.view</field>
+        <field name="model">procedures.after.arrival</field>
+        <field name="arch" type="xml">
+           <tree>
+               <field name="paa_file_no" optional="hide"/>
+               <field name="paa_date_of_entry" optional="show"/>
+               <field name="paa_grace_period_expiry_date" optional="show"/>
+               <field name="paa_temporary_residence" optional="show"/>
+               <field name="paa_civil_no" optional="show"/>
+               <field name="paa_fingerprint" optional="show"/>
+               <field name="paa_medical_examination" optional="hide"/>
+               <field name="paa_medical_examination_rsult" optional="hide"/>
+               <field name="paa_pcc_authentication" optional="hide"/>
+               <field name="paa_pcc_translation" optional="hide"/>
+               <field name="paa_license_authentication" optional="hide"/>
+               <field name="paa_work_permit_issue_date" optional="hide"/>
+               <field name="paa_health_insurance" optional="hide"/>
+               <field name="paa_residency_issue_date" optional="hide"/>
+               <field name="paa_submit_civil_id" optional="hide"/>
+               <field name="paa_civil_issuance_status" optional="hide"/>
+               <field name="paa_traffic_form" optional="hide"/>
+               <field name="paa_trail_date" optional="hide"/>
+               <field name="paa_trail_result" optional="hide"/>
+               <field name="paa_meta_account" optional="hide"/>
+               <field name="paa_health_card" optional="hide"/>
+               <field name="paa_comments" optional="hide"/>
+           </tree>
+        </field>
+    </record>
+
+    <record id="procedures_after_arrival_from_view" model="ir.ui.view">
+        <field name="name">procedures.after.arrival.form.view</field>
+        <field name="model">procedures.after.arrival</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Procedures After Arrival">
+                        <group>
+                            <field name="paa_file_no"/>
+                            <field name="paa_date_of_entry" required="1"/>
+                            <field name="paa_grace_period_expiry_date"/>
+                            <field name="paa_temporary_residence"/>
+                            <field name="paa_civil_no" required="1"/>
+                            <field name="paa_fingerprint"/>
+                            <field name="paa_medical_examination"/>
+                            <field name="paa_medical_examination_rsult"/>
+                            <field name="paa_pcc_authentication"/>
+                            <field name="paa_pcc_translation"/>
+                            <field name="paa_license_authentication"/>
+                            <field name="paa_work_permit_issue_date"/>
+                        </group>
+                        <group>
+                            <field name="paa_health_insurance"/>
+                            <field name="paa_residency_issue_date"/>
+                            <field name="paa_submit_civil_id"/>
+                            <field name="paa_civil_issuance_status"/>
+                            <field name="paa_traffic_form"/>
+                            <field name="paa_trail_date"/>
+                            <field name="paa_trail_result"/>
+                            <field name="paa_meta_account"/>
+                            <field name="paa_health_card"/>
+                            <field name="paa_comments"/>
+                            <field name="paa_civil_id_expiry_date"/>
+                        </group>                    
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="procedures_after_arrival_action" model="ir.actions.act_window">
+        <field name="name">Procedures After Arrival</field>
+        <field name="res_model">procedures.after.arrival</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="procedures_after_arrival_tree_view"/>
+    </record>
+
+    <menuitem id="procedures_after_arrival_menu"
+        name="Procedures After Arrival"
+        action="procedures_after_arrival_action"
+        parent="work_visa_menu"
+        sequence = "5" />
+</odoo>
+
+

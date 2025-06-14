@@ -20,6 +20,9 @@ class ConciergeRequest(models.Model):
         ('logistics', 'Courier & Logistics'),
         ('vendor', 'Vendor Coordination'),
         ('vip', 'VIP Request'),
+        ('client', 'Client Request'),
+        ('reporting', 'Reporting'),
+        ('follow_ups', 'Follow-ups'),
         ('other', 'Other')
     ], string='Request Type', required=True, tracking=True)
     description = fields.Text(string='Request Description', required=True)
