@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="documents_of_company_tree_view" model="ir.ui.view">
+        <field name="name">documents.of.company.tree.view</field>
+        <field name="model">documents.of.company</field>
+        <field name="arch" type="xml">
+           <tree>
+               <field name="dc_company_name" optional="show"/>
+               <field name="dc_document_no" optional="show"/>
+               <field name="dc_document_name" optional="show"/>
+               <field name="dc_document_issue_date" optional="show"/>
+               <field name="dc_document_expiry_date" optional="show"/>
+               <field name="dc_issuing_authority" optional="hide"/>
+               <field name="dc_site_of_issuing_authority" optional="hide"/>
+               <field name="dc_expiry_reminder_day" optional="hide"/>
+               <field name="dc_issuing_fee" optional="hide"/>
+               <field name="dac_document_no" optional="hide"/>
+                <field name="dac_issuing_authority" optional="hide"/>
+                <field name="dac_issue_date" optional="hide"/>
+                <field name="dac_expiry_date" optional="hide"/>
+                <field name="dac_expiry_reminder_day" optional="hide"/>
+                <field name="daca_document_no" optional="hide"/>
+                <field name="daca_issuing_authority" optional="hide"/>
+                <field name="daca_issue_date" optional="hide"/>
+                <field name="daca_expiry_date" optional="hide"/>
+                <field name="daca_expiry_reminder_day" optional="hide"/>
+           </tree>
+        </field>
+    </record>
+
+    <record id="documents_of_company_from_view" model="ir.ui.view">
+        <field name="name">documents.of.company.form.view</field>
+        <field name="model">documents.of.company</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Documents of Company">
+                        <group>
+                            <field name="dc_company_name" required="1"/>
+                            <field name="dc_document_no"/>
+                            <field name="dc_document_name"/>
+                            <field name="dc_document_issue_date"/>
+                            <field name="dc_document_expiry_date"/>
+                        </group>
+                        <group>
+                            <field name="dc_issuing_authority"/>
+                            <field name="dc_site_of_issuing_authority"/>
+                            <field name="dc_expiry_reminder_day"/>
+                            <field name="dc_issuing_fee"/>
+                        </group>
+                    </group>
+                    <group string="Data added to the car only">
+                        <group string="Additional information 1">
+                            <group>
+                                <field name="dac_document_no" required="1"/>
+                                <field name="dac_issuing_authority"/>
+                            </group>
+                            <group>
+                                <field name="dac_issue_date"/>
+                                <field name="dac_expiry_date"/>
+                                <field name="dac_expiry_reminder_day"/>
+                            </group>
+                        </group>
+                        <group string="Additional information 2">
+                            <group>
+                                <field name="daca_document_no" required="1"/>
+                                <field name="daca_issuing_authority"/>
+                            </group>
+                            <group>
+                                <field name="daca_issue_date"/>
+                                <field name="daca_expiry_date"/>
+                                <field name="daca_expiry_reminder_day"/>
+                            </group>
+                        </group>
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="documents_of_company_action" model="ir.actions.act_window">
+        <field name="name">Documents of Company</field>
+        <field name="res_model">documents.of.company</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="documents_of_company_tree_view"/>
+    </record>
+
+    <menuitem id="work_visa_menu"
+        name="Work Visa"
+        sequence = "1" />
+        
+    <menuitem id="documents_of_company_menu"
+        name="Documents of Company"
+        action="documents_of_company_action"
+        parent="work_visa_menu"
+        sequence = "2" />
+</odoo>
+
+

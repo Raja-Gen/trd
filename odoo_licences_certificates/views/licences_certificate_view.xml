@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="licences_certificate_from_view">
+            <field name="name">Licences Certificate</field>
+            <field name="model">record.certificate</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Reset to Draft" type="object" name="action_reset_draft" invisible="state not in ['cancel','return','reject']" class="oe_highlight"/>
+                        <button string="Active" type="object" name="action_active" invisible="state != 'a_draft'" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="a_draft,b_active,c_expire_soon,d_expired,return"/>
+                    </header>
+                        <sheet>
+                            <div class="oe_button_box" name="button_box">
+                                <button name="toggle_active" type="object"
+                                      class="oe_stat_button" icon="fa-archive" string="Active">
+                                  <!-- <field name="active" widget="boolean_button"
+                                      options='{"terminology": "archive"}'/> -->
+                                   <field name="active" widget="boolean_button"
+                                      options='{"terminology": "archive"}' invisible='1'/>
+                                </button>
+                            </div>
+                            <div class="oe_title">
+                                <h1><field name="name" class="oe_inline"  placeholder="Certificate Name .........." readonly="state != 'a_draft'"/></h1>
+                            </div>
+                            <group>
+                                <group>
+                                    <field name="number" readonly="state != 'a_draft'"/>
+                                    <field name="certificate_type" readonly="state != 'a_draft'"/>
+                                    <field name="partner_id" invisible="certificate_type != 'customer/supplier/contact'" required="not partner_id"/>
+                                    <field name="custom_user_id" invisible="certificate_type != 'user'" required= "not custom_user_id"/>
+                                    <field name="employee_id" invisible="certificate_type != 'employee'" required="not employee_id"/>
+                                    <field name="type_id" readonly="state != 'a_draft'"/>
+                                    <field name="start_date" readonly="state != 'a_draft'"/>
+                                    <field name="end_date" readonly="state != 'a_draft'"/>
+                                    <field name="issuses_by" readonly="state != 'a_draft'"/>
+                                </group>
+                            <group>
+                                <field name="project_id" readonly="state != 'a_draft'"/>
+                                <field name="task_id" readonly="state != 'a_draft'"/>
+                                <field name="product_id" readonly="state != 'a_draft'"/>
+                                <field name="user_id" select="1" widget="selection" readonly="state != 'a_draft'"/>
+                                <field name="company_id" widget="selection" readonly="state != 'a_draft'" groups="base.group_multi_company"/>
+                                <field name="reminder_day"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Other Information">
+                                <separator string="Internal Notes" colspan="4"/>
+                                <field name="notes" nolabel="1"/>
+                                <separator string="Description" colspan="4"/>
+                                <field name="note" nolabel="1"/>
+                            </page>
+                            <page string="Achievements">
+                                <field name="achievement"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="licences_certificate_tree_view">
+            <field name="name">Licences Certificate</field>
+            <field name="model">record.certificate</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="number"/>
+                    <field name="type_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="issuses_by"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+      </record>
+      <record id="licences_certificate_search_view" model="ir.ui.view">
+            <field name="name">licences.certificate.search.view</field>
+            <field name="model">record.certificate</field>
+            <field name="arch" type="xml">
+                <search string="Licences Certificate">
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="issuses_by"/>
+                    <field name="end_date" />
+                    <field name="user_id" />
+                    <field name="project_id"/>
+                    <field name="task_id"/>
+                    <field name="product_id"/>
+                    <field name="user_id"/>
+                    <field name="number"/>
+                    <field name="certificate_type"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="Start Date" domain="[]" context="{'group_by':'start_date'}"/>
+                        <filter name="Expire Date" domain="[]" context="{'group_by':'end_date'}"/>
+                        <filter name="Issused by" domain="[]" context="{'group_by':'issuses_by'}"/>
+                        <filter name="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter name="Responsible User" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter name="Project" domain="[]" context="{'group_by':'project_id'}"/>
+                        <filter name="Task" domain="[]" context="{'group_by':'task_id'}"/>
+                        <filter name="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="Certificate Type" domain="[]" context="{'group_by':'certificate_type'}"/>
+                        <filter name="Status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="licences_certificate_kanban_view" model="ir.ui.view">
+            <field name="name">licences.certificate.kanban.view</field>
+            <field name="model">record.certificate</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by='state'>
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="number"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                   <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <strong class="o_kanban_record_title"><span><field name="name"/></span></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <span style="font-weight:bold">Certificate Number:</span>
+                                        <field name="number"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <span style="font-weight:bold">Certificate Type:</span>
+                                        <field name="type_id"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban">
+                                        <span style="font-weight:bold">Start Date:</span>
+                                        <field name="start_date"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban">
+                                        <span style="font-weight:bold">Expire Date:</span>
+                                        <field name="end_date"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <group expand="0" string="Group By">
+                            <filter name="State" context="{'group_by':'state'}"/>
+                        </group>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="view_licences_certificate_calander_new" model="ir.ui.view">
+            <field name="name">licences.certificate.calander</field>
+            <field name="model">record.certificate</field>
+            <field name="arch" type="xml">
+                <calendar string="Certificates" color="partner_id" date_stop="end_date" date_start="end_date" >
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="licences_certificate_action">
+            <field name="name">Certificates</field>
+            <field name="res_model">record.certificate</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,form,kanban,calendar</field>
+        </record>
+
+        <menuitem id="menu_licences_certificate" name="Certificates" groups="base.group_user"/>
+        <menuitem id="menu_licences_certificate_submenu" name="Certificates" parent="odoo_licences_certificates.menu_licences_certificate" sequence="2" action="licences_certificate_action" groups="odoo_licences_certificates.group_licences_certificate"/>
+        <menuitem id="menu_licences_certificate_configration" name="Configration" groups="odoo_licences_certificates.group_licences_certificate" sequence="3" parent="odoo_licences_certificates.menu_licences_certificate"/>
+        <menuitem id="menu_licences_certificate_submenu_type" name="Certificates Type" parent="odoo_licences_certificates.menu_licences_certificate_configration" action="licences_certificate_type_action" />
+        <menuitem id="menu_licences_certificate_my" name="My Certificates" parent="odoo_licences_certificates.menu_licences_certificate" action="licences_certificate_action" sequence="1"/>
+    </data>
+</odoo>

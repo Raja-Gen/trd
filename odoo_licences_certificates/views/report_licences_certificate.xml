@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- <report
+            id="report_licences_certificate"
+            model="record.certificate"
+            string="Licences Certificates"
+            report_type="qweb-pdf"
+            name="odoo_licences_certificates.licences_certificate_report_templete"
+            file="odoo_licences_certificates.licences_certificate_report_templete"
+        /> -->
+
+        <record id="report_licences_certificate" model="ir.actions.report">
+            <field name="name">Licences Certificates</field>
+            <field name="model">record.certificate</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">odoo_licences_certificates.licences_certificate_report_templete</field>
+            <field name="report_file">odoo_licences_certificates.licences_certificate_report_templete</field>
+            <field name="binding_model_id" ref="model_record_certificate"/>
+            <field name="binding_type">report</field>
+        </record>
+        
+        
+        <template id="licences_certificate_report_templete">
+             <t t-call="web.html_container">
+               <t t-foreach="docs" t-as="doc">
+                  <t t-call="web.internal_layout">
+                         <div class="page">
+                          <div>
+                            <table class="table">
+                              <thead>
+                                 <tr>
+                                   <td style="text-align: center;" colspan="4">
+                                       <strong><h5><span t-field="doc.name"/></h5></strong>
+                                   </td>
+                                 </tr>
+                              </thead>
+                               <tbody>
+                                     <tr>
+                                        <td>
+                                            <strong>Certificate Number:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.number"/>
+                                        </td>
+                                        <td>
+                                            <strong>Project:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.project_id"/>
+                                        </td>
+                                     </tr>
+                                     <tr>
+                                        <td>
+                                            <strong>Belongs To:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.certificate_type"/>
+                                        </td>
+                                        <td>
+                                            <strong>Task:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.task_id"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                     </tr>
+                                     <tr>
+                                        <td>
+                                            <strong>Certificate Type:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.type_id"/>
+                                        </td>
+                                        <td>
+                                            <strong>Product:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.product_id"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                     </tr>
+                                     <tr>
+                                        <td>
+                                            <strong>Start Date:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.start_date"/>
+                                        </td>
+                                        <td>
+                                            <strong>Responsible User:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.user_id"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                     </tr>
+                                     <tr>
+                                        <td>
+                                            <strong>Expire Date:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.end_date"/>
+                                        </td>
+                                        <td>
+                                            <strong>Company:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.company_id"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                     </tr>
+                                     <tr>
+                                        <td>
+                                            <strong>Issused by:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.issuses_by"/>
+                                        </td>
+                                        <td>
+                                            <strong>Expired Reminder Day:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.reminder_day"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                     </tr>
+                                     <tr>
+                                        <td>
+                                            <strong>Status:</strong>
+                                        </td>
+                                        <td>
+                                          <span t-field="doc.state"/>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                     </tr>
+                                </tbody>
+                          </table>
+                        </div>
+                        <div class="mt32 mb32">
+                             <div class="col-xs-6 text-left">
+                                <strong>Supervisor Manager Signature:____________________</strong>
+                                <strong>Date:____________________</strong>
+                             </div>
+                        </div>
+                      </div>
+                    </t>
+                  </t>
+               </t>
+        </template>
+  </data>
+</odoo>
