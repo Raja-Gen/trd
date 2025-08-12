@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_deliveryslip_inherit_srno" inherit_id="stock.report_delivery_document">
+        <xpath expr="//table[@name='stock_move_table']/thead/tr/th[@name='th_sm_product']" position="before">
+            <th style="width:5%; text-align:center;">Sr. No.</th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr/td[1]" position="before">
+            <td style="text-align:center;">
+                <t t-esc="move_index + 1"/>
+            </td>
+        </xpath>`
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/th[@name='th_sml_product']" position="before">
+            <th style="width:5%; text-align:center;">Sr. No.</th>
+        </xpath>
+
+        <xpath expr="//table[@name='stock_backorder_table']/thead/tr/th[@name='th_sb_product']" position="before">
+            <th style="width:5%; text-align:center;">Sr. No.</th>
+        </xpath>
+        <xpath expr="//table[@name='stock_backorder_table']/tbody/tr/td[1]" position="before">
+            <td style="text-align:center;">
+                <t t-esc="bo_line_index + 1"/>
+            </td>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="inside">
+            <t t-if="env.company.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C']">
+                <div style="margin-top: 30px;line-height: 1.6;">
+                <p>
+                    This statement confirms that all items listed in a delivery note or Goods Received Note (GRN) were received in satisfactory condition.
+                </p>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 20px;">
+                    <div style="text-align: left; flex: 1;">For <t t-esc="env.company.name"/></div>
+                    <div style="text-align: right; flex: 1;">FOR CUSTOMER</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 100px;">
+                    <div style="text-align: left; flex: 1;">
+                        Authorized Signatory<br/>
+                        Sign and Stamp
+                    </div>
+                    <div style="text-align: right; flex: 1;">
+                        Name, Cont No,
+                    </div>
+                </div>
+            </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="stock_report_delivery_has_serial_move_line_inherit" inherit_id="stock.stock_report_delivery_has_serial_move_line">
+        <xpath expr="//td[1]" position="before">
+            <td style="text-align:center;">
+                <t t-esc="move_line_index + 1"/>
+            </td>
+        </xpath>
+    </template>
+
+    <template id="stock_report_delivery_aggregated_move_lines_inherit" inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <xpath expr="//td[1]" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
