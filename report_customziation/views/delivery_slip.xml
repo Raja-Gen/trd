@@ -27,17 +27,25 @@
                 <p>
                     This statement confirms that all items listed in a delivery note or Goods Received Note (GRN) were received in satisfactory condition.
                 </p>
-                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 20px;">
-                    <div style="text-align: left; flex: 1;">For <t t-esc="env.company.name"/></div>
-                    <div style="text-align: right; flex: 1;">FOR CUSTOMER</div>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 100px;">
-                    <div style="text-align: left; flex: 1;">
-                        Authorized Signatory<br/>
-                        Sign and Stamp
+                <div class="container-fluid mt-4" style="page-break-inside: avoid;">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>For <t t-esc="env.company.name"/></strong>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <strong>FOR CUSTOMER</strong>
+                        </div>
                     </div>
-                    <div style="text-align: right; flex: 1;">
-                        Name, Cont No,
+                    <div class="row" style="margin-top: 100px;">
+                        <div class="col-6">
+                            Authorized Signatory<br/>
+                            Sign and Stamp
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <div style="text-align: right;">
+                                Name, Cont No,
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
