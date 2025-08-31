@@ -22,7 +22,7 @@
             </td>
         </xpath>
         <xpath expr="//div[hasclass('page')]" position="inside">
-            <t t-if="env.company.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C']">
+            <t t-if="env.company.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
                 <div style="margin-top: 30px;line-height: 1.6;">
                 <p>
                     This statement confirms that all items listed in a delivery note or Goods Received Note (GRN) were received in satisfactory condition.

@@ -51,10 +51,21 @@
                     </div>
                 </div>
             </t>
+            <t t-if="env.company.name == 'RAJA INTERNATIONAL GENERAL TRADING (LLC)'">
+                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <div style="padding: 10px; max-width: 350px;">
+                        <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
+                        <p>on this account: Bank Details: Cheque / Wire transfer to be issued in the name of: Account Name:RAJA INTERNATIONAL GENERAL TRADING (LLC)</p>
+                        <p>Bank Name: RAKBANK Account No: 0553-129253-001</p>
+                        <p>IBAN: AE33 0400 0005 5312 9253 001 SWIFT: NRAKAEAK </p>
+                        <p>Account Currency : AED</p>
+                    </div>
+                </div>
+            </t>
         </xpath>
 
         <xpath expr="//div[@class='mb-3'][p[@name='payment_communication']]" position="replace">
-            <t t-if="env.company.name not in ['Raja International General Trading FZE', 'KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C']">
+            <t t-if="env.company.name not in ['Raja International General Trading FZE', 'KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
                  <div class="mb-3" t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference">
                     <p name="payment_communication">
                         Payment Communication: <span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span>
@@ -82,7 +93,7 @@
                     </div>
                 </div>
             </t>
-            <t t-if="env.company.name == 'Raja International General Trading FZE'">
+            <t t-if="env.company.name in ['Raja International General Trading FZE','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
                 <div style="page-break-inside: avoid; margin-top: 20px;">
                     <div style="display: flex; justify-content: space-between; font-weight: bold;">
                         <div style="text-align: left; flex: 1;">For <t t-esc="env.company.name"/></div>
