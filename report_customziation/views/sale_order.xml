@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document_inherit_srno" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//table[contains(@class,'o_main_table')]/thead/tr/th[@name='th_description']" position="attributes">
+           <attribute name="colspan">2</attribute>
+        </xpath>
+        <xpath expr="//table[contains(@class,'o_main_table')]/thead/tr/th[@name='th_description']" position="before">
+            <th style="width:5%; text-align:center;">Sr. No.</th>
+        </xpath>
+        <xpath expr="//t[@t-if='not line.display_type']/td[@name='td_name']" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+            <td name="td_image" style="border-right: none;"><img t-if="line.product_id.image_128" t-att-src="image_data_uri(line.product_id.image_128)" style="max-height: 60px; max-width: 60px;"/></td>
+        </xpath>
+        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_section'&quot;]/td[@name='td_section_line']" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+        </xpath>
+        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_note'&quot;]/td[@name='td_note_line']" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>

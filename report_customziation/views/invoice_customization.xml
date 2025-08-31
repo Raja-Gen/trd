@@ -1,0 +1,122 @@
+<odoo>
+    <template id="report_invoice_document_inherit_srno" inherit_id="account.report_invoice_document">
+
+        <xpath expr="//table[@name='invoice_line_table']/thead/tr/th[@name='th_description']" position="before">
+            <th style="width:5%; text-align:center;">Sr. No.</th>
+        </xpath>
+
+        <xpath expr="//t[@t-if=&quot;line.display_type == 'product'&quot;]/td[@name='account_invoice_line_name']" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_section'&quot;]/td" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_note'&quot;]/td" position="before">
+            <td style="text-align:center;">
+                <t t-esc="line_index + 1"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//div[@name='comment']" position="replace">
+        </xpath>
+
+        <xpath expr="//div[@id='total']" position="after">
+            <t t-if="env.company.name == 'Raja International General Trading FZE'">
+                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <div style="padding: 10px; max-width: 350px;">
+                        <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
+                        <p>on this account: 097520210318201 DUBAI ISLAMIC BANK </p>
+                        <p>Bank Details: Cheque / Wire transfer to be issued in the name of: Raja International General Trading (FZE)</p>
+                        <p>Dubai Islamic Bank, Sheikh Zayed Road Branch 2, DUBAI, UAE</p>
+                        <p>IBAN No: AE55 0240 0975 2021 0318 201, Account No: 0975 2021 0318 201</p>
+                        <p>Swift Code: DUIBAEAD, Country: UAE</p>
+                    </div>
+                </div>
+            </t>
+            <t t-if="env.company.name == 'KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C'">
+                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <div style="padding: 10px; max-width: 350px;">
+                        <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
+                        <p>on this account: Account Name: KARO INTERNATIONAL GENERAL TRADING SOLE PROPRIETORSHIP LLC </p>
+                        <p>Account No:0333164447001 Account Type: Current Account</p>
+                        <p>IBAN: AE350400 0003 3316 4447 001 SWIFT Code: NRAKAEAK </p>
+                        <p>Branch: UMM HURRAIR, DUBAI Address: RAK BANK, PO: 1531, </p>
+                        <p>DUBAI UAE</p>
+                    </div>
+                </div>
+            </t>
+            <t t-if="env.company.name == 'RAJA INTERNATIONAL GENERAL TRADING (LLC)'">
+                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <div style="padding: 10px; max-width: 350px;">
+                        <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
+                        <p>on this account: Bank Details: Cheque / Wire transfer to be issued in the name of: Account Name:RAJA INTERNATIONAL GENERAL TRADING (LLC)</p>
+                        <p>Bank Name: RAKBANK Account No: 0553-129253-001</p>
+                        <p>IBAN: AE33 0400 0005 5312 9253 001 SWIFT: NRAKAEAK </p>
+                        <p>Account Currency : AED</p>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+
+        <xpath expr="//div[@class='mb-3'][p[@name='payment_communication']]" position="replace">
+            <t t-if="env.company.name not in ['Raja International General Trading FZE', 'KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
+                 <div class="mb-3" t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference">
+                    <p name="payment_communication">
+                        Payment Communication: <span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span>
+                        <t t-if="o.partner_bank_id">
+                            <br/> on this account: <span t-field="o.partner_bank_id" class="fw-bold"/>
+                        </t>
+                    </p>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="inside">
+            <t t-if="env.company.name == 'KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C'">
+                <div class="container-fluid mt-4 mb-4" style="page-break-inside: avoid;">
+                <div class="row mt-4" style="page-break-inside: avoid;">
+                    <div class="col-6">
+                        <strong>For <t t-esc="env.company.name"/></strong>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        <strong>FOR CUSTOMER</strong>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 100px; page-break-inside: avoid;">
+                    <div class="col-6">
+                        Authorized Signatory<br/>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        Name, Cont No, Sign, Company stamp
+                    </div>
+                </div>
+            </div>
+            </t>
+           <t t-if="env.company.name in ['Raja International General Trading FZE','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
+                <div class="container-fluid mt-4 mb-4" style="page-break-inside: avoid;">
+                    <div class="row mt-4" style="page-break-inside: avoid;">
+                        <div class="col-6">
+                            <strong>For <t t-esc="env.company.name"/></strong>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <strong>FOR CUSTOMER</strong>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 100px; page-break-inside: avoid;">
+                        <div class="col-6">
+                            Authorized Signatory<br/>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            Sign and Stamp
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>
