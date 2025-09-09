@@ -24,6 +24,14 @@
         </xpath>
 
         <xpath expr="//div[@name='comment']" position="replace">
+            <t t-if="env.company.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
+                <!-- Your replacement content here -->
+            </t>
+            <t t-else="">
+                <div class="text-muted mb-3" t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}" t-if="not is_html_empty(o.narration)" name="comment">
+                                        <span t-field="o.narration"/>
+                                    </div>
+            </t>
         </xpath>
 
         <xpath expr="//div[@id='total']" position="after">
