@@ -1,0 +1,14 @@
+<odoo>
+    <template id="payment_done" name="Cash Payment Done">
+        <t t-call="website.layout">
+            <div class="container mt16 mb16">
+                <div class="alert alert-success text-center">
+                    <h2>Order Placed Successfully!</h2>
+                    <p>Your order has been confirmed. Payment will be collected in cash upon delivery by our delivery partner.</p>
+                    <p>Please ensure someone is available to make the payment at the time of delivery.</p>
+                    <a t-att-href="'/shop'" class="btn btn-primary mt16">Continue Shopping</a>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

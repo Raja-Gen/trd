@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_sale_product_extension" inherit_id="website_sale.product">
+        <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
+            <t t-if="not product.freeze_stock">
+                <t t-if="product.sudo().qty_available &gt; 0">
+                    <p class="text-success mt-3">
+                        <span t-esc="'Available: %s' % (product.sudo().qty_available)"/>
+                    </p>
+                </t>
+                <t t-else="">
+                    <p class="text-danger mt-3">
+                        <strong>Out of stock</strong>
+                    </p>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+
+    <template id="website_sale_product_disable_add_to_cart" inherit_id="website_sale.product">
+        <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
+            <attribute name="t-attf-class">#{'btn btn-light js_add_cart' + (' disabled' if product.freeze_stock else '')}</attribute>
+        </xpath>
+
+       <xpath expr="//div[@id='add_to_cart_wrap']" position="after">
+            <t t-if="product.freeze_stock">
+                <p class="text-warning mt-2">
+                    <strong>Sales temporarily disabled for this product.</strong>
+                </p>
+            </t>
+        </xpath>
+
+    </template>
+</odoo>

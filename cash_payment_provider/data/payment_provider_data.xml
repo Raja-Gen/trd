@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="payment_provider_cash" model="payment.provider">
+            <field name="name">Cash on Delivery</field>
+            <field name="image_128" type="base64" file="cash_payment_provider/static/img/cash_icon.png"/>
+            <field name="module_id" ref="base.module_cash_payment_provider"/>
+            <field name="code">cash</field>
+        </record>
+    </data>
+</odoo>

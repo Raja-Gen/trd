@@ -1,0 +1,28 @@
+<odoo>
+    <record id="email_template_abandoned_cart" model="mail.template">
+        <field name="name">Abandoned Cart Reminder</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">You left items in your cart!</field>
+        <field name="email_from">{{ (object.user_id.email) }}</field>
+        <field name="partner_to">{{ object.partner_id.id }}</field>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html" type="html">
+            <div style="margin:0; padding:0;">
+                <p>Hello <t t-out="object.partner_id.name or 'Customer'"></t>,</p>
+                <p>We noticed you left some items in your cart:</p>
+                <ul>
+                    <t t-foreach="object.order_line" t-as="line">
+                        <li>
+                            <t t-out="line.product_id.display_name"/> 
+                            (<t t-out="line.product_uom_qty"/>)
+                        </li>
+                    </t>
+                </ul>
+                <p>
+                    <a href="/shop/cart">Click here</a> to complete your purchase.
+                </p>
+            </div>
+        </field>
+    </record>
+</odoo>
+

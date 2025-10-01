@@ -1,0 +1,21 @@
+<odoo>
+    <record id="ir_cron_abandoned_cart_reminder" model="ir.cron">
+        <field name="name">Send Abandoned Cart Reminders</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">model.send_abandoned_cart_reminders()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_clear_old_carts" model="ir.cron">
+        <field name="name">Clear Old Website Carts</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="state">code</field>
+        <field name="code">model.clear_old_carts()</field>
+        <field name="interval_number">48</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+</odoo>
