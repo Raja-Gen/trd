@@ -1,0 +1,12 @@
+<odoo>
+<template id="cash_payment_status_template" name="COD Payment Status">
+    <t t-if="tx">
+        <h1>Payment Status: <t t-esc="tx.state"/></h1>
+        <p>Order Reference: <t t-esc="tx.sale_order_ids[0].name if tx.sale_order_ids else 'N/A'"/></p>
+        <p>Amount: <t t-esc="tx.amount"/></p>
+    </t>
+    <t t-else="">
+        <p>Transaction not found.</p>
+    </t>
+</template>
+</odoo>
