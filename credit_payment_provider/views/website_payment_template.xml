@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="inherit_hide_credit_payment_method_li" inherit_id="payment.form">
+        <xpath expr="//t[@t-foreach='payment_methods_sudo' and @t-as='pm_sudo']/li" position="attributes">
+            <attribute name="t-att-class">
+                "list-group-item d-flex flex-column gap-2 py-3 o_outline"
+                + (' d-none' if pm_sudo.provider_ids.filtered(lambda p: p in providers_sudo)[:1]._get_code() == 'credit'
+                   and order.amount_total > partner.credit_limit - partner.credit_used else '')
+            </attribute>
+        </xpath>
+    </template>
+</odoo>
+
+

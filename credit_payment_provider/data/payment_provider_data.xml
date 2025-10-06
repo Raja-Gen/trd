@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="payment_provider_credit" model="payment.provider">
+            <field name="name">Credit Payment</field>
+            <field name="image_128" type="base64" file="credit_payment_provider/static/img/credit.png"/>
+            <field name="module_id" ref="base.module_credit_payment_provider"/>
+            <field name="code">credit</field>
+        </record>
+    </data>
+</odoo>
