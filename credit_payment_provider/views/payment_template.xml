@@ -1,0 +1,26 @@
+<odoo>
+    <template id="payment_done" name="Credit Payment Done">
+        <t t-call="website.layout">
+            <div class="container mt16 mb16">
+                <div class="card text-center border-success shadow-sm">
+                    <div class="card-body">
+                        <span class="badge bg-success mb-3">Credit Payment</span>
+                        <h1 class="display-5 text-success">Order Confirmed!</h1>
+                        <p class="lead mt-3">
+                            Your order has been successfully placed using your <strong>Credit Account</strong>.
+                        </p>
+                        <p>
+                            The amount will be recorded against your credit limit. 
+                            Please ensure you maintain sufficient credit for future purchases.
+                        </p>
+                        <p class="text-muted small">
+                            Your remaining credit balance will be updated accordingly.
+                        </p>
+                        <a t-att-href="'/shop'" class="btn btn-success mt-4 px-4">Continue Shopping</a>
+                        <a t-att-href="'/my/orders'" class="btn btn-outline-secondary mt-4 px-4 ms-2">View My Orders</a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

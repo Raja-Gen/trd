@@ -1,0 +1,22 @@
+<odoo>
+    <record id="view_partner_form_credit" model="ir.ui.view">
+        <field name="name">res.partner.form.credit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Credit Info">
+                <group>
+                    <field name="credit_limit"/>
+                     <field name="credit_used" readonly="1"/>
+                </group>
+                   <button name="action_reset_credit_used"
+                                type="object"
+                                string="Reset Credit Used"
+                                class="btn-reset-credit oe_button oe_highlight"
+                                icon="fa-refresh"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
