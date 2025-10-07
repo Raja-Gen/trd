@@ -20,7 +20,6 @@ paymentForm.include({
         if (providerCode !== 'credit') {
             return this._super(...arguments);
         }
-        // For credit, direct flow only
         this._setPaymentFlow('direct');
     },
     
@@ -50,8 +49,6 @@ paymentForm.include({
                     },
                     body: JSON.stringify({ flow: 'direct' }),
                 });
-
-                // ✅ Directly redirect to success page, no checks
                 window.location.replace('/payment/credit/success');
 
             } catch (error) {
