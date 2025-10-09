@@ -1,0 +1,1 @@
+from . import freeze_stock_wizard
