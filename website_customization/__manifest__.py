@@ -9,7 +9,11 @@
         "views/product_template.xml",
         "views/website_template_views.xml",
         "data/abandoned_cart_items.xml",
-        "data/cart_email_template.xml"
+        "data/cart_email_template.xml",
+        "data/unfreeze_stock_cron_job.xml",
+        "views/sale_order_views.xml",
+        "wizards/freeze_stock_views.xml",
+        "security/ir.model.access.csv"
     ],
     "license": "LGPL-3",
     "installable": True,
