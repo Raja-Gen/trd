@@ -1,0 +1,22 @@
+<odoo>
+    <record id="view_order_form_inherit_freeze_toggle" model="ir.ui.view">
+        <field name="name">sale.order.form.freeze.toggle.button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="is_stock_frozen" invisible="1"/>
+                <button name="action_freeze_stock"
+                        type="object"
+                        string="Freeze Stock"
+                        invisible="is_stock_frozen"
+                        class="btn-primary"/>
+                <button name="action_unfreeze_stock"
+                        type="object"
+                        string="Unfreeze Stock"
+                        invisible="not is_stock_frozen"
+                        class="btn-warning"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_freeze_stock_wizard_form" model="ir.ui.view">
+        <field name="name">freeze.stock.wizard.form</field>
+        <field name="model">freeze.stock.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Freeze Stock Duration">
+                <group>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="freeze_days" required="1" help="Number of days to freeze the stock (max 30)."/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm_freeze" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_freeze_stock_wizard" model="ir.actions.act_window">
+        <field name="name">Freeze Stock</field>
+        <field name="res_model">freeze.stock.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_freeze_stock_wizard,access.freeze.stock.wizard,model_freeze_stock_wizard,,1,1,1,1
+access_stock_freeze_record,access.stock.freeze.record,model_stock_freeze_record,,1,1,1,1
