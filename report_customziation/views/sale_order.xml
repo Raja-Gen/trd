@@ -18,10 +18,13 @@
                 <t t-esc="line_index + 1"/>
             </td>
         </xpath>
-        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_note'&quot;]/td[@name='td_note_line']" position="before">
-            <td style="text-align:center;">
-                <t t-esc="line_index + 1"/>
-            </td>
+    </template>
+
+
+    <template id="report_saleorder_ref_label" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@name='informations_reference']/strong" position="replace">
+            <strong>PO Number</strong>
         </xpath>
     </template>
-</odoo>
+    
+</odoo> 
