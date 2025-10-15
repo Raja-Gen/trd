@@ -53,6 +53,18 @@
         </xpath>
     </template>
 
+    <template id="report_document" inherit_id="sale_stock.report_delivery_document_inherit_sale_stock">
+        <xpath expr="//div[@class='col-auto col-3 mw-100 mb-2' and ./strong[text()='Customer Reference:']]" position="replace">
+            <div t-if="o.sudo().sale_id.client_order_ref" class="col-auto col-3 mw-100 mb-2">
+                <strong>PO Number:</strong>
+                <p t-field="o.sudo().sale_id.client_order_ref" class="m-0"/>
+            </div>
+        </xpath>
+    </template>
+
+
+
+
     <template id="stock_report_delivery_has_serial_move_line_inherit" inherit_id="stock.stock_report_delivery_has_serial_move_line">
         <xpath expr="//td[1]" position="before">
             <td style="text-align:center;">
