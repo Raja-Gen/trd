@@ -17,11 +17,11 @@
             </td>
         </xpath>
 
-        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_note'&quot;]/td" position="before">
+        <!-- <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_note'&quot;]/td" position="before">
             <td style="text-align:center;">
                 <t t-esc="line_index + 1"/>
             </td>
-        </xpath>
+        </xpath> -->
 
         <xpath expr="//div[@name='comment']" position="replace">
         </xpath>
