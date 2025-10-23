@@ -34,10 +34,10 @@
             </t>
         </xpath>
 
-        <xpath expr="//div[@id='total']" position="after">
+        <xpath expr="//div[@id='right-elements']" position="after">
             <t t-if="env.company.name == 'Raja International General Trading FZE'">
-                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
-                    <div style="padding: 10px; max-width: 350px;">
+                <div style="">
+                    <div style="padding: 10px;">
                         <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
                         <p>on this account: 097520210318201 DUBAI ISLAMIC BANK </p>
                         <p>Bank Details: Cheque / Wire transfer to be issued in the name of: Raja International General Trading (FZE)</p>
@@ -48,8 +48,8 @@
                 </div>
             </t>
             <t t-if="env.company.name == 'KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C'">
-                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
-                    <div style="padding: 10px; max-width: 350px;">
+                <div style="">
+                    <div style="padding: 10px;">
                         <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
                         <p>on this account: Account Name: KARO INTERNATIONAL GENERAL TRADING SOLE PROPRIETORSHIP LLC </p>
                         <p>Account No:0333164447001 Account Type: Current Account</p>
@@ -60,8 +60,8 @@
                 </div>
             </t>
             <t t-if="env.company.name == 'RAJA INTERNATIONAL GENERAL TRADING (LLC)'">
-                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 10px;">
-                    <div style="padding: 10px; max-width: 350px;">
+                <div style="">
+                    <div style="padding: 10px;">
                         <p style="font-weight: bold; margin-bottom: 5px;">Payment Communication:<span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span></p>
                         <p>on this account: Bank Details: Cheque / Wire transfer to be issued in the name of: Account Name:RAJA INTERNATIONAL GENERAL TRADING (LLC)</p>
                         <p>Bank Name: RAKBANK Account No: 0553-129253-001</p>
