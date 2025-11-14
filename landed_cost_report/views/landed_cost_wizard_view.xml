@@ -1,0 +1,30 @@
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_landed_cost_wizard_form" model="ir.ui.view">
+        <field name="name">landed.cost.wizard.form</field>
+        <field name="model">landed.cost.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Landed Cost Report">
+                        <field name="filtered_purchase_ids" invisible="1"/>
+
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="purchase"  options="{'no_create': True}"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object" string="Confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_landed_cost_wizard" model="ir.actions.act_window">
+        <field name="name">Landed Cost Report</field>
+        <field name="res_model">landed.cost.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

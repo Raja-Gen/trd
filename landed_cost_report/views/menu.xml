@@ -1,0 +1,7 @@
+<odoo>
+  <menuitem id="menu_landed_cost_report_root"
+              name="Landed Cost Report"
+              parent="account.menu_finance_reports"
+              action="action_landed_cost_wizard"
+              sequence="10"/>
+</odoo>
