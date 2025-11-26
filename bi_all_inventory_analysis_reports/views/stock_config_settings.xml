@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_stock_config_inherit_bi" model="ir.ui.view">
+			<field name="name">view.stock.config.inherit.bi</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="stock.res_config_settings_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//block[@id='production_lot_info']" position="after">
+					<h2 id="caverage_info">Inventory Coverage Report</h2>
+					<div class="row mt16 o_settings_container">
+						<div class="col-12 col-lg-6 o_setting_box">
+							<div class="o_setting_left_pane">
+								<field name="forcast_sales" />
+							</div>
+							<div class="o_setting_right_pane">
+								<label for="forcast_sales" />
+								<div class="text-muted">
+		                            If True Use Forcast Sales Otherwise Past Sales
+		                        </div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box">
+							<div class="o_setting_right_pane">
+								<label for="day_forcast" />
+								<div class="text-muted">
+		                            Backup Stock Days
+		                        </div>
+							</div>
+							<div class="o_setting_right_pane">
+								<field name="day_forcast" />
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box" invisible="forcast_sales">
+<!--							 attrs="{'invisible': [('forcast_sales', '=', True)]}">-->
+							<div class="o_setting_right_pane">
+								<label for="past_sale" />
+								<div class="text-muted">
+		                            Number of Past Sales
+		                        </div>
+							</div>
+							<div class="o_setting_right_pane">
+								<field name="past_sale" />
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box" invisible="not forcast_sales">
+<!--							 attrs="{'invisible': [('forcast_sales', '=', False)]}">-->
+							<div class="o_setting_left_pane">
+								<field name="forcast_warehouse" />
+							</div>
+							<div class="o_setting_right_pane">
+								<label for="forcast_warehouse" />
+								<div class="text-muted">
+		                            Use Warehouse from Product When Auto Create Forcast Sale
+		                        </div>
+							</div>
+						</div>
+					</div>
+				</xpath>
+
+			</field>
+		</record>
+
+
+		<record id="view_stock_config_inherit_bi_2" model="ir.ui.view">
+			<field name="name">view.stock.config.inherit.bi</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="stock.res_config_settings_view_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//block[@id='production_lot_info']" position="after">
+					<h2 id="stock_info">Stock Expiry Report</h2>
+					<div class="row mt16 o_settings_container">
+						<div class="col-12 col-lg-6 o_setting_box">
+							<div class="o_setting_left_pane" />
+							<div class="o_setting_right_pane">
+								<label for="stock_expiry_days" string="Generate Report For (Days)" />
+								<div class="text-muted">
+										Generate Report For (Days)
+									</div>
+								<div class="text-muted">
+									<field name="stock_expiry_days" />
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box">
+							<div class="o_setting_left_pane">
+								<field name="include_expiry" />
+							</div>
+							<div class="o_setting_right_pane">
+								<label for="include_expiry" string="Include Expiry Stock" />
+								<div class="text-muted">
+										Include Expiry Stock
+									</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box">
+							<div class="o_setting_left_pane" />
+							<div class="o_setting_right_pane">
+								<label for="recipients_ids" string="Mail Recipients" />
+								<div class="text-muted">
+										Mail Recipients
+									</div>
+								<div class="text-muted">
+									<field name="recipients_ids" widget="many2many_tags" />
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box">
+							<div class="o_setting_left_pane" />
+							<div class="o_setting_right_pane">
+								<label for="report_type" string="Report Type" />
+								<div class="text-muted">
+										Report Type
+									</div>
+								<div class="text-muted">
+									<field name="report_type" />
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box" invisible="report_type in ('all','location')">
+<!--							 attrs="{'invisible': [('report_type', 'in', ['all','location'])]}">-->
+							<div class="o_setting_left_pane" />
+							<div class="o_setting_right_pane">
+								<label for="warehouse_ids" string="Warehouses" />
+								<div class="text-muted">
+										Warehouses
+									</div>
+								<div class="text-muted">
+									<field name="warehouse_ids" widget="many2many_tags" />
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6 o_setting_box" invisible="report_type in ('all','warehouse')">
+<!--							 attrs="{'invisible': [('report_type', 'in', ['all','warehouse'])]}">-->
+							<div class="o_setting_left_pane" />
+							<div class="o_setting_right_pane">
+								<label for="location_ids" string="Locations" />
+								<div class="text-muted">
+										Locations
+									</div>
+								<div class="text-muted">
+									<field name="location_ids" widget="many2many_tags" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</xpath>
+
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="export_stock_product_info_form_view" model="ir.ui.view">
+            <field name="name">export.stock.product.info.form.view</field>
+            <field name="model">export.stock.info.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Export Stock information in excel">
+                    <group invisible="file">
+<!--                            attrs="{'invisible': [('file', '!=', False)]}">-->
+                        <group>
+                            <field name="report_type" widget="radio" options="{'horizontal': true}" />
+                            <field name="warehouse_ids" widget="many2many_tags" string="Warehouse" invisible="report_type != 'warehouse'" required="report_type == 'warehouse'"/>
+<!--                                   attrs="{'invisible': [('report_type', '!=', 'warehouse')], 'required': [('report_type', '==', 'warehouse')]}" />-->
+                            <field name="location_ids" widget="many2many_tags" string="Location" invisible="report_type != 'location'" required="report_type == 'location'"/>
+<!--                                   attrs="{'invisible': [('report_type', '!=', 'location')], 'required': [('report_type', '==', 'location')]}" />-->
+                        </group>
+                        <group>
+                            <field name="date_from" string="From Date" required="1" />
+                            <field name="date_to" string="To Date" required="1" />
+                        </group>
+                    </group>
+                    <group invisible="file">
+<!--                            attrs="{'invisible': [('file', '!=', False)]}">-->
+                        <group>
+                            <field name="check_active" />
+                        </group>
+                        <group>
+                            <field name="color_neg" />
+                        </group>
+                    </group>
+                    <group invisible="file">
+<!--                            attrs="{'invisible': [('file', '!=', False)]}">-->
+                        <group string="Supplier">
+                            <field name="supp_ids" nolabel="1" colspan="2">
+                                <tree string="Supplier" editable="bottom">
+                                    <field name="display_name" string="Name" />
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Category">
+                            <field name="cat_ids" nolabel="1" colspan="2">
+                                <tree editable="bottom">
+                                    <field name="display_name" string="Product Category" />
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+
+                    <field name="file" invisible="1" />
+                    <separator string="Report Generated" colspan="4" invisible="file == False"/>
+<!--                               attrs="{'invisible': [('file', '==', False)]}" />-->
+                    <p invisible="file == False">
+<!--                            attrs="{'invisible': [('file', '==', False)]}">-->
+                        Here is the Excel Report:
+                        <field name="document" filename="file" invisible="file == False" readonly="1" />
+<!--                               attrs="{'invisible': [('file', '==', False)]}" -->
+                    </p>
+
+                    <footer>
+                        <button name="print_pdf_report" string="Print PDF" type="object" icon="fa-print" class="btn-primary" invisible="file"/>
+<!--                                attrs="{'invisible': [('file', '!=', False)]}" />-->
+                        <t invisible="file">OR</t>
+<!--                                attrs="{'invisible': [('file', '!=', False)]}">-->
+                        <button name="print_excel_report" string="Print Excel" type="object" icon="fa-print" class="btn-primary" invisible="file"/>
+<!--                                attrs="{'invisible': [('file', '!=', False)]}" />-->
+                        <t invisible="file">OR</t>
+<!--                                attrs="{'invisible': [('file', '!=', False)]}"-->
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                        <t invisible="file == False">OR</t>
+<!--                                attrs="{'invisible': [('file', '==', False)]}"-->
+                        <button name="action_back" string="_Back" type="object" invisible="file == False" class="oe_highlight" />
+<!--                                attrs="{'invisible': [('file', '==', False)]}" -->
+                    </footer>
+                </form>
+            </field>
+
+        </record>
+
+        <record id="action_wizard_stock_export" model="ir.actions.act_window">
+            <field name="name">Export Stock</field>
+            <field name="res_model">export.stock.info.wiz</field>
+            <field name="binding_view_types">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- <menuitem id="wizard_stock_export" 
+        name="Export Stock" 
+        parent="stock.menu_warehouse_report"
+        action="action_wizard_stock_export"/> -->
+
+    </data>
+</odoo>

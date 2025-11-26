@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Report Excel Extended -->
+    <record model="ir.ui.view" id="action_inventory_outofstock_extended_report_form">
+        <field name="name">inventory.outofstock.extended.form</field>
+        <field name="model">inventory.outofstock.extended</field>
+        <field name="arch" type="xml">
+            <form string="Excel Report">
+                <group>
+                    <group>
+                        <field name="excel_file" readonly="1" filename="file_name" />
+                    </group>
+                    <group>
+                        <field name="file_name" invisible="1" />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Cancel" name="cancel" special="cancel" class="oe_highlight" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Report Excel Extened action -->
+    <record id="action_inventory_outofstock_report_extended" model="ir.actions.act_window">
+        <field name="name">inventory.outofstock.extended</field>
+        <field name="res_model">inventory.outofstock.extended</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="inventory_outofstock_extended_report_tree" model="ir.ui.view">
+        <field name="name">inventory.outofstock.extended.tree</field>
+        <field name="model">inventory.outofstock.extended</field>
+        <field name="arch" type="xml">
+            <tree string="Warehouse Out of Stock Analysis Report" create="false">
+                <!--<field name="company" />
+                <field name="warehouse" />-->
+                <field name="company_ids" widget="many2many_tags"/>
+                <field name="warehouse_ids" widget="many2many_tags"/>
+                <field name="products" />
+                <field name="product_category" />
+                <field name="stock_forecasted" />
+                <field name="sales" />
+                <field name="ads" />
+                <field name="qty_demanded" />
+                <field name="instock_days" />
+                <field name="days_outofstock" />
+                <field name="qty_outofstock" />
+                <field name="ratio_outofstock" />
+                <field name="value_outofstock" />
+                <field name="cost" />
+                <field name="qty_per_outofstock" />
+                <field name="value_per_outofstock" />
+                <field name="turnover" />
+                <field name="movement_fns_type" />
+                <field name="stock_available" />
+                <field name="qty_incoming" />
+                <field name="qty_outgoing" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="inventory_outofstock_extended_report_search" model="ir.ui.view">
+        <field name="name">inventory.outofstock.extended.search</field>
+        <field name="model">inventory.outofstock.extended</field>
+        <field name="arch" type="xml">
+            <search string="Warehouse Out of Stock Analysis Report">
+                <!--<field name="company" />
+                <field name="warehouse" />-->
+                <field name="company_ids"/>
+                <field name="warehouse_ids"/>
+                <field name="products" />
+                <field name="product_category" />
+
+                <separator />
+
+                <filter string="Product" context="{'group_by':'products'}" name="products_groupby" />
+                <!--<filter string="Warehouse" context="{'group_by':'warehouse'}" name="warehouse_groupby" />-->
+                <filter string="Product Category" context="{'group_by':'product_category'}" name="product_category_groupby" />
+                <!--<filter string="Company" context="{'group_by':'company'}" name="company_groupby" />-->
+                <separator />
+            </search>
+        </field>
+    </record>
+
+    <record id="inventory_outofstock_extended_report_graph" model="ir.ui.view">
+        <field name="name">inventory.outofstock.extended.report.graph</field>
+        <field name="model">inventory.outofstock.extended</field>
+        <field name="arch" type="xml">
+            <graph string="Warehouse Out of Stock Analysis Report" type="bar" stacked="False">
+                <!--<field name="warehouse" type="col" />-->
+                <field name="product_category" type="col" />
+                <field name="movement_fns_type" type="row" />
+                <field name="qty_per_outofstock" type="measure" />
+            </graph>
+        </field>
+    </record>
+
+    <!-- Report Wizard Form View -->
+    <record id="inventory_outofstock_wizard_form_view" model="ir.ui.view">
+        <field name="name">inventory.outofstock.report.wiz.form</field>
+        <field name="model">inventory.outofstock.report.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Warehouse Out of Stock Analysis Report">
+                <sheet string="Warehouse Out of Stock Analysis Report">
+                    <group expand="0" string="Select days of OutOfStock">
+                        <field name="stock_days" required="True" />
+                    </group>
+
+                    <group expand="0" string="Select Company And Warehouse">
+                        <field name="company_ids" widget="many2many_tags" />
+                        <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id','in',company_ids)]"/>
+                    </group>
+
+                    <group expand="0" string="Select Product And Category">
+                        <field name="category_ids" widget="many2many_tags" />
+                        <field name="product_ids" widget="many2many_tags" domain="[('categ_id', 'in', category_ids),'|',('company_id','in',company_ids),('company_id','=',False)]"/>
+                    </group>
+
+                    <group expand="0" string="Select date">
+                        <field name="from_date" required="True" />
+                        <field name="to_date" required="True" />
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="print_inventory_outofstock_report" string="Excel" type="object" class="oe_highlight" />
+                    <button name="tree_graph_report_view" string="Data" type="object" class="oe_highlight" />
+                    <button name="tree_graph_report_view" string="Graph" type="object" class="oe_highlight" context="{'report_graph':True}" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!--Report Wizard Action View -->
+    <record id="action_inventory_outofstock_report_action" model="ir.actions.act_window">
+        <field name="name">Warehouse Out of Stock Analysis Report</field>
+        <field name="res_model">inventory.outofstock.report.wiz</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- <menuitem id="bi_inventory_outofstock_reports_report_menu" action="action_inventory_outofstock_report_action" parent="stock.menu_warehouse_report" sequence="7" /> -->
+
+</odoo>

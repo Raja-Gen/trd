@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Report Excel Extended -->
+    <record model="ir.ui.view" id="action_inventory_stock_rotation_extended_report_form">
+        <field name="name">inventory.stock.rotation.extended.form</field>
+        <field name="model">inventory.stock.rotation.extended</field>
+        <field name="arch" type="xml">
+            <form string="Excel Report">
+                <group>
+                    <group>
+                        <field name="excel_file" readonly="1" filename="file_name" />
+                    </group>
+                    <group>
+                        <field name="file_name" invisible="1" />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Cancel" name="cancel" special="cancel" class="oe_highlight" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Report Excel Extened action -->
+    <record id="action_inventory_stock_rotation_report_extended" model="ir.actions.act_window">
+        <field name="name">inventory.stock.rotation.extended</field>
+        <field name="res_model">inventory.stock.rotation.extended</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Report Wizard Form View -->
+    <record id="inventory_stock_rotation_wizard_form_view" model="ir.ui.view">
+        <field name="name">inventory.stock.rotation.report.wiz.form</field>
+        <field name="model">inventory.stock.rotation.report.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Stock Rotation Report">
+                <sheet string="Stock Rotation Report">
+
+                    <group expand="0" string="Select Company And Warehouse">
+                        <field name="company_ids" widget="many2many_tags" />
+                        <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id','in',company_ids)]"/>
+                    </group>
+
+                    <group expand="0" string="Select Product And Category">
+                        <field name="category_ids" widget="many2many_tags" />
+                        <field name="product_ids" widget="many2many_tags" domain="[('categ_id', 'in', category_ids),'|',('company_id','in',company_ids),('company_id','=',False)]"/>
+                    </group>
+
+                    <group expand="0" string="Select data date upto">
+                        <field name="from_beginning" />
+                    </group>
+                    <group expand="0" string="Select Date of report data">
+                        <field name="date_upto" required="from_beginning" invisible="not from_beginning"/>
+<!--                               attrs="{'required': [('from_beginning','=',True)], 'invisible': [('from_beginning','=',False)]}" />-->
+                        <field name="from_date" required="not from_beginning" invisible="from_beginning"/>
+<!--                               attrs="{'required': [('from_beginning','=',False)], 'invisible': [('from_beginning','=',True)]}" />-->
+                        <field name="to_date" required="not from_beginning" invisible="from_beginning"/>
+<!--                               attrs="{'required': [('from_beginning','=',False)], 'invisible': [('from_beginning','=',True)]}" />-->
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="print_inventory_stock_rotation_report" string="Excel" type="object" class="oe_highlight" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!--Report Wizard Action View -->
+    <record id="action_inventory_stock_rotation_report_action" model="ir.actions.act_window">
+        <field name="name">Stock Rotation Report</field>
+        <field name="res_model">inventory.stock.rotation.report.wiz</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- <menuitem id="bi_inventory_stock_rotation_reports_report_menu" action="action_inventory_stock_rotation_report_action"
+            name="Warehouse Stock Rotation Analysis Report"    parent="stock.menu_warehouse_report" sequence="9" /> -->
+
+
+</odoo>

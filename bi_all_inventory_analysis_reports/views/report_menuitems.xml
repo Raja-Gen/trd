@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem
+            id="inventory_analysis_reports_menu"
+           
+ 			name="Inventory Analysis Reports"
+ 			parent="stock.menu_warehouse_report"
+            sequence="10"/>
+        <menuitem id="bi_inventory_abc_reports_report_menu"
+ 			action="action_inventory_abc_report_action"
+ 			parent="inventory_analysis_reports_menu" sequence="1" />
+        <menuitem id="bi_inventory_age_breakdown_reports_report_menu"
+ 			action="action_inventory_age_breakdown_report_action"
+ 			parent="inventory_analysis_reports_menu" sequence="2" />
+        <menuitem id="bi_inventory_age_reports_report_menu"
+ 			action="action_inventory_age_report_action"
+ 			parent="inventory_analysis_reports_menu" sequence="3" />
+        <menuitem id="bi_inventory_fsn_xyz_reports_report_menu"
+ 			action="action_inventory_fsn_xyz_report_action"
+ 			parent="inventory_analysis_reports_menu" sequence="4" />
+        <menuitem id="bi_inventory_stock_rotation_reports_report_menu"
+ 			action="action_inventory_stock_rotation_report_action"
+ 			name="Warehouse Stock Rotation Analysis Report"
+ 			parent="inventory_analysis_reports_menu" sequence="5" />
+        <menuitem id="bi_inventory_turnover_reports_report_menu"
+ 			action="action_inventory_turnover_report_action"
+ 			parent="inventory_analysis_reports_menu" sequence="6" />
+        <menuitem id="menu_report_config"
+ 			name="Expiry Report Setting"
+ 			parent="stock.menu_stock_config_settings"
+ 			action="action_stock_report_config" sequence="7" />
+        <menuitem id="wizard_stock_export"
+ 			name="Export Stock"
+ 			parent="inventory_analysis_reports_menu"
+ 			action="action_wizard_stock_export" sequence="8" />
+        <menuitem id="menu_stock_expiry"
+ 			name="Stock Expiry Report"
+ 			parent="inventory_analysis_reports_menu"
+ 			action="action_view_expiry_wizard" sequence="9"/>
+        <menuitem id="stock_rotation_report_menu"
+ 			name="Stock Rotation" 
+ 			parent="inventory_analysis_reports_menu"
+ 			action="stock_rotation_report_action" sequence="10"/>
+        <menuitem id="menu_inventory_valuation_report_product_category"
+ 			name="Inventory Valuation Report"
+ 			parent="inventory_analysis_reports_menu"
+ 			action="action_inventory_valuation_report_product_category" 
+            groups="stock.group_stock_manager,stock.group_stock_user" sequence="11"/>
+        <menuitem id="menu_product_recommendation"
+ 			name="Product Recommendation"
+ 			parent="inventory_analysis_reports_menu"
+ 			action="action_view_product_recommendation" sequence="12" />
+        <menuitem id="menu_inventory_cover"
+ 			name="Inventory Coverage"
+ 			parent="inventory_analysis_reports_menu"
+ 			action="action_view_inventory_cover_wizard" sequence="13" />
+        <menuitem id="menu_non_moving_product_wizard_id"
+ 			name="Non Moving Products"
+ 			parent="inventory_analysis_reports_menu"
+ 			action="action_non_moving_product_wizard" sequence="14"/>
+		<menuitem id="bi_inventory_overstock_reports_report_menu"
+			action="action_inventory_overstock_report_action"
+            parent="inventory_analysis_reports_menu" sequence="15" />
+        <menuitem id="bi_inventory_outofstock_reports_report_menu"
+ 			action="action_inventory_outofstock_report_action"
+ 			parent="inventory_analysis_reports_menu" sequence="16" />
+    </data>
+</odoo>
