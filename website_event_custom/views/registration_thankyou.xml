@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="registration_thankyou" name="Registration Thank You - TechSafe">
+        <t t-call="website_event.layout">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body text-center py-5 px-4">
+                                <div class="mb-4">
+                                    <i class="fa fa-check-circle text-success" style="font-size: 4rem;"/>
+                                </div>
+                                <h3 class="mb-4 text-primary">Thank You!</h3>
+                                <p class="mb-3" style="font-size: 1.1rem;">
+                                    Thank You for registering your interest in attending the upcoming
+                                    <strong>TechSafe Seminar</strong>.
+                                </p>
+                                <p class="mb-3" style="font-size: 1.1rem;">
+                                    Our Team will process the same and send you your
+                                    <strong>confirmation / entry permit</strong> shortly.
+                                </p>
+                                <hr class="my-4 w-50 mx-auto"/>
+                                <p class="mb-1" style="font-size: 1.1rem;">Have a Safe Day !</p>
+                                <p class="mt-3 fw-bold" style="font-size: 1.2rem;">Team TechSafe</p>
+                                <div class="mt-4">
+                                    <a class="btn btn-primary" t-att-href="event.website_url">
+                                        <i class="fa fa-arrow-left me-2"/>Back to Event
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
