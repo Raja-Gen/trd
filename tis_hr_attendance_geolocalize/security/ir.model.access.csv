@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_push_notification,base.push.notification,model_push_notification,base.group_user,1,1,1,1
+tis_hr_attendance_geolocalize.access_employee_location,access_employee_location,tis_hr_attendance_geolocalize.model_employee_location,base.group_user,1,1,1,1
+access_assign_hr_wizard,access_assign_hr_wizard,model_assign_hr_wizard,base.group_user,1,1,1,1
+access_work_mood_storage,access_work_mood_storage,model_work_mood_storage,base.group_user,1,1,1,1

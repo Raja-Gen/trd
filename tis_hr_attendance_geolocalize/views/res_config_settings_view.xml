@@ -1,0 +1,33 @@
+<odoo>
+    <!--  Inherit res config form view  -->
+    <record id="res_config_settings_view_form_inherit_base" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.base</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!--   Insert new settings block after the purchase settings   -->
+            <xpath expr="//block[@name='employees_setting_container']" position="before">
+                <block title="Office Buddy Settings" id="Office_Buddy_settings">
+                    <setting id="hide_payslip" help="Hide payslip">
+                        <field name="hide_payslip"/>
+                    </setting>
+                    <setting id="hide_leave_overview" help="Hide Leave Overview">
+                        <field name="hide_leave_overview"/>
+                    </setting>
+                    <setting id="hide_allocation_tab" help="Hide Allocation Tab">
+                        <field name="hide_allocation_tab"/>
+                    </setting>
+                    <setting id="late_by_minute" help="Late By Minute">
+                        <field name="late_by_minute"/>
+                    </setting>
+                    <setting id="is_admin" help="Is Admin">
+                        <field name="is_admin"/>
+                    </setting>
+                    <setting id="is_expense" help="Expense Module Configuration">
+                        <field name="is_expense"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

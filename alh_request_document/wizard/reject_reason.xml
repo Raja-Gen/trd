@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+       <record id="rejection_feedback_wizard_form_view" model="ir.ui.view">
+        <field name="name">rejection.feedback.wizard.form.view</field>
+        <field name="model">rejection.feedback.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Rejection Feedback">
+               <group>
+                     <field name="feedback"/>
+               </group>
+                <footer>
+                    <button name="action_add_feedback" type="object"
+                            string="Done" class="btn-primary"/>
+                    <button special="cancel" data-hotkey="z" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_rejection_feedback_wizard" model="ir.actions.act_window">
+        <field name="name">Rejection Feedback</field>
+        <field name="res_model">rejection.feedback.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="rejection_feedback_wizard_form_view"/>
+    </record>
+</odoo>
