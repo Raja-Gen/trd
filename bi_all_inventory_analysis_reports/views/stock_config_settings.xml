@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_stock_config_inherit_bi" model="ir.ui.view">
+			<field name="name">view.stock.config.inherit.bi</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+			<field name="arch" type="xml">
+
+				<xpath expr="//app[@name='stock']" position="inside">
+
+					<block title="Inventory Coverage Report">
+
+						<setting string="Use Forecast Sales">
+							<field name="forcast_sales"/>
+							<div class="text-muted">
+								If True Use Forecast Sales Otherwise Past Sales
+							</div>
+						</setting>
+
+						<setting string="Backup Stock Days">
+							<field name="day_forcast"/>
+						</setting>
+
+						<setting string="Number of Past Sales"
+								invisible="forcast_sales">
+							<field name="past_sale"/>
+						</setting>
+
+						<setting string="Use Warehouse From Product"
+								invisible="not forcast_sales">
+							<field name="forcast_warehouse"/>
+							<div class="text-muted">
+								Use Warehouse from Product When Auto Create Forecast Sale
+							</div>
+						</setting>
+
+					</block>
+
+				</xpath>
+
+			</field>
+		</record>
+
+
+
+		<record id="view_stock_config_inherit_bi_2" model="ir.ui.view">
+			<field name="name">view.stock.config.inherit.bi.2</field>
+			<field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="stock.res_config_settings_view_form"/>
+			<field name="arch" type="xml">
+
+				<xpath expr="//app[@name='stock']" position="inside">
+
+					<block title="Stock Expiry Report">
+
+						<setting string="Generate Report For (Days)">
+							<field name="stock_expiry_days"/>
+						</setting>
+
+						<setting string="Include Expiry Stock">
+							<field name="include_expiry"/>
+						</setting>
+
+						<setting string="Mail Recipients">
+							<field name="recipients_ids" widget="many2many_tags"/>
+						</setting>
+
+						<setting string="Report Type">
+							<field name="report_type"/>
+						</setting>
+
+						<setting string="Warehouses"
+								invisible="report_type in ['all','location']">
+							<field name="warehouse_ids" widget="many2many_tags"/>
+						</setting>
+
+						<setting string="Locations"
+								invisible="report_type in ['all','warehouse']">
+							<field name="location_ids" widget="many2many_tags"/>
+						</setting>
+
+					</block>
+
+				</xpath>
+
+			</field>
+		</record>
+	</data>
+</odoo>

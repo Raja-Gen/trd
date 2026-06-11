@@ -1,0 +1,8 @@
+=> 17.0.0.1 :- date 31 Jan 2024
+:- Fixed model has no group issue in csv
+
+21/10/2024 | 17.0.0.2
+=>Added the functionality of bi_overstock_report module as per the index flow.
+
+25/10/2024 | 17.0.0.3
+=>solved issue in configurations.

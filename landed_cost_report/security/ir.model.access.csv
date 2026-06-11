@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_landed_cost_wizard,access_landed_cost_wizard,model_landed_cost_wizard,,1,1,1,1

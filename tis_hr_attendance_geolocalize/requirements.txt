@@ -1,3 +1,0 @@
-httpagentparser
-geopy
-firebase-admin

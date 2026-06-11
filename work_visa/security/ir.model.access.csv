@@ -1,6 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-work_visa.access_documents_of_company,access_documents_of_company,work_visa.model_documents_of_company,base.group_user,1,1,1,1
-work_visa.access_employee_details,access_employee_details,work_visa.model_employee_details,base.group_user,1,1,1,1
-work_visa.access_work_permit_details,access_work_permit_details,work_visa.model_work_permit_details,base.group_user,1,1,1,1
-work_visa.access_work_visa_details,access_work_visa_details,work_visa.model_work_visa_details,base.group_user,1,1,1,1
-work_visa.access_procedures_after_arrival,access_procedures_after_arrival,work_visa.model_procedures_after_arrival,base.group_user,1,1,1,1

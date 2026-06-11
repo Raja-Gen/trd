@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Report Excel Extended -->
+    <record model="ir.ui.view" id="action_inventory_fsn_xyz_extended_report_form">
+        <field name="name">inventory.fsn_xyz.extended.form</field>
+        <field name="model">inventory.fsn_xyz.extended</field>
+        <field name="arch" type="xml">
+            <form string="Excel Report">
+                <group>
+                    <group>
+                        <field name="excel_file" readonly="1" filename="file_name" />
+                    </group>
+                    <group>
+                        <field name="file_name" invisible="1" />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Cancel" name="cancel" special="cancel" class="oe_highlight" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Report Excel Extened action -->
+    <record id="action_inventory_fsn_xys_report_extended" model="ir.actions.act_window">
+        <field name="name">inventory.fsn_xyz.extended</field>
+        <field name="res_model">inventory.fsn_xyz.extended</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="inventory_fsn_xyz_extended_report_tree" model="ir.ui.view">
+        <field name="name">inventory.fsn_xyz.extended.tree</field>
+        <field name="model">inventory.fsn_xyz.extended</field>
+        <field name="arch" type="xml">
+            <list string="FSN XYZ Analysis Report" create="false">
+                <!--<field name="company" />-->
+                <field name="company_ids" widget="many2many_tags"/>
+                <field name="products" />
+                <field name="product_category" />
+                <field name="stock_average" />
+                <field name="sales" />
+                <field name="turnover" />
+                <field name="sales" />
+                <field name="value" />
+                <field name="type" />
+                <field name="movement_type" />
+                <field name="fsn_xyz_type" />
+            </list>
+        </field>
+    </record>
+
+    <record id="inventory_fsn_xyz_extended_report_search" model="ir.ui.view">
+        <field name="name">inventory.fsn_xyz.extended.search</field>
+        <field name="model">inventory.fsn_xyz.extended</field>
+        <field name="arch" type="xml">
+            <search string="FSN XYZ Analysis Report">
+                <!--<field name="company" />-->
+                <field name="company_ids"/>
+                <field name="products" />
+                <field name="product_category" />
+
+                <separator />
+
+                <filter string="Product" context="{'group_by':'products'}" name="product_groupby" />
+                <filter string="Product Category" context="{'group_by':'product_category'}" name="product_category_groupby" />
+                <!--<filter string="Company" context="{'group_by':'company'}" name="company_groupby" />-->
+                <separator />
+            </search>
+        </field>
+    </record>
+
+    <record id="inventory_fsn_xyz_extended_report_graph" model="ir.ui.view">
+        <field name="name">inventory.fsn_xyz.extended.report.graph</field>
+        <field name="model">inventory.fsn_xyz.extended</field>
+        <field name="arch" type="xml">
+            <graph string="FSN XYZ Analysis Report" type="bar" stacked="False">
+                <!--<field name="company" type="col" />-->
+                <field name="product_category" type="col" />
+                <field name="fsn_xyz_type" type="row" />
+            </graph>
+        </field>
+    </record>
+
+    <!-- Report Wizard Form View -->
+    <record id="inventory_fsn_xyz_wizard_form_view" model="ir.ui.view">
+        <field name="name">inventory.fsn_xyz.report.wiz.form</field>
+        <field name="model">inventory.fsn_xyz.report.wiz</field>
+        <field name="arch" type="xml">
+            <form string="FSN XYZ Analysis Report">
+                <sheet string="FSN XYZ Analysis Report">
+
+                    <group expand="0" string="Select type of movement">
+                        <field name="movement_type" required="True" />
+                        <field name="type" required="True" />
+                    </group>
+
+                    <group expand="0" string="Select Company And Warehouse">
+                        <field name="company_ids" widget="many2many_tags" />
+                        <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id','in', company_ids)]"/>
+                    </group>
+
+                    <group expand="0" string="Select Product And Category">
+                        <field name="category_ids" widget="many2many_tags" />
+                        <field name="product_ids" widget="many2many_tags" domain="[('categ_id', 'in', category_ids),'|',('company_id','in',company_ids),('company_id','=',False)]"/>
+                    </group>
+
+                    <group expand="0" string="Select date">
+                        <field name="from_date" required="True" />
+                        <field name="to_date" required="True" />
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="print_inventory_fsn_xyz_report" string="Excel" type="object" class="oe_highlight" />
+                    <button name="tree_graph_report_view" string="Data" type="object" class="oe_highlight" />
+                    <button name="tree_graph_report_view" string="Graph" type="object" class="oe_highlight" context="{'report_graph':True}" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!--Report Wizard Action View -->
+    <record id="action_inventory_fsn_xyz_report_action" model="ir.actions.act_window">
+        <field name="name">FSN XYZ Analysis Report</field>
+        <field name="res_model">inventory.fsn_xyz.report.wiz</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- <menuitem id="bi_inventory_fsn_xyz_reports_report_menu" action="action_inventory_fsn_xyz_report_action"
+                parent="stock.menu_warehouse_report" sequence="4" /> -->
+
+
+</odoo>

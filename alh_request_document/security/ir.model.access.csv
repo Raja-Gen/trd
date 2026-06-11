@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_document_request,document.request,model_document_request,,1,1,1,1
-access_rejection_feedback_wizard,rejection.feedback.wizard,model_rejection_feedback_wizard,,1,1,1,1
-access_request_document_type,request.document.type,model_request_document_type,,1,1,1,1
-access_document_request_attachment,document.request.attachment,model_document_request_attachment,,1,1,1,1

@@ -7,17 +7,23 @@
         <xpath expr="//table[contains(@class,'o_main_table')]/thead/tr/th[@name='th_description']" position="before">
             <th style="width:5%; text-align:center;">Sr. No.</th>
         </xpath>
-        <xpath expr="//t[@t-if='not line.display_type']/td[@name='td_name']" position="before">
+        <!-- Initialize custom counter before looping lines -->
+        <xpath expr="//t[@t-foreach='lines_to_report']" position="before">
+            <t t-set="sr_no" t-value="0"/>
+        </xpath>
+
+        <xpath expr="//tr[@name='tr_product']/td[@name='td_product_name']" position="before">
             <td style="text-align:center;">
-                <t t-esc="line_index + 1"/>
+                <t t-set="sr_no" t-value="sr_no + 1"/>
+                <t t-esc="sr_no"/>
             </td>
             <td name="td_image" style="border-right: none;"><img t-if="line.product_id.image_128" t-att-src="image_data_uri(line.product_id.image_128)" style="max-height: 60px; max-width: 60px;"/></td>
         </xpath>
-        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_section'&quot;]/td[@name='td_section_line']" position="before">
-            <td style="text-align:center;">
-                <t t-esc="line_index + 1"/>
-            </td>
-        </xpath>
+<!--        <xpath expr="//t[@t-elif=&quot;line.display_type == 'line_section'&quot;]/td[@name='td_section_line']" position="before">-->
+<!--            <td style="text-align:center;">-->
+<!--                <t t-esc="line_index + 1"/>-->
+<!--            </td>-->
+<!--        </xpath>-->
     </template>
 
 

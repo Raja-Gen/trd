@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "MS Product Brand Management",
-    "version": "1.0",
+    "version": "19.0.1.0.0",
     "summary": "Manage product brands and link them to products.",
     "description": """
         This module introduces product brand management.
@@ -12,7 +12,7 @@
     "category": "Inventory/Inventory",
     "author": "MicroSolutions, Kuwait",
     "website": "https://www.mskuwait.com",
-    "depends": ["base", "product", "mail", "stock"],
+    "depends": ["base", "product", "mail", "stock", "sale"],
     "data": [
         "security/ir.model.access.csv",
         "security/product_brand_security.xml",
