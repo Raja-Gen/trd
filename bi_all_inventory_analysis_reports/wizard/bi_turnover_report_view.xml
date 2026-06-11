@@ -35,7 +35,7 @@
         <field name="name">inventory.turnover.extended.tree</field>
         <field name="model">inventory.turnover.extended</field>
         <field name="arch" type="xml">
-            <tree string="Warehouse Turnover Analysis Report" create="false">
+            <list string="Warehouse Turnover Analysis Report" create="false">
                 <!--<field name="company" />
                 <field name="warehouse" />-->
                 <field name="company_ids" widget="many2many_tags"/>
@@ -47,7 +47,7 @@
                 <field name="stock_average" />
                 <field name="sales" />
                 <field name="turnover" />
-            </tree>
+            </list>
         </field>
     </record>
 

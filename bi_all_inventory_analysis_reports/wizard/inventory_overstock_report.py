@@ -127,9 +127,9 @@ class InventoryOverstockReport(models.TransientModel):
 
 
     def generate_xls_report(self):
-        current_date = fields.datetime.now() + timedelta(days=1)
-        past_date = fields.datetime.now() - timedelta(days=self.past_sale_dur_days)
-        advance_date = fields.datetime.now() + timedelta(days=self.adv_stock_dur_days)
+        current_date = fields.Datetime.now() + timedelta(days=1)
+        past_date = fields.Datetime.now() - timedelta(days=self.past_sale_dur_days)
+        advance_date = fields.Datetime.now() + timedelta(days=self.adv_stock_dur_days)
 
         if self.product_ids:
             get_report_data = self.specific_products_in_all_warehouse()
@@ -205,8 +205,9 @@ class InventoryOverstockReport(models.TransientModel):
                 if picking_obj:
                     on_hand_qty = pick_done_qty = 0
                     for pick in picking_obj:
-                        if any(product.id == pro.product_id.id for pro in pick.move_ids_without_package):
-                            for p_line in pick.move_ids_without_package:
+                        pick_moves = getattr(pick, 'move_ids', False) or getattr(pick, 'move_ids_without_package', self.env['stock.move'])
+                        if any(product.id == pro.product_id.id for pro in pick_moves):
+                            for p_line in pick_moves:
                                 if p_line.product_id.id == product.id:
                                     pick_done_qty = pick_done_qty + p_line.product_uom_qty
                     on_hand_qty = (product.qty_available - pick_done_qty)

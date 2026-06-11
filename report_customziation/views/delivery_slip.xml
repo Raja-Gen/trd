@@ -8,7 +8,7 @@
             <td style="text-align:center;">
                 <t t-esc="move_index + 1"/>
             </td>
-        </xpath>`
+        </xpath>
         <xpath expr="//table[@name='stock_move_line_table']/thead/tr/th[@name='th_sml_product']" position="before">
             <th style="width:5%; text-align:center;">Sr. No.</th>
         </xpath>
@@ -54,8 +54,8 @@
     </template>
 
     <template id="report_document" inherit_id="sale_stock.report_delivery_document_inherit_sale_stock">
-        <xpath expr="//div[@class='col-auto col-3 mw-100 mb-2' and ./strong[text()='Customer Reference:']]" position="replace">
-            <div t-if="o.sudo().sale_id.client_order_ref" class="col-auto col-3 mw-100 mb-2">
+        <xpath expr="//div[@class='col col-3 mw-100 mb-2' and ./strong[text()='Customer Reference']]" position="replace">
+            <div t-if="o.sudo().sale_id.client_order_ref" class="col col-3 mw-100 mb-2">
                 <strong>PO Number:</strong>
                 <p t-field="o.sudo().sale_id.client_order_ref" class="m-0"/>
             </div>

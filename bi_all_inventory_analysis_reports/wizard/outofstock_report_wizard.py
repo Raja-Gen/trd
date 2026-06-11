@@ -2,7 +2,8 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 from odoo import fields, models, api, _
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 from odoo.exceptions import UserError
@@ -195,7 +196,7 @@ class Inventory_outofstock_analysis_wizard(models.Model):
             domain += [('date', '>=', date_start), ('date', '<=', date_end)]
             product_qty = self.env['stock.move.line'].search(domain)
 
-            avaialable_qty = sum(product_qty.mapped('quantity'))
+            avaialable_qty = sum(product_qty.mapped('qty_done'))
 
             if product_id.sales_count and product_id.virtual_available:
                 ads = product_id.sales_count/product_id.virtual_available
@@ -234,14 +235,14 @@ class Inventory_outofstock_analysis_wizard(models.Model):
                 if product_id.id == qty.product_id.id:
                     if str(qty.date.strftime("%m-%d-%y")) <= str(self.from_date.strftime("%m-%d-%y")):
                         if qty.location_dest_id in location_ids:
-                            opening_qty += qty.quantity
+                            opening_qty += qty.qty_done
                         if qty.location_id in location_ids:
-                            opening_qty = opening_qty-qty.quantity
+                            opening_qty = opening_qty-qty.qty_done
                     if str(qty.date.strftime("%m-%d-%y")) <= str(self.to_date.strftime("%m-%d-%y")):
                         if qty.location_dest_id in location_ids:
-                            closing_qty += qty.quantity
+                            closing_qty += qty.qty_done
                         if qty.location_id in location_ids:
-                            closing_qty = closing_qty-qty.quantity
+                            closing_qty = closing_qty-qty.qty_done
 
             if opening_qty or closing_qty:
                 average = (opening_qty + closing_qty)/2
@@ -261,10 +262,8 @@ class Inventory_outofstock_analysis_wizard(models.Model):
                 fsn_type = 'Non Moving'
 
             sr_no += 1
-            worksheet.write(rows, 0, product_id.name_get()[
-                            0][1] or '', for_left_not_bold)
-            worksheet.write(rows, 1, product_id.categ_id.name_get()[
-                            0][1] or '', for_left_not_bold)
+            worksheet.write(rows, 0, product_id.display_name or '', for_left_not_bold)
+            worksheet.write(rows, 1, product_id.categ_id.display_name or '', for_left_not_bold)
             worksheet.write(
                 rows, 2, avaialable_qty or '0', for_left_not_bold)
             worksheet.write(
@@ -388,7 +387,7 @@ class Inventory_outofstock_analysis_wizard(models.Model):
             domain += [('date', '>=', date_start), ('date', '<=', date_end)]
             product_qty = self.env['stock.move.line'].search(domain)
 
-            available_quantity = sum(product_qty.mapped('quantity'))
+            available_quantity = sum(product_qty.mapped('qty_done'))
 
             if product_id.sales_count and product_id.virtual_available:
                 ads = product_id.sales_count/product_id.virtual_available
@@ -424,14 +423,14 @@ class Inventory_outofstock_analysis_wizard(models.Model):
                 if product_id.id == qty.product_id.id:
                     if str(qty.date.strftime("%m-%d-%y")) <= str(self.from_date.strftime("%m-%d-%y")):
                         if qty.location_dest_id in location_ids:
-                            opening_qty += qty.quantity
+                            opening_qty += qty.qty_done
                         if qty.location_id in location_ids:
-                            opening_qty = opening_qty-qty.quantity
+                            opening_qty = opening_qty-qty.qty_done
                     if str(qty.date.strftime("%m-%d-%y")) <= str(self.to_date.strftime("%m-%d-%y")):
                         if qty.location_dest_id in location_ids:
-                            closing_qty += qty.quantity
+                            closing_qty += qty.qty_done
                         if qty.location_id in location_ids:
-                            closing_qty = closing_qty-qty.quantity
+                            closing_qty = closing_qty-qty.qty_done
 
             if opening_qty or closing_qty:
                 average = (opening_qty + closing_qty)/2
@@ -494,14 +493,14 @@ class Inventory_outofstock_analysis_wizard(models.Model):
 
         if graph_first:
             display.append((graph_id, 'graph'))
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
         else:
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
             display.append((graph_id, 'graph'))
         return {
             'name': _('Warehouse Out of Stock Analysis Report'),
             'res_model': 'inventory.outofstock.extended',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'type': 'ir.actions.act_window',
             'views': display,
         }

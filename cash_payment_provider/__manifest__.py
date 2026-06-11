@@ -1,6 +1,6 @@
 {
     'name': 'Payment Cash on Delivery',
-    'version': '1.0',
+    'version': '19.0.1.0.0',
     'category': 'Accounting/Payment',
     'summary': 'Integrate Cash on Delivery Payment Method with Odoo 17',
     'description': 'Custom integration for Cash on Delivery payment method.',

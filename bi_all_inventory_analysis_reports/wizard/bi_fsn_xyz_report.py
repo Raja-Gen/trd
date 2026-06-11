@@ -2,7 +2,8 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 from odoo import fields, models, api, _
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 from dateutil.relativedelta import relativedelta
@@ -84,7 +85,7 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
 
         average_qty = round(sum(total_incoming_qty_list) / len(total_incoming_qty_list), 2)
 
-        total_outgoing_demand_qty = sum(demand_move_lines.mapped('quantity'))
+        total_outgoing_demand_qty = sum(demand_move_lines.mapped('qty_done'))
 
         turnover_ration = total_outgoing_demand_qty / (average_qty or 1)
 
@@ -128,7 +129,7 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
         domain += [('date','>',date_start),('date','<=',date_end)]
 
         move_lines = self.env['stock.move.line'].search(domain)
-        qty_sold = sum(move_lines.mapped('quantity'))
+        qty_sold = sum(move_lines.mapped('qty_done'))
 
         product_sold_qty_per_month.append(qty_sold)
 
@@ -143,7 +144,7 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
             range_domain += [('date','>',date_start),('date','<=',date_end)]
 
             move_lines = self.env['stock.move.line'].search(range_domain)
-            qty_sold = sum(move_lines.mapped('quantity'))
+            qty_sold = sum(move_lines.mapped('qty_done'))
 
             product_sold_qty_per_month.append(qty_sold)
 
@@ -186,7 +187,7 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
         domain += [('date','<',date_start)]
 
         move_lines = self.env['stock.move.line'].search(domain)
-        qty_sold = sum(move_lines.mapped('quantity'))
+        qty_sold = sum(move_lines.mapped('qty_done'))
         return qty_sold
 
     def _find_incoming_qty(self, product):
@@ -216,7 +217,7 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
         domain += [('date','>',date_start),('date','<=',date_end)]
 
         move_lines = self.env['stock.move.line'].search(domain)
-        qty_sold = sum(move_lines.mapped('quantity'))
+        qty_sold = sum(move_lines.mapped('qty_done'))
 
         product_sold_qty_per_month.append(qty_sold)
 
@@ -232,7 +233,7 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
             range_domain += [('date','>',date_start),('date','<=',date_end)]
 
             move_lines = self.env['stock.move.line'].search(range_domain)
-            qty_sold = sum(move_lines.mapped('quantity'))
+            qty_sold = sum(move_lines.mapped('qty_done'))
 
             product_sold_qty_per_month.append(qty_sold)
 
@@ -368,8 +369,8 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
             elif self.movement_type == 'Non_moving' and movement_type != 'non':
                 continue
 
-            worksheet.write(rows, 0, product.name_get()[0][1] or '', for_left_not_bold)
-            worksheet.write(rows, 1, product.categ_id.name_get()[0][1] or '', for_left_not_bold)
+            worksheet.write(rows, 0, product.display_name or '', for_left_not_bold)
+            worksheet.write(rows, 1, product.categ_id.display_name or '', for_left_not_bold)
             worksheet.write(rows, 2, average_qty  or '0', for_left_not_bold)
             worksheet.write(rows, 3, total_outgoing_demand_qty or '0', for_left_not_bold)
             worksheet.write(rows, 4, turnover_ration or '0', for_left_not_bold)
@@ -489,14 +490,14 @@ class Inventory_fsn_xyz_analysis_wizard(models.Model):
 
         if graph_first:
             display.append((graph_id, 'graph'))
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
         else:
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
             display.append((graph_id, 'graph'))
         return {
             'name': _('Stock FSN XYZ Analysis'),
             'res_model': 'inventory.fsn_xyz.extended',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'type': 'ir.actions.act_window',
             'views': display,
         }
@@ -535,11 +536,10 @@ class Inventory_fsn_xyz_analysis_Extended(models.TransientModel):
 class FSN_XYZ_Inherit_Product_Product(models.Model):
     _inherit = 'product.product'
 
-    stock_value = fields.Float("stock Value" ,compute='calculate_stock_value')
+    stock_value = fields.Float("Stock Value", compute='calculate_stock_value')
 
-    @api.depends('standard_price','qty_available')
+    @api.depends('standard_price', 'qty_available')
     def calculate_stock_value(self):
-        if self.standard_price and self.qty_available:
-            self.stock_value=  self.standard_price*self.qty_available
-        else:
-            self.stock_value=0.0
+        for rec in self:
+            rec.stock_value = rec.standard_price * rec.qty_available
+

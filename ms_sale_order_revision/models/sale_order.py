@@ -59,7 +59,6 @@ class SaleOrder(models.Model):
 
                 if message_passed:
                     # Update revision
-                    print(f"\n\t\torder_revise - {order.order_revise}, ")
                     if order.order_revise:
                         current = int(order.order_revise[1:])
                         order.order_revise = f"R{current + 1}"

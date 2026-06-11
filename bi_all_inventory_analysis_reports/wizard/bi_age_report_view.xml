@@ -34,7 +34,7 @@
         <field name="name">inventory.age.extended.tree</field>
         <field name="model">inventory.age.extended</field>
         <field name="arch" type="xml">
-            <tree string="Stock Age Ratio" create="false">
+            <list string="Stock Age Ratio" create="false">
                 <field name="company" />
                 <field name="products" />
                 <field name="product_category" />
@@ -45,7 +45,7 @@
                 <field name="oldest_value" />
                 <field name="qty_ratio" />
                 <field name="value_ratio" />
-            </tree>
+            </list>
         </field>
     </record>
 

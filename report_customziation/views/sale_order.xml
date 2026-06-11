@@ -12,7 +12,7 @@
             <t t-set="sr_no" t-value="0"/>
         </xpath>
 
-        <xpath expr="//t[@t-if='not line.display_type']/td[@name='td_name']" position="before">
+        <xpath expr="//tr[@name='tr_product']/td[@name='td_product_name']" position="before">
             <td style="text-align:center;">
                 <t t-set="sr_no" t-value="sr_no + 1"/>
                 <t t-esc="sr_no"/>

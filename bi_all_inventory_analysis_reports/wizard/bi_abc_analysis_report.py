@@ -2,7 +2,8 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 from odoo import fields, models, api, _
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 from odoo.exceptions import UserError
@@ -134,8 +135,8 @@ class Inventory_ABC_analysis_wizard(models.Model):
         domain += [('date','>',date_start),('date','<=',date_end)]
 
         total_move_lines = self.env['stock.move.line'].search(domain)
-        total_sale_qty = sum(total_move_lines.mapped('quantity'))
-        total_cumulative = sum(line.quantity * line.product_id.standard_price for line in total_move_lines)
+        total_sale_qty = sum(total_move_lines.mapped('qty_done'))
+        total_cumulative = sum(line.qty_done * line.product_id.standard_price for line in total_move_lines)
 
         for product in product_ids:
 
@@ -158,7 +159,7 @@ class Inventory_ABC_analysis_wizard(models.Model):
 
             move_lines = self.env['stock.move.line'].search(domain)
             
-            unit_sold = sum(move_lines.mapped('quantity'))
+            unit_sold = sum(move_lines.mapped('qty_done'))
 
             consumption_value_per = unit_sold * product.standard_price
 
@@ -182,8 +183,8 @@ class Inventory_ABC_analysis_wizard(models.Model):
             elif self.type == 'low_stock' and analysis_type != 'C Class':
                 continue
 
-            worksheet.write(rows, 0, product.name_get()[0][1] or '', for_left_not_bold)
-            worksheet.write(rows, 1, product.categ_id.name_get()[0][1] or '', for_left_not_bold)
+            worksheet.write(rows, 0, product.name or '', for_left_not_bold)
+            worksheet.write(rows, 1, product.categ_id.display_name or '', for_left_not_bold)
             worksheet.write(rows, 2, unit_sold or '0.0',for_left_not_bold)
             worksheet.write(rows, 3, product.standard_price or '0.0', for_left_not_bold)
             worksheet.write(rows, 4, consumption_value_per or '0.0', for_left_not_bold)
@@ -260,8 +261,8 @@ class Inventory_ABC_analysis_wizard(models.Model):
         domain += [('date','>',date_start),('date','<=',date_end)]
 
         total_move_lines = self.env['stock.move.line'].search(domain)
-        total_sale_qty = sum(total_move_lines.mapped('quantity'))
-        total_cumulative = sum(line.quantity * line.product_id.standard_price for line in total_move_lines)
+        total_sale_qty = sum(total_move_lines.mapped('qty_done'))
+        total_cumulative = sum(line.qty_done * line.product_id.standard_price for line in total_move_lines)
 
         for product in product_ids:
 
@@ -275,7 +276,7 @@ class Inventory_ABC_analysis_wizard(models.Model):
             location_id = self.env['stock.location'].search(location_domain)
             
             domain += [('location_id', 'in', location_id.ids)]
-            domain += [('state','=','done')]
+            domain += [('state', '=', 'done')]
 
             date_start = self.from_date
             date_end = self.to_date
@@ -284,7 +285,7 @@ class Inventory_ABC_analysis_wizard(models.Model):
 
             move_lines = self.env['stock.move.line'].search(domain)
             
-            unit_sold = sum(move_lines.mapped('quantity'))
+            unit_sold = sum(move_lines.mapped('qty_done'))
 
             consumption_value_per = unit_sold * product.standard_price
 
@@ -333,14 +334,14 @@ class Inventory_ABC_analysis_wizard(models.Model):
 
         if graph_first:
             display.append((graph_id, 'graph'))
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
         else:
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
             display.append((graph_id, 'graph'))
         return {
             'name': _('Stock ABC Ratio Analysis'),
             'res_model': 'inventory.abc.extended',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'type': 'ir.actions.act_window',
             'views': display,
         }
@@ -370,7 +371,7 @@ class Inventory_ABC_analysis_Extended(models.TransientModel):
 class Inherit_product_product(models.Model):
     _inherit = 'product.product'
 
-    stock_value = fields.Float("stock Value", compute='calculate_stock_value')
+    stock_value = fields.Float("stock Value", compute='calculate_stock_value', store=True)
 
     @api.depends('standard_price', 'qty_available')
     def calculate_stock_value(self):

@@ -2,7 +2,8 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
 from odoo import fields, models, api, _
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 from odoo.exceptions import UserError
@@ -110,10 +111,8 @@ class Inventory_Turnover_analysis_wizard(models.Model):
         self._create_turnover_data()
         dispaly_data = self.env['inventory.turnover.extended'].search([])
         for record in dispaly_data:
-            worksheet.write(rows, 0, record.products.name_get()
-                            [0][1] or '', for_left_not_bold)
-            worksheet.write(rows, 1, record.product_category.name_get()[
-                            0][1] or '', for_left_not_bold)
+            worksheet.write(rows, 0, record.products.display_name or '', for_left_not_bold)
+            worksheet.write(rows, 1, record.product_category.display_name or '', for_left_not_bold)
             worksheet.write(
                 rows, 2, record.stock_opening or '0.0', for_left_not_bold)
             worksheet.write(
@@ -194,9 +193,9 @@ class Inventory_Turnover_analysis_wizard(models.Model):
                 closing_stock_domain)
 
             opening_qty = sum(opening_stock_data.filtered(lambda x: x.location_id in location_ids).mapped(
-                'quantity')) - sum(opening_stock_data.filtered(lambda x: x.location_dest_id in location_ids).mapped('quantity'))
+                'qty_done')) - sum(opening_stock_data.filtered(lambda x: x.location_dest_id in location_ids).mapped('qty_done'))
             closing_qty = sum(closing_stock_data.filtered(lambda x: x.location_id in location_ids).mapped(
-                'quantity')) - sum(closing_stock_data.filtered(lambda x: x.location_dest_id in location_ids).mapped('quantity'))
+                'qty_done')) - sum(closing_stock_data.filtered(lambda x: x.location_dest_id in location_ids).mapped('qty_done'))
 
             if opening_qty or closing_qty:
                 average = (opening_qty + closing_qty)/2
@@ -248,15 +247,15 @@ class Inventory_Turnover_analysis_wizard(models.Model):
 
         if graph_first:
             display.append((graph_id, 'graph'))
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
         else:
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
             display.append((graph_id, 'graph'))
 
         return {
             'name': _('Warehouse Turnover Ratio Analysis'),
             'res_model': 'inventory.turnover.extended',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'type': 'ir.actions.act_window',
             'views': display,
         }

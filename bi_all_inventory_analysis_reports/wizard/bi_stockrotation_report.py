@@ -7,7 +7,8 @@ from datetime import date, timedelta, datetime
 import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import tempfile
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 import time
@@ -209,7 +210,8 @@ class Inventory_Stock_Rotation_analysis_wizard(models.Model):
                                         
 
                             for rec in data:
-                                for product in rec.move_ids_without_package:
+                                rec_moves = getattr(rec, 'move_ids', False) or getattr(rec, 'move_ids_without_package', self.env['stock.move'])
+                                for product in rec_moves:
                                     if rec1.id == product.product_id.id:
                                         if product.state =='confirmed':
                                             sale_return+= product.product_uom_qty
@@ -234,8 +236,8 @@ class Inventory_Stock_Rotation_analysis_wizard(models.Model):
                                         
 
                             sr_no += 1
-                            worksheet.write(rows, 0, record.product_id.name_get()[0][1] or '', for_left_not_bold)
-                            worksheet.write(rows, 1, rec1.categ_id.name_get()[0][1] or '', for_left_not_bold)
+                            worksheet.write(rows, 0, record.product_id.display_name or '', for_left_not_bold)
+                            worksheet.write(rows, 1, rec1.categ_id.display_name or '', for_left_not_bold)
                             worksheet.write(rows, 2, record.inventory_quantity  or '0.0', for_left_not_bold)
                             worksheet.write(rows, 3, rec1.sales_count or '0.0', for_left_not_bold)
                             worksheet.write(rows, 4, sale_return or '0.0', for_left_not_bold)

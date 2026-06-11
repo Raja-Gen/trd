@@ -6,7 +6,8 @@ from odoo.exceptions import UserError
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import tempfile
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 from dateutil.relativedelta import relativedelta
@@ -171,7 +172,7 @@ class Inventory_Age_analysis_wizard(models.Model):
 
                             sr_no += 1
                             worksheet.write(rows, 0, rec1.display_name or '', for_left_not_bold)
-                            worksheet.write(rows, 1, rec1.categ_id.name_get()[0][1] or '', for_left_not_bold)
+                            worksheet.write(rows, 1, rec1.categ_id.display_name or '', for_left_not_bold)
                             worksheet.write(rows, 2, rec1.qty_available  or '0.0', for_left_not_bold)
                             worksheet.write(rows, 3, value or '0.0', for_left_not_bold)
                             worksheet.write(rows, 4, quant_per or '0.0', for_left_not_bold)
@@ -293,14 +294,14 @@ class Inventory_Age_analysis_wizard(models.Model):
 
         if graph_first:
             display.append((graph_id, 'graph'))
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
         else:
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
             display.append((graph_id, 'graph'))
         return {
             'name': _('Stock age Ratio Analysis'),
             'res_model': 'inventory.age.extended',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'type': 'ir.actions.act_window',
             'views': display,
         }

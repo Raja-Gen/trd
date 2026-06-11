@@ -1,6 +1,6 @@
 {
     'name': 'credit_payment_provider',
-    'version': '1.0',
+    'version': '19.0.1.0.0',
     'category': 'Accounting/Payment',
     'summary': 'credit payment provider',
     'description': 'Custom integration for credit payment provider.',

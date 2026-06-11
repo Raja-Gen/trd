@@ -3,7 +3,8 @@
 
 from odoo import fields, models, api, _
 from datetime import datetime
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 from dateutil.relativedelta import relativedelta
@@ -59,7 +60,7 @@ class Inventory_Age_Breakdown_analysis_wizard(models.Model):
         worksheet.col(6).width = 4000
         worksheet.col(7).width = 4000
 
-        worksheet.write_merge(0, 0, 0, 5, 'Stock Age Breakdown Report', GREEN_TABLE_HEADER)
+        worksheet.write_merge(0, 0, 0, 25, 'Stock Age Breakdown Report', GREEN_TABLE_HEADER)
 
         row= 1
         col=0
@@ -71,13 +72,15 @@ class Inventory_Age_Breakdown_analysis_wizard(models.Model):
             worksheet.write(row, col, company or '', for_left_not_bold)
             col+=1
 
-        row = 2
+        base_days = self.days_breakdown or 1
+        if base_days <= 30:
+            sales_columns = 2
+        else:
+            sales_columns = 3
 
-        worksheet.write(row, 0, '' or '', for_left)
-        worksheet.write(row, 1, '' or '', for_left)
-        worksheet.write(row, 2, '' or '', for_left)
-        worksheet.write(row, 3, '' or '', for_left)
-        row_col = 4
+        row += 1
+        row_col = 10 + sales_columns
+        worksheet.write_merge(row, row, 0, row_col - 1, '', for_left)
         initial_val = 1
         for break_down in range(1,7):
             initial_val = break_down if break_down == 1 else ((self.days_breakdown)*(break_down-1)) + 1
@@ -91,14 +94,52 @@ class Inventory_Age_Breakdown_analysis_wizard(models.Model):
         stock_str = 'Stock'
         value_str = 'Value'
 
+        worksheet.write(row, header_col, 'Item Code', for_left)
+        header_col += 1
         worksheet.write(row, header_col, 'Product Name' or '', for_left)
         header_col += 1
+        worksheet.write(row, header_col, 'Brand', for_left)
+        header_col += 1
         worksheet.write(row, header_col, 'Category' or '', for_left)
+        header_col += 1
+        worksheet.write(row, header_col, 'Expected Qty', for_left)
+        header_col += 1
+
+        worksheet.write(row, header_col, 'Cost', for_left)
+        header_col += 1
+
+        worksheet.write(row, header_col, 'Available Qty', for_left)
+        header_col += 1
+
+        worksheet.write(row, header_col, 'Available Stock Value', for_left)
         header_col += 1
         worksheet.write(row, header_col, 'Total Stock' or '', for_left)
         header_col += 1
         worksheet.write(row, header_col, 'Stock Value' or '', for_left)
         header_col += 1
+
+        base_days = self.days_breakdown or 1
+
+        if base_days <= 30:
+            worksheet.write(row, header_col, f'Last {base_days} Days Sales', for_left)
+            header_col += 1
+
+            worksheet.write(row, header_col, 'Last Week Sales', for_left)
+            header_col += 1
+
+            sales_columns = 2
+        else:
+            worksheet.write(row, header_col, f'Last {base_days} Days Sales', for_left)
+            header_col += 1
+
+            worksheet.write(row, header_col, 'Last 30 Days Sales', for_left)
+            header_col += 1
+
+            worksheet.write(row, header_col, 'Last Week Sales', for_left)
+            header_col += 1
+            sales_columns = 3
+        ageing_start_col = header_col
+
         for i in range(1,8):
             worksheet.write(row, header_col, stock_str, for_left)
             header_col += 1
@@ -140,22 +181,77 @@ class Inventory_Age_Breakdown_analysis_wizard(models.Model):
             domain += [('state','=','done')]
             
             move_lines = self.env['stock.move.line'].search(domain)
-            qty_sold = sum(line.quantity for line in move_lines)
+            qty_sold = sum(line.qty_done for line in move_lines)
 
             qty_to_carry = qty_sold
 
             col = 0
+            worksheet.write(rows, col, product_id.default_code or '', for_left_not_bold)
+            col += 1
             worksheet.write(rows, col, product_id.display_name or '', for_left_not_bold)
             col += 1
-            worksheet.write(rows, col, product_id.categ_id.name_get()[0][1] or '', for_left_not_bold)
+            brand_name = product_id.x_studio_brand_5.x_name if hasattr(product_id, 'x_studio_brand_5') and product_id.x_studio_brand_5 else ''
+            worksheet.write(rows, col, brand_name, for_left_not_bold)
+            col += 1
+            worksheet.write(rows, col, product_id.categ_id.display_name or '', for_left_not_bold)
+            col += 1
+            worksheet.write(rows, col, product_id.virtual_available or '', for_left_not_bold)
+            col += 1
+            worksheet.write(rows, col, product_id.standard_price or '', for_left_not_bold)
+            col += 1
+            worksheet.write(rows, col, product_id.qty_available or '', for_left_not_bold)
+            col += 1
+            available_value = product_id.qty_available * product_id.standard_price
+            worksheet.write(rows, col, available_value or '', for_left_not_bold)
             col += 1
             worksheet.write(rows, col, product_id.qty_available  or '', for_left_not_bold)
             col += 1
             stock_value = product_id.qty_available * product_id.standard_price
             worksheet.write(rows, col, stock_value or '', for_left_not_bold)
             col += 1
+            today = fields.Datetime.now()
+            base_days = self.days_breakdown or 1
 
-            col += 14
+            SaleLine = self.env['sale.order.line']
+
+            def _get_sale_qty(days):
+                from_date = today - relativedelta(days=days)
+                domain = [
+                    ('product_id', '=', product_id.id),
+                    ('order_id.state', 'in', ['sale', 'done']),
+                    ('order_id.date_order', '>=', from_date),
+                ]
+                if self.company_ids:
+                    domain += [('order_id.company_id', 'in', self.company_ids.ids)]
+                return sum(SaleLine.search(domain).mapped('product_uom_qty'))
+
+            if base_days <= 30:
+                period_sales = _get_sale_qty(base_days)
+                week_sales = _get_sale_qty(7)
+            else:
+                period_sales = _get_sale_qty(base_days)
+                month_sales = _get_sale_qty(30)
+                week_sales = _get_sale_qty(7)
+
+            if base_days <= 30:
+                worksheet.write(rows, col, period_sales or '', for_left_not_bold)
+                col += 1
+
+                worksheet.write(rows, col, week_sales or '', for_left_not_bold)
+                col += 1
+            else:
+                worksheet.write(rows, col, period_sales or '', for_left_not_bold)
+                col += 1
+
+                worksheet.write(rows, col, month_sales or '', for_left_not_bold)
+                col += 1
+
+                worksheet.write(rows, col, week_sales or '', for_left_not_bold)
+                col += 1
+
+            col = ageing_start_col + (7 * 2)
+
+
             for i in range(7, 0, -1):
                 to_date = datetime.now() if i == 1 else (datetime.now() - relativedelta(days=self.days_breakdown*(i-1)))
                 from_date = to_date - relativedelta(days=self.days_breakdown)
@@ -173,7 +269,7 @@ class Inventory_Age_Breakdown_analysis_wizard(models.Model):
 
                 move_lines = self.env['stock.move.line'].search(domain)
 
-                qty_on_hand = sum(line.quantity for line in move_lines)
+                qty_on_hand = sum(line.qty_done for line in move_lines)
                 qty_to_carry -= qty_on_hand
 
                 if qty_on_hand and (qty_to_carry < 0.0):

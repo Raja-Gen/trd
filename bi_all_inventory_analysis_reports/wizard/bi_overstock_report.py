@@ -3,7 +3,8 @@
 
 from odoo import fields, models, api, _
 
-from odoo.tools.misc import xlwt
+# from odoo.tools.misc import xlwt
+import xlwt
 import io
 import base64
 
@@ -250,8 +251,8 @@ class Inventory_OverStock_analysis_wizard(models.Model):
                                 fsn_type = 'Non Moving'
 
                             sr_no += 1
-                            worksheet.write(rows, 0, record.product_id.name_get()[0][1] or '', for_left_not_bold)
-                            worksheet.write(rows, 1, rec1.categ_id.name_get()[0][1] or '', for_left_not_bold)
+                            worksheet.write(rows, 0, record.product_id.display_name or '', for_left_not_bold)
+                            worksheet.write(rows, 1, rec1.categ_id.display_name or '', for_left_not_bold)
                             worksheet.write(rows, 2, total or '0', for_left_not_bold)
                             worksheet.write(rows, 3, ads or '0', for_left_not_bold)
                             worksheet.write(rows, 4, record.available_quantity or '0', for_left_not_bold)
@@ -446,20 +447,20 @@ class Inventory_OverStock_analysis_wizard(models.Model):
                             })
 
         display = []
-        graph_id = self.env.ref('bi_overstock_report.inventory_overstock_extended_report_graph').id
-        tree_id = self.env.ref('bi_overstock_report.inventory_overstock_extended_report_tree').id
+        graph_id = self.env.ref('bi_all_inventory_analysis_reports.inventory_overstock_extended_report_graph').id
+        tree_id = self.env.ref('bi_all_inventory_analysis_reports.inventory_overstock_extended_report_tree').id
         graph_first = self.env.context.get('report_graph', False)
 
         if graph_first:
             display.append((graph_id, 'graph'))
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
         else:
-            display.append((tree_id, 'tree'))
+            display.append((tree_id, 'list'))
             display.append((graph_id, 'graph'))
         return {
             'name': _('Warehouse Overstock Analysis Report'),
             'res_model': 'inventory.overstock.extended',
-            'view_mode': 'tree',
+            'view_mode': 'list',
             'type': 'ir.actions.act_window',
             'views': display,
         }

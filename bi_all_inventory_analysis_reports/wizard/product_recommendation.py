@@ -88,8 +88,8 @@ class ProductRecommendation(models.TransientModel):
             'bi_all_inventory_analysis_reports.view_get_product_recommendation').id
         action = {
             'type': 'ir.actions.act_window',
-            'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
-            'view_mode': 'tree,form',
+            'views': [(tree_view_id, 'list'), (form_view_id, 'form')],
+            'view_mode': 'list,form',
             'name': _('Products'),
             'res_model': 'get.product.recommendation',
             'context': dict(self.env.context),

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Website Customization",
-    "version": "17.0",
+    "version": "19.0.1.0.0",
     "category": "Website",
     "summary": "Customize the website layout and design",
     "depends": ["website", "website_sale","stock","sale","sale_management"],

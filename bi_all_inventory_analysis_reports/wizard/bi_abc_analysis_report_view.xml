@@ -31,7 +31,7 @@
 		<field name="name">inventory.abc.extended.tree</field>
 		<field name="model">inventory.abc.extended</field>
 		<field name="arch" type="xml">
-			<tree string="Stock ABC Ratio" create="false">
+			<list string="Stock ABC Ratio" create="false">
 				<!--<field name="company"/>-->
 				<field name="company_ids" widget="many2many_tags"/>
 				<field name="products" />
@@ -42,7 +42,7 @@
 				<field name="sold_value_percentage" />
 				<field name="annual_consumption_percentage" />
 				<field name="analysis_type" />
-			</tree>
+			</list>
 		</field>
 	</record>
 	<record id="inventory_abc_extended_report_search" model="ir.ui.view">
@@ -90,7 +90,16 @@
 					</group>
 					<group expand="0" string="Select Product And Categories">
 						<field name="category_ids" widget="many2many_tags" />
-						<field name="product_ids" widget="many2many_tags" domain="[('categ_id', 'in', category_ids),'|',('company_id','in',company_ids),('company_id','=',False)]"/>
+						<field name="product_ids"
+       widget="many2many_tags"
+       domain="[
+           ('product_tmpl_id.categ_id', 'in', category_ids),
+           '|',
+               ('company_id', 'in', company_ids),
+               ('company_id', '=', False)
+       ]"
+/>
+
 					</group>
 					<group expand="0" string="Select value of Stock">
 						<field name="type" required="True" />

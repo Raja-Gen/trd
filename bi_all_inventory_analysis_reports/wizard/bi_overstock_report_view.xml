@@ -35,7 +35,7 @@
             <field name="name">inventory.overstock.extended.tree</field>
             <field name="model">inventory.overstock.extended</field>
             <field name="arch" type="xml">
-                <tree string="Warehouse Overstock Analysis Report"  create="false">
+                <list string="Warehouse Overstock Analysis Report"  create="false">
                     <field name="company" />
                     <field name="warehouse" />
                     <field name="products" />
@@ -60,7 +60,7 @@
                     <field name="value_per_OverStock" />
                     <field name="name_of_currency" />
                     <field name="name_of_vendor" />
-                </tree>
+                </list>
             </field>
         </record>
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
-import odoo.addons.decimal_precision as dp
+# import odoo.addons.decimal_precision as dp
 from odoo import api, fields, models, _
 from datetime import datetime
 from odoo.tools import pycompat
@@ -564,7 +564,7 @@ class ExportStockInfoWiz(models.TransientModel):
             'res_id': self.id,
             'name': 'Files to Download',
             'view_type': 'form',
-            "view_mode": 'form,tree',
+            "view_mode": 'form,list',
             'res_model': 'export.stock.info.wiz',
             'type': 'ir.actions.act_window',
             'target': 'new',

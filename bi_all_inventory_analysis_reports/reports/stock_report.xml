@@ -15,10 +15,13 @@
                             <field name="recipients_ids" widget="many2many_tags" />
                         </group>
                         <group colspan="4" col="4">
-                            <field name="location_ids" widget="many2many_tags" invisible="report_type in ('all','warehouse')"/>
-<!--                                   attrs="{'invisible': [('report_type', 'in', ['all','warehouse'])]}" />-->
-                            <field name="warehouse_ids" widget="many2many_tags" invisible="report_type in ('all','location')"/>
-<!--                                   attrs="{'invisible': [('report_type', 'in', ['all','location'])]}" />-->
+                            <field name="location_ids"
+                                widget="many2many_tags"
+                                invisible="report_type in ['all','warehouse']"/>
+
+                            <field name="warehouse_ids"
+                                widget="many2many_tags"
+                                invisible="report_type in ['all','location']"/>
                         </group>
                     </sheet>
                 </form>
@@ -29,11 +32,11 @@
             <field name="name">view.expiry.report.config.tree.view</field>
             <field name="model">stock.expiry.report</field>
             <field name="arch" type="xml">
-                <tree string="Genrating Stock Expiry Report">
+                <list string="Genrating Stock Expiry Report">
                     <field name="stock_expiry_days" />
                     <field name="include_expiry" />
                     <field name="report_type" />
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -41,7 +44,7 @@
             <field name="name">Stock Expiry Report</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">stock.expiry.report</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <!-- <menuitem id="menu_report_config" name="Expiry Report Setting" parent="stock.menu_stock_config_settings" action="action_stock_report_config" sequence="30"/> -->

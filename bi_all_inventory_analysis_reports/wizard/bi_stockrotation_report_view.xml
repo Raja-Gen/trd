@@ -51,15 +51,22 @@
                     <group expand="0" string="Select data date upto">
                         <field name="from_beginning" />
                     </group>
-                    <group expand="0" string="Select Date of report data">
-                        <field name="date_upto" required="from_beginning" invisible="not from_beginning"/>
-<!--                               attrs="{'required': [('from_beginning','=',True)], 'invisible': [('from_beginning','=',False)]}" />-->
-                        <field name="from_date" required="not from_beginning" invisible="from_beginning"/>
-<!--                               attrs="{'required': [('from_beginning','=',False)], 'invisible': [('from_beginning','=',True)]}" />-->
-                        <field name="to_date" required="not from_beginning" invisible="from_beginning"/>
-<!--                               attrs="{'required': [('from_beginning','=',False)], 'invisible': [('from_beginning','=',True)]}" />-->
-                    </group>
 
+                    <group expand="0" string="Select Date of report data">
+
+                        <field name="date_upto"
+                            required="from_beginning"
+                            invisible="not from_beginning"/>
+
+                        <field name="from_date"
+                            required="not from_beginning"
+                            invisible="from_beginning"/>
+
+                        <field name="to_date"
+                            required="not from_beginning"
+                            invisible="from_beginning"/>
+
+                    </group>
                 </sheet>
                 <footer>
                     <button name="print_inventory_stock_rotation_report" string="Excel" type="object" class="oe_highlight" />

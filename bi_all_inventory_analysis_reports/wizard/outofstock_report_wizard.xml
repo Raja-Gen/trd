@@ -34,7 +34,7 @@
         <field name="name">inventory.outofstock.extended.tree</field>
         <field name="model">inventory.outofstock.extended</field>
         <field name="arch" type="xml">
-            <tree string="Warehouse Out of Stock Analysis Report" create="false">
+            <list string="Warehouse Out of Stock Analysis Report" create="false">
                 <!--<field name="company" />
                 <field name="warehouse" />-->
                 <field name="company_ids" widget="many2many_tags"/>
@@ -58,7 +58,7 @@
                 <field name="stock_available" />
                 <field name="qty_incoming" />
                 <field name="qty_outgoing" />
-            </tree>
+            </list>
         </field>
     </record>
 

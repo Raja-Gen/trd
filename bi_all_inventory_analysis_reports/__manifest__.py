@@ -2,15 +2,13 @@
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'All in One Inventory Report Management',
-    'version': '17.0.0.3',
+    'version': '19.0.0.0',
     'category': 'Warehouse',
     'summary': 'All in one stock reports all in one warehouse reports inventory turnover analysis report stock inventory valuation report stock valuation report product overstock report inventory coverage report inventory age breakdown report warehouse stock movement report',
     'description': """
         All in One Inventory Report Management Odoo Apps for various reports to cover all important stock information.User can generate different inventory and warehouse reports like Real-Time Inventory Valuation Report, Stock Expiry Report, Warehouse Out of Stock Analysis Report, Inventory Coverage Report, Warehouse Turnover Analysis Report, Stock Age Breakdown XLS Report, Stock Age Analysis Report, Warehouse Overstock Analysis Report, FSN XYZ Analysis Report, ABC Analysis Report, Warehouse Stock Rotation Analysis Excel Report, Export Stock In Excel Report in Odoo Warehouse ERP.
     """,
-    'author': 'BROWSEINFO',
-    "price": 199,
-    "currency": 'EUR',
+    'author': 'quadra',
     'website': 'https://www.browseinfo.com/demo-request?app=bi_all_inventory_analysis_reports&version=17&edition=Community',
     'depends': ['base', 'stock', 'purchase','sale_management','product_expiry'],
     'data': [
@@ -27,7 +25,7 @@
         'reports/report_stock_expiry_template_warehouse.xml',
         'reports/stock_expiry_report.xml',
         'reports/stock_report.xml',
-        'data/mail_templates.xml',
+        # 'data/mail_templates.xml',
         'wizard/bi_abc_analysis_report_view.xml',
         'wizard/bi_age_breakdown_report_view.xml',
         'wizard/bi_age_report_view.xml',

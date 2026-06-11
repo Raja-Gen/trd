@@ -34,7 +34,7 @@
         <field name="name">inventory.fsn_xyz.extended.tree</field>
         <field name="model">inventory.fsn_xyz.extended</field>
         <field name="arch" type="xml">
-            <tree string="FSN XYZ Analysis Report" create="false">
+            <list string="FSN XYZ Analysis Report" create="false">
                 <!--<field name="company" />-->
                 <field name="company_ids" widget="many2many_tags"/>
                 <field name="products" />
@@ -47,7 +47,7 @@
                 <field name="type" />
                 <field name="movement_type" />
                 <field name="fsn_xyz_type" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -98,7 +98,7 @@
 
                     <group expand="0" string="Select Company And Warehouse">
                         <field name="company_ids" widget="many2many_tags" />
-                        <field name="warehouse_ids" widget="many2many_tags" context="{'fsn_xyz_company_id' : company_ids}" />
+                        <field name="warehouse_ids" widget="many2many_tags" domain="[('company_id','in', company_ids)]"/>
                     </group>
 
                     <group expand="0" string="Select Product And Category">

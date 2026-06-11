@@ -45,7 +45,7 @@ class NonMovingProductWizard(models.Model):
         domain += [('date','<',date_start)]
 
         move_lines = self.env['stock.move.line'].search(domain)
-        qty_sold = sum(move_lines.mapped('quantity'))
+        qty_sold = sum(move_lines.mapped('qty_done'))
         return qty_sold
 
     def _find_incoming_qty(self, product):
@@ -80,7 +80,7 @@ class NonMovingProductWizard(models.Model):
         domain += [('date','>',date_start),('date','<=',date_end)]
 
         move_lines = self.env['stock.move.line'].search(domain)
-        qty_sold = sum(move_lines.mapped('quantity'))
+        qty_sold = sum(move_lines.mapped('qty_done'))
 
         product_sold_qty_per_month.append(qty_sold)
 
@@ -95,7 +95,7 @@ class NonMovingProductWizard(models.Model):
             range_domain += [('date','>',date_start),('date','<=',date_end)]
 
             move_lines = self.env['stock.move.line'].search(range_domain)
-            qty_sold = sum(move_lines.mapped('quantity'))
+            qty_sold = sum(move_lines.mapped('qty_done'))
 
             product_sold_qty_per_month.append(qty_sold)
 
@@ -178,7 +178,7 @@ class NonMovingProductWizard(models.Model):
 
             average_qty = round(sum(total_incoming_qty_list) / len(total_incoming_qty_list), 2)
 
-            total_outgoing_demand_qty = sum(demand_move_lines.mapped('quantity'))
+            total_outgoing_demand_qty = sum(demand_move_lines.mapped('qty_done'))
 
             turnover_ration = total_outgoing_demand_qty / (average_qty or 1)
 

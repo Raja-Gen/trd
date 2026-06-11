@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'MS Sale Order Revision Tracking',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'summary': 'Tracks sale order line changes, logs them, and manages order revisions.',
     'description': """
 Key Features:

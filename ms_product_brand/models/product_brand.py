@@ -41,13 +41,10 @@ class ProductBrand(models.Model):
         compute="_compute_products_count",
     )
 
-    _sql_constraints = [
-        (
-            "name_company_uniq",
-            "unique(name, company_id)",
-            "Brand name must be unique per company!",
-        )
-    ]
+    _name_company_uniq = models.Constraint(
+        "unique(name, company_id)",
+        "Brand name must be unique per company!",
+    )
 
     @api.depends("product_ids")
     def _compute_products_count(self):
