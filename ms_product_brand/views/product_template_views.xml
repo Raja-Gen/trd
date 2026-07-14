@@ -11,6 +11,9 @@
                 <xpath expr="//field[@name='categ_id']" position="after">
                     <field name="brand_id" placeholder="e.g. Apple, Samsung" options="{'no_create_edit': True}"/>
                 </xpath>
+                <xpath expr="//group[@name='upsell_pos']" position="attributes">
+                    <attribute name="string">Related Items</attribute>
+                </xpath>
             </field>
         </record>
 
