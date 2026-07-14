@@ -12,7 +12,7 @@
     "category": "Inventory/Inventory",
     "author": "MicroSolutions, Kuwait",
     "website": "https://www.mskuwait.com",
-    "depends": ["base", "product", "mail", "stock", "sale"],
+    "depends": ["base", "product", "mail", "stock", "sale", "point_of_sale"],
     "data": [
         "security/ir.model.access.csv",
         "security/product_brand_security.xml",
