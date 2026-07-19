@@ -6,7 +6,7 @@ class CashPaymentController(http.Controller):
     @http.route('/payment/cash/create_tx', type='json', auth='public', website=True)
     def create_cash_tx(self, **kwargs):
 
-        order = request.website.sale_get_order()
+        order = request.cart
         if not order:
             return {'error': 'No active sale order'}
 

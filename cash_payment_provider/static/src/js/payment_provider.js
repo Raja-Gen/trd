@@ -1,8 +1,9 @@
 /** @odoo-module **/
 
-import paymentForm from '@payment/js/payment_form';
+import { patch } from '@web/core/utils/patch';
+import { PaymentForm } from '@payment/interactions/payment_form';
 
-paymentForm.include({
+patch(PaymentForm.prototype, {
     // #=== DOM MANIPULATION ===#
 
     /**

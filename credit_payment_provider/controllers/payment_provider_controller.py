@@ -6,7 +6,7 @@ class CreditPaymentController(http.Controller):
 
     @http.route('/payment/credit/create_tx', type='json', auth='public', website=True)
     def create_credit_tx(self, **kwargs):
-        order = request.website.sale_get_order()
+        order = request.cart
         if not order:
             return {'error': 'No active sale order'}
 
@@ -61,7 +61,7 @@ class CreditPaymentController(http.Controller):
 
     @http.route(['/shop/payment/options'], type='json', auth='public', website=True)
     def get_payment_options(self, **kwargs):
-        order = request.website.sale_get_order()
+        order = request.cart
         options = []
 
         if not order:
