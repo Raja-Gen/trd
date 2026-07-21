@@ -42,7 +42,9 @@ class WebsiteEventCustomController(WebsiteEventController):
                 type='http', auth="public", methods=['POST'], website=True)
     def registration_confirm(self, event, **post):
         """Override to redirect to thank-you page instead of ticket download page."""
-        if not request.env['ir.http']._verify_request_recaptcha_token('website_event_registration'):
+        try:
+            request.env['ir.http']._verify_request_recaptcha_token('website_event_registration')
+        except UserError:
             raise UserError(_('Suspicious activity detected by Google reCaptcha.'))
         registrations_data = self._process_attendees_form(event, post)
         registration_tickets = Counter(
