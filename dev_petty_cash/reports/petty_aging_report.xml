@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Aging Report Actions             -->
+    <!-- ============================================ -->
+
+    <!-- PDF Report Action -->
+    <record id="action_report_petty_aging_pdf" model="ir.actions.report">
+        <field name="name">Petty Cash Aging Report (PDF)</field>
+        <field name="model">dev.petty.cash.aging.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dev_petty_cash.report_petty_aging_template</field>
+        <field name="report_file">dev_petty_cash.report_petty_aging_template</field>
+        <field name="print_report_name">'Petty_Cash_Aging_Report_%s' % (time.strftime('%Y%m%d'))</field>
+        <field name="binding_model_id" ref="model_dev_petty_cash_aging_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- XLS Report Action (via XLSX Report Engine if installed, otherwise uses server action) -->
+    <record id="action_report_petty_aging_xls" model="ir.actions.server">
+        <field name="name">Petty Cash Aging Report (Excel)</field>
+        <field name="model_id" ref="model_dev_petty_cash_aging_report"/>
+        <field name="binding_model_id" ref="model_dev_petty_cash_aging_report"/>
+        <field name="binding_type">report</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records.action_export_xls()
+        </field>
+    </record>
+
+    <!-- Aging Summary PDF Report Action -->
+    <record id="action_report_petty_aging_summary_pdf" model="ir.actions.report">
+        <field name="name">Petty Cash Aging Summary (PDF)</field>
+        <field name="model">dev.petty.cash.aging.summary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dev_petty_cash.report_petty_aging_summary_template</field>
+        <field name="report_file">dev_petty_cash.report_petty_aging_summary_template</field>
+        <field name="print_report_name">'Petty_Cash_Aging_Summary_%s' % (time.strftime('%Y%m%d'))</field>
+        <field name="binding_model_id" ref="model_dev_petty_cash_aging_summary"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

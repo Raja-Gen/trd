@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Approval Matrix Views            -->
+    <!-- ============================================ -->
+
+    <!-- Approval Matrix Tree View -->
+    <record id="view_dev_petty_approval_matrix_tree" model="ir.ui.view">
+        <field name="name">dev.petty.approval.matrix.tree</field>
+        <field name="model">dev.petty.approval.matrix</field>
+        <field name="arch" type="xml">
+            <list string="Approval Matrix">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="fund_id" optional="show"/>
+                <field name="min_amount" widget="monetary"/>
+                <field name="max_amount" widget="monetary"/>
+                <field name="approver_group_id"/>
+                <field name="auto_approve"/>
+                <field name="requires_policy_approval"/>
+                <field name="active" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Approval Matrix Form View -->
+    <record id="view_dev_petty_approval_matrix_form" model="ir.ui.view">
+        <field name="name">dev.petty.approval.matrix.form</field>
+        <field name="model">dev.petty.approval.matrix</field>
+        <field name="arch" type="xml">
+            <form string="Approval Rule">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                   options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Rule Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Scope">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="fund_id"
+                                   placeholder="All Funds (leave empty for global rule)"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Approval Level">
+                            <field name="sequence"
+                                   help="Lower sequence = first approval level. Use same sequence for parallel approvers."/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Amount Range">
+                            <field name="min_amount"/>
+                            <label for="max_amount"/>
+                            <div class="o_row">
+                                <field name="max_amount" class="oe_inline"/>
+                                <span class="text-muted">(0 = Unlimited)</span>
+                            </div>
+                        </group>
+                        <group string="Approver Configuration">
+                            <field name="approver_group_id"
+                                   options="{'no_create': True}"/>
+                            <field name="auto_approve"/>
+                            <field name="requires_policy_approval"
+                                   help="If checked, users in this group can approve vouchers with policy violations."/>
+                        </group>
+                    </group>
+                    <group string="Notes" name="notes">
+                        <field name="note" nolabel="1" colspan="2"
+                               placeholder="Additional notes about this approval rule..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Approval Matrix Search View -->
+    <record id="view_dev_petty_approval_matrix_search" model="ir.ui.view">
+        <field name="name">dev.petty.approval.matrix.search</field>
+        <field name="model">dev.petty.approval.matrix</field>
+        <field name="arch" type="xml">
+            <search string="Search Approval Rules">
+                <field name="name"/>
+                <field name="fund_id"/>
+                <field name="approver_group_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Global Rules" name="global" domain="[('fund_id', '=', False)]"/>
+                <filter string="Fund-Specific" name="fund_specific" domain="[('fund_id', '!=', False)]"/>
+                <separator/>
+                <filter string="Auto Approve" name="auto_approve" domain="[('auto_approve', '=', True)]"/>
+                <filter string="Can Approve Policy Violations" name="policy_approver" domain="[('requires_policy_approval', '=', True)]"/>
+                <group>
+                    <filter string="Approval Level" name="group_sequence" context="{'group_by': 'sequence'}"/>
+                    <filter string="Fund" name="group_fund" context="{'group_by': 'fund_id'}"/>
+                    <filter string="Approver Group" name="group_approver" context="{'group_by': 'approver_group_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Approval Matrix Action -->
+    <record id="action_dev_petty_approval_matrix" model="ir.actions.act_window">
+        <field name="name">Approval Matrix</field>
+        <field name="res_model">dev.petty.approval.matrix</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_dev_petty_approval_matrix_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first approval rule
+            </p>
+            <p>
+                Configure amount-based approval rules:
+                <ul>
+                    <li>Define amount ranges for different approval levels</li>
+                    <li>Assign approver groups to each level</li>
+                    <li>Use sequence for multi-level approvals</li>
+                    <li>Enable auto-approval for small amounts</li>
+                </ul>
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Approval History Views                      -->
+    <!-- ============================================ -->
+
+    <!-- Approval History Tree View -->
+    <record id="view_dev_petty_approval_history_tree" model="ir.ui.view">
+        <field name="name">dev.petty.approval.history.tree</field>
+        <field name="model">dev.petty.approval.history</field>
+        <field name="arch" type="xml">
+            <list string="Approval History" create="false" edit="false">
+                <field name="voucher_id"/>
+                <field name="approval_level"/>
+                <field name="approved_by_id"/>
+                <field name="approval_date"/>
+                <field name="action" decoration-success="action == 'approve'"
+                       decoration-danger="action == 'reject'"
+                       decoration-warning="action == 'escalate'"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Approval History Form View -->
+    <record id="view_dev_petty_approval_history_form" model="ir.ui.view">
+        <field name="name">dev.petty.approval.history.form</field>
+        <field name="model">dev.petty.approval.history</field>
+        <field name="arch" type="xml">
+            <form string="Approval History" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="voucher_id"/>
+                            <field name="approval_level"/>
+                            <field name="rule_id"/>
+                        </group>
+                        <group>
+                            <field name="approved_by_id"/>
+                            <field name="approval_date"/>
+                            <field name="action"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Approval History Search View -->
+    <record id="view_dev_petty_approval_history_search" model="ir.ui.view">
+        <field name="name">dev.petty.approval.history.search</field>
+        <field name="model">dev.petty.approval.history</field>
+        <field name="arch" type="xml">
+            <search string="Search Approval History">
+                <field name="voucher_id"/>
+                <field name="approved_by_id"/>
+                <filter string="Approved" name="approved" domain="[('action', '=', 'approve')]"/>
+                <filter string="Rejected" name="rejected" domain="[('action', '=', 'reject')]"/>
+                <filter string="Escalated" name="escalated" domain="[('action', '=', 'escalate')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('approval_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[('approval_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Voucher" name="group_voucher" context="{'group_by': 'voucher_id'}"/>
+                    <filter string="Approved By" name="group_approver" context="{'group_by': 'approved_by_id'}"/>
+                    <filter string="Action" name="group_action" context="{'group_by': 'action'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'approval_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Approval History Action -->
+    <record id="action_dev_petty_approval_history" model="ir.actions.act_window">
+        <field name="name">Approval History</field>
+        <field name="res_model">dev.petty.approval.history</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_dev_petty_approval_history_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No approval history yet
+            </p>
+            <p>
+                Approval history is automatically tracked when vouchers are approved or rejected.
+            </p>
+        </field>
+    </record>
+
+</odoo>

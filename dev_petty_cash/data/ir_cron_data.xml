@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Scheduled Actions (Cron Jobs)               -->
+    <!-- ============================================ -->
+
+    <!-- Cron: Check Replenishment Threshold -->
+    <record id="ir_cron_check_replenishment_threshold" model="ir.cron">
+        <field name="name">Petty Cash: Check Replenishment Threshold</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_check_replenishment_threshold()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!-- <field name="numbercall">-1</field> -->
+        <field name="active" eval="True"/>
+        <!-- <field name="doall" eval="False"/> -->
+        <!-- Run at 8:00 AM -->
+        <field name="nextcall" eval="'2024-01-01 08:00:00'"/>
+    </record>
+
+</odoo>

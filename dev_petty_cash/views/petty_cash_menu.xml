@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Menu Structure                   -->
+    <!-- Under Accounting -> Petty Cash              -->
+    <!-- ============================================ -->
+
+    <!-- Main Menu: Petty Cash (top-level application) -->
+    <menuitem
+        id="menu_petty_cash_root"
+        name="Petty Cash"
+        web_icon="dev_petty_cash,static/description/icon.png"
+        sequence="3"
+        groups="dev_petty_cash.group_petty_user"/>
+
+    <!-- Submenu: Dashboard (Accounting Dashboard) -->
+    <menuitem
+        id="menu_petty_cash_dashboard"
+        name="Dashboard"
+        parent="menu_petty_cash_root"
+        action="action_petty_cash_dashboard_kpi"
+        sequence="1"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+    <!-- Submenu: Fund Monitoring -->
+    <menuitem
+        id="menu_petty_cash_fund_monitoring"
+        name="Fund Monitoring"
+        parent="menu_petty_cash_root"
+        action="action_petty_cash_dashboard_funds"
+        sequence="2"
+        groups="dev_petty_cash.group_petty_manager,account.group_account_user"/>
+
+    <!-- Submenu: Critical Funds Alert -->
+    <menuitem
+        id="menu_petty_cash_critical_funds"
+        name="Critical Funds"
+        parent="menu_petty_cash_root"
+        action="action_petty_cash_critical_funds"
+        sequence="3"
+        groups="dev_petty_cash.group_petty_manager,account.group_account_user"/>
+
+    <!-- Submenu: Vouchers -->
+    <menuitem
+        id="menu_petty_cash_vouchers"
+        name="Vouchers"
+        parent="menu_petty_cash_root"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_petty_cash_vouchers_all"
+        name="All Vouchers"
+        parent="menu_petty_cash_vouchers"
+        action="action_dev_petty_voucher"
+        sequence="1"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <menuitem
+        id="menu_petty_cash_vouchers_my"
+        name="My Vouchers"
+        parent="menu_petty_cash_vouchers"
+        action="action_dev_petty_voucher_my"
+        sequence="2"
+        groups="dev_petty_cash.group_petty_user"/>
+
+    <menuitem
+        id="menu_petty_cash_vouchers_pending"
+        name="To Approve"
+        parent="menu_petty_cash_vouchers"
+        action="action_dev_petty_voucher_pending"
+        sequence="3"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <menuitem
+        id="menu_petty_cash_vouchers_to_pay"
+        name="To Pay"
+        parent="menu_petty_cash_vouchers"
+        action="action_dev_petty_voucher_to_pay"
+        sequence="4"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <menuitem
+        id="menu_petty_cash_vouchers_to_reconcile"
+        name="To Reconcile"
+        parent="menu_petty_cash_vouchers"
+        action="action_dev_petty_voucher_to_reconcile"
+        sequence="5"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <!-- Submenu: Funds -->
+    <!-- <menuitem
+        id="menu_petty_cash_funds"
+        name="Funds"
+        parent="menu_petty_cash_root"
+        action="action_dev_petty_fund"
+        sequence="20"
+        groups="dev_petty_cash.group_petty_cashier"/> -->
+
+    <!-- Submenu: Replenishments -->
+    <menuitem
+        id="menu_petty_cash_replenish"
+        name="Replenishments"
+        parent="menu_petty_cash_root"
+        sequence="30"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <menuitem
+        id="menu_petty_cash_replenish_all"
+        name="All Replenishments"
+        parent="menu_petty_cash_replenish"
+        action="action_dev_petty_replenish"
+        sequence="1"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <menuitem
+        id="menu_petty_cash_replenish_pending"
+        name="Pending Approval"
+        parent="menu_petty_cash_replenish"
+        action="action_dev_petty_replenish_pending"
+        sequence="2"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+    <!-- Submenu: Reports -->
+    <menuitem
+        id="menu_petty_cash_reports"
+        name="Reports"
+        parent="menu_petty_cash_root"
+        sequence="40"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <!-- <menuitem
+        id="menu_petty_cash_report_voucher"
+        name="Voucher Report"
+        parent="menu_petty_cash_reports"
+        action="action_dev_petty_voucher_report_wizard"
+        sequence="1"
+        groups="dev_petty_cash.group_petty_cashier"/> -->
+
+    <!-- Submenu: Aging Reports -->
+    <menuitem
+        id="menu_petty_cash_aging"
+        name="Aging Analysis"
+        parent="menu_petty_cash_reports"
+        action="action_dev_petty_cash_aging_report"
+        sequence="10"
+        groups="dev_petty_cash.group_petty_cashier"/>
+
+    <menuitem
+        id="menu_petty_cash_aging_summary"
+        name="Aging Summary"
+        parent="menu_petty_cash_reports"
+        action="action_dev_petty_cash_aging_summary"
+        sequence="11"
+        groups="dev_petty_cash.group_petty_cashier"/>
+<!-- 
+    <menuitem
+        id="menu_petty_cash_aging_overdue"
+        name="Overdue Vouchers"
+        parent="menu_petty_cash_reports"
+        action="action_dev_petty_cash_aging_report_overdue"
+        sequence="12"
+        groups="dev_petty_cash.group_petty_cashier"/> -->
+
+    <!-- Submenu: Configuration -->
+    <menuitem
+        id="menu_petty_cash_config"
+        name="Configuration"
+        parent="menu_petty_cash_root"
+        sequence="50"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+    <menuitem
+        id="menu_petty_cash_config_funds"
+        name="Funds Configuration"
+        parent="menu_petty_cash_config"
+        action="action_dev_petty_fund"
+        sequence="1"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+    <menuitem
+        id="menu_petty_cash_config_policies"
+        name="Policies"
+        parent="menu_petty_cash_config"
+        action="action_dev_petty_policy"
+        sequence="10"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+    <menuitem
+        id="menu_petty_cash_config_approval_matrix"
+        name="Approval Matrix"
+        parent="menu_petty_cash_config"
+        action="action_dev_petty_approval_matrix"
+        sequence="20"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+    <menuitem
+        id="menu_petty_cash_config_approval_history"
+        name="Approval History"
+        parent="menu_petty_cash_config"
+        action="action_dev_petty_approval_history"
+        sequence="30"
+        groups="dev_petty_cash.group_petty_manager"/>
+
+</odoo>

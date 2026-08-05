@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="dev_petty_cash.PettyAttachmentPreviewField">
+        <t t-if="attachments.length">
+            <span class="o_petty_attachment_trigger"
+                  title="Click to preview attachments"
+                  t-on-mouseenter="onMouseenter"
+                  t-on-mouseleave="onMouseleave"
+                  t-on-click.stop.prevent="onClick">
+                <i class="fa fa-paperclip me-1"/>
+                <span class="o_petty_attachment_count" t-esc="attachments.length"/>
+            </span>
+        </t>
+        <span t-else="" class="text-muted">—</span>
+    </t>
+
+    <t t-name="dev_petty_cash.AttachmentPreviewPopover">
+        <div class="o_petty_attachment_gallery p-2"
+             t-on-mouseenter="() => props.onKeepOpen()"
+             t-on-mouseleave="() => props.onScheduleClose()">
+            <div class="o_petty_attachment_hint text-muted small mb-2">Click a document to open it</div>
+            <t t-foreach="props.attachments" t-as="att" t-key="att.id">
+                <div class="o_petty_attachment_item d-flex align-items-center mb-2"
+                     role="button"
+                     t-att-title="att.name"
+                     t-on-click.stop.prevent="() => props.onSelect(att)">
+                    <span class="o_petty_attachment_thumb_link me-2">
+                        <img t-if="isImage(att)"
+                             t-att-src="imageUrl(att)"
+                             t-att-alt="att.name"
+                             class="o_petty_attachment_thumb"/>
+                        <span t-else="" class="o_petty_attachment_icon">
+                            <i t-att-class="isPdf(att) ? 'fa fa-file-pdf-o' : 'fa fa-file-o'"
+                               title="Document"/>
+                        </span>
+                    </span>
+                    <span class="o_petty_attachment_name text-truncate" t-esc="att.name"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,68 @@
+.o_petty_attachment_trigger {
+    cursor: pointer;
+    white-space: nowrap;
+
+    .fa-paperclip {
+        color: var(--gray-600, #6c757d);
+    }
+    &:hover .fa-paperclip {
+        color: var(--primary, #017e84);
+    }
+    .o_petty_attachment_count {
+        font-weight: 500;
+    }
+}
+
+// Popover is portalled to the overlay container, so it is never clipped by
+// the list table's overflow.
+.o_petty_attachment_popover {
+    .o_petty_attachment_gallery {
+        max-width: 320px;
+        max-height: 340px;
+        overflow-y: auto;
+    }
+
+    .o_petty_attachment_item {
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+
+        &:last-child {
+            margin-bottom: 0 !important;
+        }
+        &:hover {
+            background-color: var(--gray-200, #e9ecef);
+        }
+    }
+
+    .o_petty_attachment_thumb_link {
+        flex: 0 0 auto;
+    }
+
+    .o_petty_attachment_thumb {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border: 1px solid var(--gray-300, #dee2e6);
+        border-radius: 4px;
+    }
+
+    .o_petty_attachment_icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--gray-300, #dee2e6);
+        border-radius: 4px;
+
+        .fa {
+            font-size: 24px;
+            color: var(--gray-600, #6c757d);
+        }
+    }
+
+    .o_petty_attachment_name {
+        max-width: 240px;
+    }
+}
