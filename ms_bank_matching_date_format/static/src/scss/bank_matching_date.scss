@@ -1,0 +1,14 @@
+// The first grid column of a Bank Matching row is 90px, sized for the short
+// "Apr 14" label. A full DD/MM/YYYY date shares that cell with the chatter icon
+// and no longer fits, so widen it. Selector mirrors the core rule in
+// account_accountant/static/src/components/bank_reconciliation/bank_rec_widget.scss
+// so it overrides on load order rather than on specificity.
+.o_bank_reconciliation_container {
+    @include media-breakpoint-up(md) {
+        .o_bank_reconciliation_kanban_renderer {
+            .o_statement_line .o_grid_container {
+                grid-template-columns: 120px 3fr minmax(200px, 1fr) 1fr 40px;
+            }
+        }
+    }
+}
