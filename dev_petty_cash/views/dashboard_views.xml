@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Dashboard Views                  -->
+    <!-- Account-style dashboard with KPI cards      -->
+    <!-- ============================================ -->
+
+    <!-- ========================== -->
+    <!-- Dashboard KPI Views        -->
+    <!-- ========================== -->
+
+    <!-- KPI Tree View (simplified, mainly used as base) -->
+    <record id="view_dev_petty_dashboard_kpi_tree" model="ir.ui.view">
+        <field name="name">dev.petty.dashboard.kpi.tree</field>
+        <field name="model">dev.petty.dashboard.kpi</field>
+        <field name="arch" type="xml">
+            <list string="Petty Cash KPIs" create="false" edit="false" delete="false">
+                <field name="company_id"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="total_float_amount"/>
+                <field name="total_available_balance"/>
+                <field name="funds_count"/>
+                <field name="funds_below_threshold"/>
+                <field name="pending_approval_amount"/>
+                <field name="unreconciled_amount"/>
+                <field name="current_month_spend"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- KPI Form View - Dashboard Style -->
+    <record id="view_dev_petty_dashboard_kpi_form" model="ir.ui.view">
+        <field name="name">dev.petty.dashboard.kpi.form</field>
+        <field name="model">dev.petty.dashboard.kpi</field>
+        <field name="arch" type="xml">
+            <form string="Petty Cash Dashboard" create="false" edit="false" delete="false" class="o_petty_dashboard">
+                <header>
+                    <button name="refresh_dashboard_data" type="object" string="Refresh Data" class="btn-secondary"/>
+                </header>
+                <div class="container-fluid bg-light p-3">
+                    
+                    <!-- Top Bar: Title & Filters (Compact) -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="bg-white p-3 rounded shadow-sm d-flex flex-wrap align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0 text-dark fw-bold me-4">Petty Cash Overview</h4>
+                                    
+                                    <!-- Company -->
+                                    <div class="me-4 border-start ps-3 d-none d-md-block">
+                                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Company</small>
+                                        <div class="h6 mb-0 fw-bold text-dark">
+                                            <field name="company_id" readonly="1" options="{'no_open': True}"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Date -->
+                                    <div class="border-start ps-3 d-none d-md-block">
+                                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Date</small>
+                                        <div class="h6 mb-0 fw-bold text-dark">
+                                            <field name="today_date" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <field name="currency_id" invisible="1"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 1: Key Liquidity & Activity (3 Cards) -->
+                    <div class="row g-3 mb-3">
+                        <!-- Total Float -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #4e73df !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Total Float</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #f0f4fd;">
+                                            <i class="fa fa-briefcase text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="total_float_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </h3>
+                                    <div>
+                                        <button name="action_view_all_funds" type="object" 
+                                                class="btn btn-sm btn-light text-primary fw-bold rounded-pill px-3 py-0"
+                                                style="font-size: 0.8rem;">
+                                            <field name="funds_count"/> Active Funds <i class="fa fa-angle-right ms-1"/>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Available Balance -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #1cc88a !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Available Balance</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #e8faf6;">
+                                            <i class="fa fa-money text-success"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="total_available_balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </h3>
+                                    <span class="badge bg-success bg-opacity-10 text-white p-1 px-2 rounded-pill small">
+                                        Safe
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Spend -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #858796 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Monthly Spend</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #f3f3f4;">
+                                            <i class="fa fa-line-chart text-secondary"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="current_month_spend" widget="monetary"/>
+                                    </h3>
+                                    <span class="text-muted small">This Month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Action Items (3 Cards) -->
+                    <div class="row g-3 mb-3">
+                        <!-- Pending Vouchers -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #f6c23e !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Draft Vouchers</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #fef8dd;">
+                                            <i class="fa fa-pencil-square-o text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="pending_approval_count"/>
+                                    </h3>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="text-warning fw-bold small">
+                                            <field name="pending_approval_amount" widget="monetary"/>
+                                        </span>
+                                        <button name="action_view_pending_vouchers" type="object" 
+                                                class="btn btn-sm btn-warning text-white fw-bold rounded-pill px-3 py-0">
+                                            Process
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Replenishments -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #4e73df !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Replenishments</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #e6f0ff;">
+                                            <i class="fa fa-refresh text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="pending_replenish_count"/>
+                                    </h3>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                         <span class="text-primary fw-bold small">
+                                            <field name="pending_replenish_amount" widget="monetary"/>
+                                        </span>
+                                        <button name="action_view_pending_replenishments" type="object" 
+                                                class="btn btn-sm btn-primary fw-bold rounded-pill px-3 py-0"
+                                                style="font-size: 0.8rem;">
+                                            Review
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Unreconciled -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #36b9cc !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Unreconciled</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #eef9fb;">
+                                            <i class="fa fa-files-o text-info"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="unreconciled_amount" widget="monetary"/>
+                                    </h3>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted small">
+                                            <field name="unreconciled_count"/> items
+                                        </span>
+                                        <button name="action_view_unreconciled_vouchers" type="object" 
+                                                class="btn btn-sm btn-info text-white fw-bold rounded-pill px-3 py-0"
+                                                style="font-size: 0.8rem;">
+                                            Reconcile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Alerts & Variances (3 Cards) -->
+                    <div class="row g-3">
+                        <!-- Critical Funds -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #e74a3b !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Low Balance Funds</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #fceceb;">
+                                            <i class="fa fa-exclamation-triangle text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-danger">
+                                        <field name="funds_below_threshold"/>
+                                    </h3>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="small text-danger fw-bold">
+                                            <field name="funds_critical_count"/> Critical
+                                        </span>
+                                        <button name="action_view_critical_funds" type="object" 
+                                                class="btn btn-sm btn-outline-danger fw-bold rounded-pill px-3 py-0"
+                                                style="font-size: 0.8rem;">
+                                            View
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Missing Receipts -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #20c997 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Missing Receipts</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #e8f9f5;">
+                                            <i class="fa fa-paperclip text-success" style="color: #20c997 !important;"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="missing_receipts_count"/>
+                                    </h3>
+                                    <div class="d-flex justify-content-end">
+                                        <button name="action_view_missing_receipts" type="object" 
+                                                class="btn btn-sm btn-light text-success fw-bold rounded-pill px-3 py-0"
+                                                style="color: #20c997 !important; font-size: 0.8rem;"
+                                                invisible="missing_receipts_count == 0">
+                                            View List
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Variance -->
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px; border-left: 4px solid #fd7e14 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-uppercase text-muted fw-bold small">Total Variance</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 35px; height: 35px; background-color: #fff1e6;">
+                                            <i class="fa fa-balance-scale text-warning"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="mb-2 fw-bold text-dark">
+                                        <field name="total_variance" widget="monetary"/>
+                                    </h3>
+                                    <div class="text-muted small">
+                                        Discrepancies found
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========================== -->
+    <!-- Dashboard Fund Views       -->
+    <!-- ========================== -->
+
+    <!-- Fund Dashboard Tree View -->
+    <record id="view_dev_petty_dashboard_fund_tree" model="ir.ui.view">
+        <field name="name">dev.petty.dashboard.fund.tree</field>
+        <field name="model">dev.petty.dashboard.fund</field>
+        <field name="arch" type="xml">
+            <list string="Fund Status"
+                  create="false" edit="false" delete="false"
+                  decoration-danger="status == 'critical'"
+                  decoration-warning="status == 'warning'"
+                  decoration-muted="fund_state == 'blocked'">
+                <field name="name"/>
+                <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="float_amount" sum="Total Float"/>
+                <field name="available_balance" sum="Total Available"/>
+                <field name="utilization_percentage" widget="progressbar"
+                       options="{'max_value': 100, 'editable': false}"/>
+                <field name="replenish_threshold"/>
+                <field name="last_replenishment_date"/>
+                <field name="pending_vouchers_count" string="Pending"/>
+                <field name="unreconciled_vouchers_count" string="Unrec."/>
+                <field name="month_spend" string="MTD Spend"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'ok'"
+                       decoration-warning="status == 'warning'"
+                       decoration-danger="status == 'critical'"/>
+                <field name="fund_state" optional="hide"/>
+                <button name="action_request_replenishment" type="object"
+                        title="Request Replenishment" icon="fa-refresh"
+                        invisible="status == 'ok'"/>
+                <button name="action_view_fund_vouchers" type="object"
+                        title="View Vouchers" icon="fa-list"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Fund Dashboard Kanban View -->
+    <record id="view_dev_petty_dashboard_fund_kanban" model="ir.ui.view">
+        <field name="name">dev.petty.dashboard.fund.kanban</field>
+        <field name="model">dev.petty.dashboard.fund</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" create="false" edit="false" delete="false"
+                    sample="1" default_group_by="status">
+                <field name="name"/>
+                <field name="fund_id"/>
+                <field name="float_amount"/>
+                <field name="available_balance"/>
+                <field name="utilization_percentage"/>
+                <field name="balance_percentage"/>
+                <field name="currency_id"/>
+                <field name="responsible_user_id"/>
+                <field name="status"/>
+                <field name="fund_state"/>
+                <field name="pending_vouchers_count"/>
+                <field name="unreconciled_vouchers_count"/>
+                <field name="month_spend"/>
+                <field name="last_replenishment_date"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.status.raw_value == 'critical' ? 'border-danger border-3' : record.status.raw_value == 'warning' ? 'border-warning border-2' : ''}">
+                            <div class="oe_kanban_content">
+                                <!-- Header -->
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="status" widget="label_selection"
+                                           options="{'classes': {'ok': 'success', 'warning': 'warning', 'critical': 'danger'}}"/>
+                                </div>
+
+                                <!-- Balance Info -->
+                                <div class="o_kanban_record_body">
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <span class="text-muted small">Float:</span>
+                                            <br/>
+                                            <field name="float_amount" widget="monetary"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted small">Available:</span>
+                                            <br/>
+                                            <strong t-attf-class="#{record.status.raw_value == 'critical' ? 'text-danger' : record.status.raw_value == 'warning' ? 'text-warning' : 'text-success'}">
+                                                <field name="available_balance" widget="monetary"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- Progress Bar -->
+                                    <div class="progress mb-2" style="height: 8px;">
+                                        <div class="progress-bar"
+                                             t-attf-class="#{record.status.raw_value == 'critical' ? 'bg-danger' : record.status.raw_value == 'warning' ? 'bg-warning' : 'bg-success'}"
+                                             role="progressbar"
+                                             t-attf-style="width: #{record.balance_percentage.raw_value}%"
+                                             t-att-aria-valuenow="record.balance_percentage.raw_value"
+                                             aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">
+                                        <span t-esc="record.balance_percentage.raw_value"/>% available
+                                        (<span t-esc="record.utilization_percentage.raw_value"/>% utilized)
+                                    </small>
+
+                                    <!-- Voucher Stats -->
+                                    <div class="row mt-3">
+                                        <div class="col-4 text-center" t-if="record.pending_vouchers_count.raw_value > 0">
+                                            <span class="badge text-bg-warning">
+                                                <field name="pending_vouchers_count"/> pending
+                                            </span>
+                                        </div>
+                                        <div class="col-4 text-center" t-if="record.unreconciled_vouchers_count.raw_value > 0">
+                                            <span class="badge text-bg-info">
+                                                <field name="unreconciled_vouchers_count"/> unrec.
+                                            </span>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <small class="text-muted">MTD: <field name="month_spend" widget="monetary"/></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <small class="text-muted" t-if="record.last_replenishment_date.raw_value">
+                                            Last replen: <field name="last_replenishment_date"/>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Fund Dashboard Search View -->
+    <record id="view_dev_petty_dashboard_fund_search" model="ir.ui.view">
+        <field name="name">dev.petty.dashboard.fund.search</field>
+        <field name="model">dev.petty.dashboard.fund</field>
+        <field name="arch" type="xml">
+            <search string="Search Funds">
+                <field name="name"/>
+                <field name="responsible_user_id"/>
+                <filter string="Critical" name="filter_critical" domain="[('status', '=', 'critical')]"/>
+                <filter string="Warning" name="filter_warning" domain="[('status', '=', 'warning')]"/>
+                <filter string="OK" name="filter_ok" domain="[('status', '=', 'ok')]"/>
+                <separator/>
+                <filter string="Active Funds" name="filter_active" domain="[('fund_state', '=', 'active')]"/>
+                <filter string="Has Pending Vouchers" name="filter_pending"
+                        domain="[('pending_vouchers_count', '>', 0)]"/>
+                <filter string="Has Unreconciled" name="filter_unreconciled"
+                        domain="[('unreconciled_vouchers_count', '>', 0)]"/>
+                <group>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Cashier" name="group_responsible"
+                            context="{'group_by': 'responsible_user_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"
+                            groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ========================== -->
+    <!-- Dashboard Actions          -->
+    <!-- ========================== -->
+
+    <!-- Main Dashboard Window Action (Used by Server Action) -->
+    <record id="action_petty_cash_dashboard_window" model="ir.actions.act_window">
+        <field name="name">Petty Cash Dashboard</field>
+        <field name="res_model">dev.petty.dashboard.kpi</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Main Dashboard Action (Server Action to load correct company record) -->
+    <record id="action_petty_cash_dashboard_kpi" model="ir.actions.server">
+        <field name="name">Petty Cash Dashboard</field>
+        <field name="model_id" ref="model_dev_petty_dashboard_kpi"/>
+        <field name="state">code</field>
+        <field name="code">
+action = model.action_open_dashboard()
+        </field>
+    </record>
+
+    <!-- Fund Monitoring Action -->
+    <record id="action_petty_cash_dashboard_funds" model="ir.actions.act_window">
+        <field name="name">Fund Monitoring</field>
+        <field name="res_model">dev.petty.dashboard.fund</field>
+        <field name="view_mode">list,kanban</field>
+        <field name="search_view_id" ref="view_dev_petty_dashboard_fund_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No petty cash funds found
+            </p>
+            <p>
+                Create petty cash funds to start monitoring.
+            </p>
+        </field>
+    </record>
+
+    <!-- Critical Funds Action -->
+    <record id="action_petty_cash_critical_funds" model="ir.actions.act_window">
+        <field name="name">Critical Funds</field>
+        <field name="res_model">dev.petty.dashboard.fund</field>
+        <field name="view_mode">list,kanban</field>
+        <field name="search_view_id" ref="view_dev_petty_dashboard_fund_search"/>
+        <field name="domain">[('status', 'in', ['critical', 'warning'])]</field>
+        <field name="context">{'search_default_filter_critical': 1}</field>
+    </record>
+
+</odoo>

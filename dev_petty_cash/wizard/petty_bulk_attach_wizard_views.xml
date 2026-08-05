@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_petty_bulk_attach_wizard_form" model="ir.ui.view">
+        <field name="name">petty.bulk.attach.wizard.form</field>
+        <field name="model">petty.bulk.attach.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Attach Documents">
+                <div class="alert alert-info" role="status">
+                    Add a row for each petty cash voucher, pick the voucher by its number
+                    and drop the document(s). Click <b>Attach</b> to attach them all.
+                </div>
+                <field name="line_ids">
+                    <list string="Documents">
+                        <field name="voucher_id"/>
+                        <field name="attachment_count" string="Files"/>
+                    </list>
+                    <form string="Voucher Documents">
+                        <group>
+                            <field name="voucher_id" options="{'no_create': True}"/>
+                        </group>
+                        <field name="attachment_ids" widget="many2many_binary"
+                               string="Documents"/>
+                    </form>
+                </field>
+                <footer>
+                    <button name="action_attach" type="object" string="Attach"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_petty_bulk_attach_wizard" model="ir.actions.act_window">
+        <field name="name">Bulk Attach Documents</field>
+        <field name="res_model">petty.bulk.attach.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_petty_cash_bulk_attach"
+              name="Bulk Attach Documents"
+              parent="menu_petty_cash_vouchers"
+              action="action_petty_bulk_attach_wizard"
+              sequence="6"
+              groups="dev_petty_cash.group_petty_cashier"/>
+
+</odoo>

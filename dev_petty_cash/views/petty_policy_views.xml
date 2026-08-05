@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Policy Views                     -->
+    <!-- ============================================ -->
+
+    <!-- Policy Tree View -->
+    <record id="view_dev_petty_policy_tree" model="ir.ui.view">
+        <field name="name">dev.petty.policy.tree</field>
+        <field name="model">dev.petty.policy</field>
+        <field name="arch" type="xml">
+            <list string="Petty Cash Policies">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="fund_id" optional="show"/>
+                <field name="max_voucher_amount" widget="monetary"/>
+                <field name="max_daily_amount_per_user" widget="monetary"/>
+                <field name="receipt_required_above" widget="monetary"/>
+                <field name="violation_action"/>
+                <field name="active" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Policy Form View -->
+    <record id="view_dev_petty_policy_form" model="ir.ui.view">
+        <field name="name">dev.petty.policy.form</field>
+        <field name="model">dev.petty.policy</field>
+        <field name="arch" type="xml">
+            <form string="Petty Cash Policy">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                   options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Policy Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Scope">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="fund_id"
+                                   placeholder="All Funds (leave empty for global policy)"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Violation Handling">
+                            <field name="violation_action" widget="radio"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Amount Limits" name="amount_limits">
+                            <group>
+                                <group>
+                                    <label for="max_voucher_amount"/>
+                                    <div class="o_row">
+                                        <field name="max_voucher_amount" class="oe_inline"/>
+                                        <span class="text-muted">(0 = No limit)</span>
+                                    </div>
+                                </group>
+                                <group>
+                                    <label for="max_daily_amount_per_user"/>
+                                    <div class="o_row">
+                                        <field name="max_daily_amount_per_user" class="oe_inline"/>
+                                        <span class="text-muted">(0 = No limit)</span>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Receipt Requirements" name="receipt_requirements">
+                            <group>
+                                <group>
+                                    <label for="receipt_required_above"/>
+                                    <div class="o_row">
+                                        <field name="receipt_required_above" class="oe_inline"/>
+                                        <span class="text-muted">(Receipts required for amounts at or above this)</span>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Expense Account Restrictions" name="account_restrictions">
+                            <group>
+                                <field name="allowed_expense_account_ids"
+                                       widget="many2many_tags"
+                                       options="{'no_create': True}"
+                                       placeholder="Leave empty for no restrictions"/>
+                            </group>
+                            <p class="text-muted">
+                                If expense accounts are specified, vouchers can only use these accounts.
+                                Leave empty to allow all expense accounts.
+                            </p>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Additional notes about this policy..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Policy Search View -->
+    <record id="view_dev_petty_policy_search" model="ir.ui.view">
+        <field name="name">dev.petty.policy.search</field>
+        <field name="model">dev.petty.policy</field>
+        <field name="arch" type="xml">
+            <search string="Search Policies">
+                <field name="name"/>
+                <field name="fund_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Global Policies" name="global" domain="[('fund_id', '=', False)]"/>
+                <filter string="Fund-Specific" name="fund_specific" domain="[('fund_id', '!=', False)]"/>
+                <separator/>
+                <filter string="Blocking" name="blocking" domain="[('violation_action', '=', 'block')]"/>
+                <filter string="Requires Approval" name="approval" domain="[('violation_action', '=', 'require_approval')]"/>
+                <group>
+                    <filter string="Fund" name="group_fund" context="{'group_by': 'fund_id'}"/>
+                    <filter string="Violation Action" name="group_action" context="{'group_by': 'violation_action'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Policy Action -->
+    <record id="action_dev_petty_policy" model="ir.actions.act_window">
+        <field name="name">Petty Cash Policies</field>
+        <field name="res_model">dev.petty.policy</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_dev_petty_policy_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first petty cash policy
+            </p>
+            <p>
+                Policies define limits and rules for petty cash transactions:
+                <ul>
+                    <li>Maximum voucher amounts</li>
+                    <li>Daily spending limits per user</li>
+                    <li>Receipt requirements</li>
+                    <li>Allowed expense accounts</li>
+                </ul>
+            </p>
+        </field>
+    </record>
+
+</odoo>

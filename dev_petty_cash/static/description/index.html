@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Petty Cash Management | Odoo Apps</title>
+	<meta name="description"
+		content="Enterprise-grade petty cash fund management with full accounting integration. Track balances, process vouchers, and automate replenishments.">
+	<meta name="keywords"
+		content="petty cash, odoo petty cash, cash fund management, voucher management, replenishment, accounting integration">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<style>
+.custom-tab {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 1px solid #015d65;
+    color: #015d65 !important;
+    background-color: #f3fbfc;
+    transition: all 0.25s ease;
+}
+
+/* Hover */
+.custom-tab:hover {
+    background-color: #d4f2f5;
+    color: #015d65 !important;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
+}
+
+/* Active */
+.custom-tab.active {
+    background-color: #015d65 !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Remove bootstrap bottom border */
+.nav-tabs {
+    border-bottom: none;
+}
+</style>
+
+</head>
+
+<body>
+	<div class="container mt-5">
+		<!-- heading & description -->
+		<section id="dev_intro" class="mt-2">
+			<div class="product-card shadow-lg p-3" style="border-radius: 14px;">
+				<div class="card-body text-center mt-3">
+					<h2 class="card-title" style="color: #015d65;">
+						Petty Cash Management
+					</h2>
+					<img src="images/seprator.png" alt="seprator" width=250 />
+					<p class="card-text description mt-2"
+						style="color: #5a5a5a; font-size: 17px; letter-spacing: 0.6px; text-align: justify;">
+						The <b>Petty Cash Management</b> app is an enterprise-grade solution designed for <b>efficient petty cash fund management</b> with full accounting integration. It allows organizations to <b>create and manage multiple funds</b>, policy, approval rules, track balances in <b>real-time</b>, and streamline <b>voucher requests and approvals</b>. With features like <b>automatic replenishment triggers</b>, <b>multi-company support</b>, and <b>detailed audit trails</b>, it ensures transparency and control over small expenditures while maintaining <b>accounting precision</b>.
+					</p>
+					<div class="row my-3 text-center">
+						<div class="col">
+							<span class='btn btn-primary'
+								style="position: relative; overflow: hidden; border: 1px solid transparent; padding: .375rem .75rem; font-size: 1rem; line-height: 1.5; border-radius: .25rem; background-color: #015d65; border-color: #015d65;">
+								<i class='fa fa-check'></i>
+								<span>Community</span>
+							</span>
+							<span class='btn btn-primary'
+								style="position: relative; overflow: hidden; border: 1px solid transparent; padding: .375rem .75rem; font-size: 1rem; line-height: 1.5; border-radius: .25rem; background-color: #015d65; border-color: #015d65;">
+								<i class='fa fa-check'></i>
+								<span>Enterprise</span>
+							</span>
+							<span class='btn btn-primary'
+								style="position: relative; overflow: hidden; border: 1px solid transparent; padding: .375rem .75rem; font-size: 1rem; line-height: 1.5; border-radius: .25rem; background-color: #015d65; border-color: #015d65;">
+								<i class='fa fa-check'></i>
+								<span>Odoo.sh</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- features -->
+		<section id="dev_features" class="mt-5">
+            <div class="text-center">
+                <p class="mb-0" style="color: #015d65; font-weight: 600; font-size: 25px;">FEATURES</p>
+                <img src="images/seprator.png" alt="seprator" width=150 />
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <ul class="list-unstyled">
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/fund_icon.png" alt="fund-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Multiple Petty Cash Funds</h4>
+                                    <p class="mb-0">
+                                        Create and manage multiple petty cash funds with dedicated journals, GL accounts, and responsible users
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/dashboard_icon.png" alt="balance-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Real-time Balance Tracking Dashboard</h4>
+                                    <p class="mb-0">
+                                        Monitor fund balances and available cash in real-time through an interactive dashboard
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/voucher_icon.png" alt="voucher-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Voucher Workflow</h4>
+                                    <p class="mb-0">
+                                        Streamlined request and approval workflow for petty cash vouchers with full traceability and policy control
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/replenish_icon.png"alt="replenish-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <h4 style="color: #015d65; margin: 0;">Replenishment Management</h4>
+                                    </div>
+                                    <p class="mb-0">
+                                        Trigger replenishment requests automatically or manually whenever fund balances fall below predefined safety thresholds.
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <ul class="list-unstyled">
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/accounting_icon.png" alt="account-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Accounting Integration</h4>
+                                    <p class="mb-0">
+                                        Seamlessly generate journal entries and integrate with Odoo's core accounting for accurate financial reporting
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/company_icon.png"alt="company-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Multi-Company Support</h4>
+                                    <p class="mb-0">
+                                        Manage petty cash funds across multiple branches or companies with centralized oversight and security
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/report_icon.png" alt="report-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Comprehensive Reporting</h4>
+                                    <p class="mb-0">
+                                        Generate detailed petty voucher reports and aging reports for effortless auditing
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="shadow-lg rounded"
+                            style="padding:20px; margin-bottom:20px; display:block; border-radius:0.25rem">
+                            <div class="row">
+                                <div class="col-md-2 col-12">
+                                    <img src="images/icons/mail_icon.png"alt="mail-icon" style="height:85px;" />
+                                </div>
+                                <div class="col-md-10 col-12">
+                                    <h4 style="color: #015d65;">Email Notifications</h4>
+                                    <p class="mb-0">
+                                        Automated email alerts for voucher approvals, replenishment requests and Dashboard Summary to keep everyone informed
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+		<!-- tabs -->
+		<section id="tabs" class="mt-5">
+			<ul class="nav nav-tabs justify-content-center pb-2" role="tablist">
+				<li class="nav-item rounded mx-1"
+					style="color: white !important; cursor: pointer; text-decoration: none; background-color: #015d65; font-weight: 600; font-size: 14px;">
+					<span class="nav-link active rounded"
+						style=" cursor: pointer; border: 1px solid #015d65;  padding: 10px 20px;" data-bs-toggle="tab"
+						href="#Configurations">
+						Setup
+					</span>
+				</li>
+				<li class="nav-item rounded mx-1"
+					style="color: white !important; cursor: pointer; text-decoration: none; background-color: #015d65; font-weight: 600; font-size: 14px;">
+					<span class="nav-link rounded"
+						style=" cursor: pointer; border: 1px solid #015d65;  padding: 10px 20px;" data-bs-toggle="tab"
+						href="#Release">
+						Releases
+					</span>
+				</li>
+				<li class="nav-item rounded mx-1"
+					style="color: white !important; cursor: pointer; text-decoration: none; background-color: #015d65; font-weight: 600; font-size: 14px;">
+					<span class="nav-link rounded"
+						style=" cursor: pointer; border: 1px solid #015d65;  padding: 10px 20px;" data-bs-toggle="tab"
+						href="#faqs">
+						FAQs
+					</span>
+				</li>
+				<li class="nav-item rounded mx-1"
+					style="color: white !important; cursor: pointer; text-decoration: none; background-color: #015d65; font-weight: 600; font-size: 14px;">
+					<span class="nav-link rounded"
+						style=" cursor: pointer; border: 1px solid #015d65;  padding: 10px 20px;" data-bs-toggle="tab"
+						href="#support">
+						Support
+					</span>
+				</li>
+			</ul>
+			
+			<div class="tab-content">
+				<div class="tab-pane fade show active" id="Configurations" role="tabpanel">
+					<section id="screenshot" class="text-center" style="color: #015d65;">
+						<hr/>
+						<section id="tabs" class="mt-4">
+    <ul class="nav nav-tabs justify-content-center pb-2" role="tablist">
+
+        <li class="nav-item mx-1">
+            <span class="nav-link active custom-tab"
+                data-bs-toggle="tab"
+                href="#subtab_dashboard">
+                Dashboard
+            </span>
+        </li>
+
+        <li class="nav-item mx-1">
+            <span class="nav-link custom-tab"
+                data-bs-toggle="tab"
+                href="#subtab_workflow">
+                Workflow
+            </span>
+        </li>
+
+        <li class="nav-item mx-1">
+            <span class="nav-link custom-tab"
+                data-bs-toggle="tab"
+                href="#subtab_reporting">
+                Reporting
+            </span>
+        </li>
+
+    </ul>
+
+						<div class="tab-content">
+						<!-- Dashboard -->
+						<div class="tab-pane fade show active" id="subtab_dashboard" role="tabpanel">
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Petty Cash Dashboard</b>
+								</p>
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								The Petty Cash Dashboard provides a real-time overview of all petty cash funds, including the total float assigned to each fund, the available balance, and the amount spent during the current month. It also highlights operational status such as draft vouchers, pending replenishment requests, unreconciled vouchers, funds with low balances, vouchers missing receipts, and the total variance between expected and actual cash balances.
+							</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_1.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Active Funds</b>
+								</p>
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								List of all Active Funds
+							</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_2.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Draft Vouchers</b>
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_3.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									List of all Draft Vouchers
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_4.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Replenishments</b>
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_5.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									List of all fund replenishments
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_6.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Unreconciled Vouchers</b>
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_10.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									List of all unreconciled vouchers
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_11.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Critical Funds</b>
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_7.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									List of all funds with low balance
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_8.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Missing Receipts</b>
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_9.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									List of all vouchers with missing receipts
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty__1.png" style="width:100%">
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="subtab_workflow" role="tabpanel">
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Security Groups</b>
+								</p>
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									Access to petty cash features is managed through role-based security groups, where <b>Users</b> can submit petty cash voucher requests, <b>Cashiers</b> can approve and pay vouchers for their assigned funds, and <b>Managers</b> have full access to all petty cash operations and configurations.
+								</p>
+
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_security.png" style="width:100%">
+								</div>
+							</div>
+							<!-- menu -->
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Petty Cash Menu</b>
+								</p>
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									Navigate to <b>Accounting → Petty Cash</b> to access all petty cash features.
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_16.png" style="width:100%">
+								</div>
+							</div>
+							<!-- Funds Configuration -->
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Funds Configuration</b>
+								</p>
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									Navigate to <b>Accounting → Petty Cash → Funds Configuration</b> to configure petty cash funds.
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_12.png" style="width:100%">
+								</div>
+							</div>
+							<!-- Fund Policy Configuration -->
+							<div class="mt-4">
+								<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+									<b>Policy Configuration</b>
+								</p>
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									Navigate to <b>Accounting → Petty Cash → Policies</b> to configure fund policies. <br/>These policies automatically enforce the configured rules when a user submits an expense voucher, such as <b>blocking transactions</b> that exceed the maximum allowed amount or requiring <b>additional approvals</b> based on the defined approval rules.
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_13.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									Require expense receipts for amounts exceeding the specified limit.
+								</p>
+
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_14.png" style="width:100%">
+								</div>
+							</div>
+							<div class="mt-4">
+								<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+									Voucher requests are limited to the selected expense account.
+								</p>
+								<div class="col-md-12">
+									<img class="img-responsive rounded shadow" src="screens/petty_15.png" style="width:100%">
+								</div>
+							</div>
+						<!-- Approval Rule Configuration-->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Approval Rule Configuration</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → Approval Matrix</b> to configure approval rules.<br/>Define approval thresholds for specific amount ranges, enabling <b>automatic approvals</b> or requiring approval from <b>designated approver groups for policy violations</b>.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_17.png" style="width:100%">
+							</div>
+						</div>
+						<!--Voucher Request -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Voucher Request</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → My Voucher</b> to create a new voucher request.<br/>
+								Set up the expense voucher by selecting the required fund, expense account, and product details, then click on <b>“Submit for Approval”</b> to send it for approval. 
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_18.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Voucher request mail sent to manager/ cashier and Policy violation is looged if applicable.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_19.png" style="width:100%">
+							</div>
+						</div>
+						<!--Voucher Approval -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Voucher Approval</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Manager/Cashier can View, approve and pay the voucher request.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_20.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Once approved, the voucher status changes to <b>“Approved”</b> and an email notification is sent to the user. Click on <b>“Mark as Paid”</b> to process the voucher payment.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_21.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Reconcile the paid voucher to automatically create the related journal entry, with all details stored in the record for tracking and audit purposes. 
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_22.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Enter the receipt amount for the voucher. If it is less than the payable amount, a variance journal entry is created for the difference; otherwise, the full amount is journalized and reconciled.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_24.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Voucher state changes to <b>“Reconciled”</b> and a journal entry is created for the voucher.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_25.png" style="width:100%">
+							</div>
+							<div class="col-md-12 mt-4">
+								<img class="img-responsive rounded shadow" src="screens/petty_23.png" style="width:100%">
+							</div>
+						</div>
+						<!-- Replenishment Configuration -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Replenishment Configuration</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → All Replenishments</b> and click <b>“New”</b> to create a new replenishment request.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_26.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Once submitted, an email is sent to the approver. Click on <b>“Approve”</b> to approve the request.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_27.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								After approval, the state changes to <b>“Approved”</b>. Click on <b>"Create Journal Entry"</b> to create a journal entry for the replenishment.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_28.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Journal Entry created. Click on <b>“Mark as Done”</b> to complete the replenishment.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_29.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								State changes to <b>“Done”</b> and replenishment journal entry created.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_30.png" style="width:100%">
+							</div>
+							<div class="col-md-12 mt-4">
+								<img class="img-responsive rounded shadow" src="screens/petty_31.png" style="width:100%">
+							</div>
+						</div>	
+						<!-- Funds Monitoring -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Funds Monitoring</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → Fund Monitoring</b> to view the fund utilisation and related information.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_32.png" style="width:100%">
+							</div>
+						</div>
+						<!-- Critical Funds -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Critical Funds</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → Critical Funds</b> to view the Funds with low balance.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_33.png" style="width:100%">
+							</div>
+						</div>
+					</div>
+
+					<div class="tab-pane fade" id="subtab_reporting" role="tabpanel">
+						<!-- Aging Analysis -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Aging Analysis</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → Aging Analysis</b> to print reports for Overdue vouchers in PDF and Excel formats.
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_34.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								PDF Format
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_35.png" style="width:50%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Excel Format
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_36.png" style="width:80%">
+							</div>
+						</div>
+						<!-- Aging Summary -->
+						<div class="mt-4">
+							<p style="font-size: 30px; margin: auto; letter-spacing: .5px">
+								<b>Aging Summary</b>
+							</p>
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								Navigate to <b>Accounting → Petty Cash → Aging Summary</b> to print Overdue vouchers details in PDF Format .
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_37.png" style="width:100%">
+							</div>
+						</div>
+						<div class="mt-4">
+							<p style="font-size: 18px; letter-spacing: 0.5px; margin-top: 10px;">
+								PDF Format
+							</p>
+							<div class="col-md-12">
+								<img class="img-responsive rounded shadow" src="screens/petty_38.png" style="width:50%">
+							</div>
+						</div>
+					</div>
+					</div>
+				</section>
+				</section>
+				</div>
+				<div class="tab-pane fade" id="Release" role="tabpanel">
+					<section id="release" class="mt-2">
+						<div class="shadow-lg rounded bg-white" style="padding:20px; margin-bottom:15px">
+							<h4
+								style="font-size:16px; margin:0; color:#212121; text-decoration:none; font-weight:600; letter-spacing:1px; display:block">
+								<span class="fa fa-hand-o-right"
+									style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+								<span>Version 18.0.1.0</span> | <span style="color:#015d65">Released on :
+									31<sup>st</sup>
+									January 2026</span>
+							</h4>
+							<div style="font-size:16px; padding-left:32px; color:#555; margin:0; padding-top:15px">
+								<div style="font-weight:normal" class="d-flex align-items-center">
+									<span class="fa fa-arrow-right"
+										style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+									<span style="vertical-align:middle; font-size:17px; font-weight: 600; ">
+										Initial Release.</span>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="tab-pane fade" id="faqs" role="tabpanel">
+					<section id="faq">
+						<ul class="list-unstyled">
+							<li class="shadow-lg rounded"
+								style="padding:20px; margin-bottom:20px; font-size:20px; color:#015d65; display:block; border-radius:0.25rem">
+								<span class="fa fa-hand-o-right"
+									style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+								<span>
+									<b>Is this app compatible with Odoo Enterprise?</b>
+								</span>
+								<br>
+								<ul style="color: black; font-size: 16px;">
+									<li>
+										<span class="pl-4">Yes, our app works with Odoo Enterprise as well as
+											Community.</span>
+									</li>
+								</ul>
+							</li>
+							<li class="shadow-lg rounded"
+								style="padding:20px; margin-bottom:20px; font-size:20px; color:#015d65; display:block; border-radius:0.25rem">
+								<span class="fa fa-hand-o-right"
+									style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+								<span>
+									<b>If need of customization in this app, How can i contact ?</b>
+								</span>
+								<br>
+								<ul style="color: black; font-size: 16px;">
+									<li>
+										<span class="pl-4">Please contact us on <b>odoo@devintellecs.com</b></span>
+									</li>
+								</ul>
+							</li>
+							<li class="shadow-lg rounded"
+								style="padding:20px; margin-bottom:20px; font-size:20px; color:#015d65; display:block; border-radius:0.25rem">
+								<span class="fa fa-hand-o-right"
+									style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+								<span>
+									<b>Do i get free support?</b>
+								</span>
+								<br>
+								<ul style="color: black; font-size: 16px;">
+									<li>
+										<span class="pl-4">Yes, you will get free support for 90days.</b></span>
+									</li>
+								</ul>
+							</li>
+							<li class="shadow-lg rounded"
+								style="padding:20px; margin-bottom:20px; font-size:20px; color:#015d65; display:block; border-radius:0.25rem">
+								<span class="fa fa-hand-o-right"
+									style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+								<span>
+									<b>Do i get free updates?</b>
+								</span>
+								<br>
+								<ul style="color: black; font-size: 16px;">
+									<li>
+										<span class="pl-4">Yes, you will get free updates for lifetime.</b></span>
+									</li>
+								</ul>
+							</li>
+							<li class="shadow-lg rounded"
+								style="padding:20px; margin-bottom:20px; font-size:20px; color:#015d65; display:block; border-radius:0.25rem">
+								<span class="fa fa-hand-o-right"
+									style="color:#015d65; font-weight:600; font-size:18px; padding-right:10px"></span>
+								<span>
+									<b>Do i have to buy this module for each version ?</b>
+								</span>
+								<br>
+								<ul style="color: black; font-size: 16px;">
+									<li>
+										<span class="pl-4">Yes, you have to buy this module for each version.</b></span>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+				</div>
+				<div class="tab-pane fade" id="support" role="tabpanel">
+					<section id="support" class="mt-4">
+						<div class="text-center">
+							<h3 class="mb-0" style="color: #015d65;">Support</h3>
+							<img src="images/seprator.png" alt="seprator" width=150 />
+						</div>
+						<div class="product-card shadow-lg p-2" style="border-radius: 14px;">
+							<div class="row">
+								<div class="col-lg-2 col-sm-12 text-center">
+									<img src="images/tube.png" alt="support" height=100>
+								</div>
+								<div class="col-lg-10 col-sm-12 pt-3" style="font-size: 20px; font-weight: 400;">
+									DevIntelle will provide FREE 90 days support for any doubt, queries, and bug fixing
+									(excluding
+									data recovery) or any
+									type of issues related to this app. This is applicable from the date of purchase.
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</section>
+
+		<!-- whyus  -->
+		<section id="whyus" class="mt-5">
+			<div class="text-center">
+				<h3 class="mb-0" style="color: #015d65;">Why Us?</h3>
+				<img src="images/seprator.png" alt="seprator" width=120 />
+			</div>
+			<div class="shadow-lg p-3" style="border-radius: 14px;">
+				<div class="row mt-3">
+					<div class="col-lg-4 col-md-12 col-sm-12 text-center my-auto">
+						<img src='images/logo.png' alt='logo' style="width: 250px;">
+					</div>
+					<div class="col-lg-8 col-md-12 col-sm-12 mt-1"
+						style="font-size: 20px; font-weight: 400; color: #364546; text-align: justify !important;">
+						DevIntelle Consulting Services Pvt Ltd is an Odoo service provider India/USA based
+						consulting
+						company with <b>12+ years of experience</b>. We provide a wide range of services, including
+						implementation, customization, migration, support, and training. Devintellecs experienced
+						team
+						of Odoo can help you get the most out of your Odoo ERP system and achieve your business
+						goals.
+					</div>
+				</div>
+				<div class="row mt-4">
+					<div class="col-lg-6 col-12 d-flex justify-content-lg-end justify-content-center">
+						<a href="https://apps.odoo.com/apps/modules/browse?author=DevIntelle%20Consulting%20Service%20Pvt.Ltd"
+							style="text-decoration: none;">
+							<span class='btn btn-primary px-5 py-3 ml-auto'
+								style="position: relative; overflow: hidden; border: 1px solid transparent; font-size: 1.3rem; line-height: 1.5; border-radius: .25rem; background-color: #015d65;border-color: #015d65;"><i
+									class='fa fa-cube' style="padding-right: 9px;"></i>More Apps</span>
+						</a>
+					</div>
+					<div class="col-lg-6 col-12 d-flex justify-content-lg-start justify-content-center mt-lg-0 mt-3">
+						<a href="mailto:odoo@devintellecs.com" style="text-decoration: none;">
+							<span class='btn btn-primary py-3 px-5'
+								style="position: relative; overflow: hidden; border: 1px solid transparent; font-size: 1.3rem; line-height: 1.5; border-radius: .25rem; background-color: #015d65;border-color: #015d65;"><i
+									class='fa fa-desktop' style="padding-right: 9px;"></i>Ask for Demo</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- app you like  -->
+		<section id="dev_similarapps" class="mt-5">
+			<div class="text-center mt-4">
+				<h3 class="mb-0" style="color: #015d65;">You May Also Like</h3>
+				<img src="images/seprator.png" alt="seprator" width=230 />
+			</div>
+			<div class="row my-3">
+				<div class="col-lg-4 col-md-6 col-sm-12 text-center mb-2">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_purchase_history/" target="_blank">
+						<img src="banners/dev_purchase_history.png" alt="Product Purchase History" width="320"
+							style="border: solid 1px #12757e;">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 text-center mb-2">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_purchase_order_status/" target="_blank">
+						<img src="banners/dev_purchase_order_status.png" alt="Purchase Order Status" width="320"
+							style="border: solid 1px #12757e;">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 text-center mb-2">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_odoo_purchase_report_bundle/" target="_blank">
+						<img src="banners/dev_odoo_purchase_report_bundle.png" alt="All in One Purchase Reports"
+							width="320" style="border: solid 1px #12757e;">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 text-center mb-2">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_purchase_pricelist/" target="_blank">
+						<img src="banners/dev_purchase_pricelist.png" alt="Purchase Pricelist" width="320"
+							style="border: solid 1px #12757e;">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 text-center mb-2">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_purchase_shipment_by_date/" target="_blank">
+						<img src="banners/dev_purchase_shipment_by_date.png" alt="Purchase Shipment By Dates"
+							width="320" style="border: solid 1px #12757e;">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 text-center mb-2">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_purchase_revision/" target="_blank">
+						<img src="banners/dev_purchase_revision.png" alt="Purchase Revision Number" width="320"
+							style="border: solid 1px #12757e;">
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- most Demandend apps  -->
+		<section id="dev_demandedapps" class="mt-5">
+			<div class="text-center mt-4">
+				<h3 class="mb-0" style="color: #015d65;">Most Demandend Apps</h3>
+				<img src="images/seprator.png" alt="seprator" width=230 />
+			</div>
+			<div class="row my-3">
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_picking_cancel/" target="_blank">
+						<img src="banners/dev_picking_cancel.gif" alt="All in one Cancel" height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_loan_management/" target="_blank">
+						<img src="banners/dev_loan_management.gif" alt="Customer / Supplier Loan Management"
+							height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_customer_credit_limit/" target="_blank">
+						<img src="banners/dev_customer_credit_limit.gif" alt="Customer Credit Limit" height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_inventory_ageing_report/" target="_blank">
+						<img src="banners/dev_inventory_ageing_report.gif" alt="Stock Inventory Aging Report PDF/Excel"
+							height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_hr_loan/" target="_blank">
+						<img src="banners/dev_hr_loan.gif" alt="Employee Loan Management" height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_export_excel/" target="_blank">
+						<img src="banners/dev_export_excel.gif"
+							alt="Dynamic / Global Export Excel Report For all Application-xls" height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_customer_account_statement/" target="_blank">
+						<img src="banners/dev_customer_account_statement.gif" alt="Customer Statement & Aging"
+							height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_purchase_down_payment/" target="_blank">
+						<img src="banners/dev_purchase_down_payment.gif" alt="Purchase Advance Payment" height="180">
+					</a>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-2 text-center">
+					<a href="https://apps.odoo.com/apps/modules/16.0/dev_invoice_multi_payment/" target="_blank">
+						<img src="banners/dev_invoice_multi_payment.gif" alt="Multiple Invoice Payment" height="180">
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- services  -->
+
+		<section id="services" class="mt-5">
+			<div class="text-center mt-4">
+				<h3 class="mb-0" style="color: #015d65;">Devintelle Odoo Services</h3>
+				<img src="images/seprator.png" alt="seprator" width=170 />
+			</div>
+			<div class="row mt-3">
+				<div class="col-lg-4 col-sm-12 text-center">
+					<a href="#" style="text-decoration: none;">
+						<div class="shadow-lg rounded btn-lg btn-block p-4 mb-2"
+							style="font-size:25px; font-weight:bold; color: #0090e9; background-color:#d1edff; width:90%; margin:auto;">
+							<span class="fa fa-cloud-upload" style="font-size:40px; color:#0090e9"></span> <br>
+							<span> Odoo Implementation </span>
+						</div>
+					</a>
+				</div>
+				<div class="col-lg-4 col-sm-12 text-center">
+					<a href="#" style="text-decoration: none;">
+						<div class="shadow-lg rounded btn-lg btn-block p-4 mb-2"
+							style="font-size:25px; font-weight:bold; color: #6bcf00; background-color:#ecfcda; width:90%; margin:auto;">
+							<span class="fa fa-gear" style="font-size:40px; color:#6bcf00"></span> <br>
+							<span> Odoo Customization </span>
+						</div>
+					</a>
+				</div>
+				<div class="col-lg-4 col-sm-12 text-center">
+					<a href="#" style="text-decoration: none;">
+						<div class="shadow-lg rounded btn-lg btn-block p-4 mb-2"
+							style="font-size:25px; font-weight:bold; color: #e90065; background-color:#ffcde3; width:90%; margin:auto;">
+							<span class="fa fa-link" style="font-size:40px; color:#e90065"></span> <br>
+							<span> Odoo Intergration </span>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-lg-4 col-sm-12 text-center">
+					<a href="#" style="text-decoration: none;">
+						<div class="shadow-lg rounded btn-lg btn-block p-4 mb-2"
+							style="font-size:25px; font-weight:bold; color: #c3c903; background-color:#feffdd; width:90%; margin:auto;">
+							<span class="fa fa-rocket" style="font-size:40px; color:#c3c903"></span> <br>
+							<span> Odoo Migration </span>
+						</div>
+					</a>
+				</div>
+				<div class="col-lg-4 col-sm-12 text-center">
+					<a href="#" style="text-decoration: none;">
+						<div class="shadow-lg rounded btn-lg btn-block p-4 mb-2"
+							style="font-size:25px; font-weight:bold; color: #e96100; background-color:#f9ddc9; width:90%; margin:auto;">
+							<span class="fa fa-desktop" style="font-size:40px; color:#e96100"></span> <br>
+							<span> Odoo Training </span>
+						</div>
+					</a>
+				</div>
+				<div class="col-lg-4 col-sm-12 text-center">
+					<a href="#" style="text-decoration: none;">
+						<div class="shadow-lg rounded btn-lg btn-block p-4 mb-2"
+							style="font-size:25px; font-weight:bold; color: #03b19f; background-color:#cafffa; width:90%; margin:auto;">
+							<span class="fa fa-comments" style="font-size:40px; color:#03b19f"></span> <br>
+							<span> Odoo Support </span>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- footer  -->
+		<section id="footer" class="mt-5">
+			<div class="text-center mt-4">
+				<h3 class="mb-0" style="color: #015d65;">Connect Us</h3>
+				<img src="images/seprator.png" alt="seprator" width=170 />
+			</div>
+			<div class="text-center row">
+				<div class="col-lg-4 col-md-4 col-sm-12 col-12">
+					<a class="shadow-lg rounded py-3 px-4 d-flex justify-content-center align-items-center mb-2"
+						style="border-width: 1px;border-style: solid;border-color: #4FCE5D;color: #fff;position: relative; overflow: hidden;text-decoration: none;border-radius: 0px;font-size: 20px;font-weight: bold;width: 100%;background-color: #4FCE5D;border-radius: 0.25rem !important;"
+						href="https://web.whatsapp.com/send?phone=+918780543446&text=Hi" target="_blank"><span
+							class="fa fa-whatsapp mr-3" style="font-size: 30px;color: #fff;"></span><span
+							class="align-middle px-2">+91 87805 43446</span></a>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-12 col-12">
+					<a class="shadow-lg rounded py-3 px-4 d-flex justify-content-center align-items-center mb-2"
+						style="border-width: 1px;border-style: solid;border-color: #4ca9e3;color: #fff;position: relative; overflow: hidden;text-decoration: none;border-radius: 0px;font-size: 20px;font-weight: bold;width: 100%;background-color: #4ca9e3;border-radius: 0.25rem !important;"
+						href="skype:devintelle?chat" target="_blank"><span class="fa fa-skype mr-3"
+							style="font-size: 30px;color: #fff;"></span><span
+							class="align-middle px-2">@devintelle</span></a>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-12 col-12">
+					<a class="shadow-lg rounded py-3 px-4 d-flex justify-content-center align-items-center mb-2"
+						style="border-width: 1px;border-style: solid;border-color: #ce493b;color: #fff;position: relative; overflow: hidden;text-decoration: none;border-radius: 0px;font-size: 20px;font-weight: bold;width: 100%;background-color: #ce493b;border-radius: 0.25rem !important;"
+						href="mailto:odoo@devintellecs.com" target="_blank"><span class="fa fa-envelope mr-3"
+							style="font-size: 30px;color: #fff;"></span><span
+							class="align-middle px-2">odoo@devintellecs.com</span></a>
+				</div>
+			</div>
+			<div class="text-center mt-4">
+				<img src="images/seprator.png" alt="seprator" width=170 />
+			</div>
+			<div class="row mt-4 mb-4">
+				<div class="col-12 text-center">
+					<img src="images/logo.png" alt="Devintelle Consulting Services" height="100">
+				</div>
+			</div>
+			<div class="row mt-2">
+				<div class="col text-center mt-3">
+					<a class="mx-2" href="https://www.instagram.com/devintelle_odoo/" target="_blank"><img
+							src="images/insta.png" alt="instagram" height="45"></a>
+					<a class="mx-2" href="https://www.facebook.com/Odoodevintellecs/" target="_blank"><img
+							src="images/fb.png" alt="facebook" height="45"></a>
+					<a class="mx-2" href="https://www.youtube.com/channel/UCrmu-T0c8rhMXGuB44bH7gA" target="_blank"><img
+							src="images/yt.png" alt="youtube" height="45"></a>
+					<a class="mx-2" href="https://twitter.com/devintelle" target="_blank"><img src="images/twit.png"
+							alt="twitter" height="45" style="border-radius: 5px;"></a>
+					<a class="mx-2" href="https://www.linkedin.com/in/devintelle-odoo-service-provide-34785b144/"
+						target="_blank"><img src="images/in.png" alt="linkedin" height="45"></a>
+					<a class="mx-2" href="https://in.pinterest.com/devintellecs_odoo_expert/" target="_blank"><img
+							src="images/pin.png" alt="pinterest" height="45"></a>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+</html>

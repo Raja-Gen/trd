@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Aging Report Views               -->
+    <!-- ============================================ -->
+
+    <!-- Aging Report Detail Tree View -->
+    <record id="view_dev_petty_cash_aging_report_tree" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.report.tree</field>
+        <field name="model">dev.petty.cash.aging.report</field>
+        <field name="arch" type="xml">
+            <list string="Petty Cash Aging Report" create="false" edit="false"
+                  decoration-danger="aging_bucket == 'above_30_days'"
+                  decoration-warning="aging_bucket == '16_30_days'"
+                  decoration-info="aging_bucket == '8_15_days'">
+                <field name="voucher_name"/>
+                <field name="fund_name"/>
+                <field name="requester_id"/>
+                <field name="voucher_date"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state_display" string="Status"/>
+                <field name="days_pending"/>
+                <field name="aging_bucket" column_invisible="1"/>
+                <field name="aging_bucket_display" string="Aging Bucket"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Aging Report Pivot View -->
+    <record id="view_dev_petty_cash_aging_report_pivot" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.report.pivot</field>
+        <field name="model">dev.petty.cash.aging.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Petty Cash Aging Analysis" sample="1">
+                <field name="fund_name" type="row"/>
+                <field name="aging_bucket" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Aging Report Graph View -->
+    <record id="view_dev_petty_cash_aging_report_graph" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.report.graph</field>
+        <field name="model">dev.petty.cash.aging.report</field>
+        <field name="arch" type="xml">
+            <graph string="Petty Cash Aging Analysis" type="bar" stacked="1" sample="1">
+                <field name="aging_bucket"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Aging Report Search View -->
+    <record id="view_dev_petty_cash_aging_report_search" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.report.search</field>
+        <field name="model">dev.petty.cash.aging.report</field>
+        <field name="arch" type="xml">
+            <search string="Search Aging Report">
+                <field name="voucher_name"/>
+                <field name="fund_id"/>
+                <field name="requester_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <!-- Aging Bucket Filters -->
+                <filter string="0-7 Days" name="bucket_0_7" domain="[('aging_bucket', '=', '0_7_days')]"/>
+                <filter string="8-15 Days" name="bucket_8_15" domain="[('aging_bucket', '=', '8_15_days')]"/>
+                <filter string="16-30 Days" name="bucket_16_30" domain="[('aging_bucket', '=', '16_30_days')]"/>
+                <filter string="30+ Days" name="bucket_30_plus" domain="[('aging_bucket', '=', 'above_30_days')]"/>
+                <separator/>
+                <!-- Status Filters -->
+                <filter string="Pending Approval" name="pending_approval" domain="[('state', '=', 'requested')]"/>
+                <filter string="Pending Reconciliation" name="pending_reconcile" domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <!-- Critical Filters -->
+                <filter string="Overdue (30+ days)" name="overdue" domain="[('days_pending', '>', 30)]"/>
+                <filter string="Warning (15+ days)" name="warning" domain="[('days_pending', '>', 15)]"/>
+                <group>
+                    <filter string="Fund" name="group_fund" context="{'group_by': 'fund_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Aging Bucket" name="group_bucket" context="{'group_by': 'aging_bucket'}"/>
+                    <filter string="Requester" name="group_requester" context="{'group_by': 'requester_id'}"/>
+                    <filter string="Voucher Date" name="group_date" context="{'group_by': 'voucher_date:month'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"
+                            groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Aging Report Action -->
+    <record id="action_dev_petty_cash_aging_report" model="ir.actions.act_window">
+        <field name="name">Aging Report</field>
+        <field name="res_model">dev.petty.cash.aging.report</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="view_dev_petty_cash_aging_report_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No pending vouchers to display
+            </p>
+            <p>
+                This report shows all vouchers awaiting approval or reconciliation,
+                organized by aging buckets (0-7, 8-15, 16-30, 30+ days).
+            </p>
+        </field>
+    </record>
+
+    <!-- Aging Report Action - Overdue Only -->
+    <!-- <record id="action_dev_petty_cash_aging_report_overdue" model="ir.actions.act_window">
+        <field name="name">Overdue Vouchers</field>
+        <field name="res_model">dev.petty.cash.aging.report</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="view_dev_petty_cash_aging_report_search"/>
+        <field name="domain">[('days_pending', '>', 30)]</field>
+        <field name="context">{'search_default_overdue': 1}</field>
+    </record> -->
+
+    <!-- ============================================ -->
+    <!-- Aging Summary Views                         -->
+    <!-- ============================================ -->
+
+    <!-- Aging Summary Tree View -->
+    <record id="view_dev_petty_cash_aging_summary_tree" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.summary.tree</field>
+        <field name="model">dev.petty.cash.aging.summary</field>
+        <field name="arch" type="xml">
+            <list string="Aging Summary" create="false" edit="false"
+                  decoration-danger="aging_bucket == 'above_30_days'"
+                  decoration-warning="aging_bucket == '16_30_days'"
+                  decoration-info="aging_bucket == '8_15_days'">
+                <field name="fund_name"/>
+                <field name="pending_type"/>
+                <field name="aging_bucket_display" string="Aging Bucket"/>
+                <field name="voucher_count"/>
+                <field name="total_amount" widget="monetary" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="aging_bucket" column_invisible="1"/>
+                <field name="avg_days_pending" string="Avg Days"/>
+                <field name="max_days_pending" string="Max Days"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Aging Summary Pivot View -->
+    <record id="view_dev_petty_cash_aging_summary_pivot" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.summary.pivot</field>
+        <field name="model">dev.petty.cash.aging.summary</field>
+        <field name="arch" type="xml">
+            <pivot string="Aging Summary" sample="1">
+                <field name="fund_name" type="row"/>
+                <field name="aging_bucket" type="col"/>
+                <field name="total_amount" type="measure"/>
+                <field name="voucher_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Aging Summary Search View -->
+    <record id="view_dev_petty_cash_aging_summary_search" model="ir.ui.view">
+        <field name="name">dev.petty.cash.aging.summary.search</field>
+        <field name="model">dev.petty.cash.aging.summary</field>
+        <field name="arch" type="xml">
+            <search string="Search Aging Summary">
+                <field name="fund_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <!-- Aging Bucket Filters -->
+                <filter string="0-7 Days" name="bucket_0_7" domain="[('aging_bucket', '=', '0_7_days')]"/>
+                <filter string="8-15 Days" name="bucket_8_15" domain="[('aging_bucket', '=', '8_15_days')]"/>
+                <filter string="16-30 Days" name="bucket_16_30" domain="[('aging_bucket', '=', '16_30_days')]"/>
+                <filter string="30+ Days" name="bucket_30_plus" domain="[('aging_bucket', '=', 'above_30_days')]"/>
+                <separator/>
+                <filter string="Pending Approval" name="pending_approval" domain="[('pending_type', '=', 'approval')]"/>
+                <filter string="Pending Reconciliation" name="pending_reconcile" domain="[('pending_type', '=', 'reconciliation')]"/>
+                <group>
+                    <filter string="Fund" name="group_fund" context="{'group_by': 'fund_id'}"/>
+                    <filter string="Pending Type" name="group_type" context="{'group_by': 'pending_type'}"/>
+                    <filter string="Aging Bucket" name="group_bucket" context="{'group_by': 'aging_bucket'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"
+                            groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Aging Summary Action -->
+    <record id="action_dev_petty_cash_aging_summary" model="ir.actions.act_window">
+        <field name="name">Aging Summary</field>
+        <field name="res_model">dev.petty.cash.aging.summary</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="search_view_id" ref="view_dev_petty_cash_aging_summary_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No aging data to display
+            </p>
+            <p>
+                This summary shows aggregated aging data by fund and bucket.
+            </p>
+        </field>
+    </record>
+
+</odoo>

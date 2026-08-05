@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Email Templates for Petty Cash Management   -->
+    <!-- ============================================ -->
+
+    <!-- Email Template: Voucher Requested (Submitted for Approval) -->
+    <record id="email_template_voucher_requested" model="mail.template">
+        <field name="name">Petty Cash: Voucher Submitted for Approval</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="subject">Petty Cash Voucher {{ object.name }} - Pending Approval</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.fund_id.responsible_user_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear <t t-out="object.fund_id.responsible_user_id.name or 'Fund Manager'"/>,
+        <br/><br/>
+        A new petty cash voucher has been submitted for your approval:
+        <br/><br/>
+    </p>
+    <table border="0" cellspacing="0" cellpadding="0" style="padding-top: 8px; font-size: 13px;">
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Voucher Number:</td>
+            <td><t t-out="object.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Requester:</td>
+            <td><t t-out="object.requester_id.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Fund:</td>
+            <td><t t-out="object.fund_id.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Amount:</td>
+            <td><t t-out="object.currency_id.symbol"/><t t-out="'%.2f' % object.amount"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Purpose:</td>
+            <td><t t-out="object.purpose"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Date:</td>
+            <td><t t-out="object.date"/></td>
+        </tr>
+    </table>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Please review and approve or reject this voucher request.
+        <br/><br/>
+        <a t-attf-href="/web#id={{ object.id }}&amp;model=dev.petty.voucher&amp;view_type=form"
+           style="background-color: #875A7B; padding: 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+            View Voucher
+        </a>
+    </p>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Best regards,<br/>
+        <t t-out="object.company_id.name"/>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Email Template: Voucher Approved -->
+    <record id="email_template_voucher_approved" model="mail.template">
+        <field name="name">Petty Cash: Voucher Approved</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="subject">Petty Cash Voucher {{ object.name }} - Approved</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.requester_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear <t t-out="object.requester_id.name or 'Requester'"/>,
+        <br/><br/>
+        Your petty cash voucher has been <strong style="color: green;">approved</strong>:
+        <br/><br/>
+    </p>
+    <table border="0" cellspacing="0" cellpadding="0" style="padding-top: 8px; font-size: 13px;">
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Voucher Number:</td>
+            <td><t t-out="object.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Amount:</td>
+            <td><t t-out="object.currency_id.symbol"/><t t-out="'%.2f' % object.amount"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Approved By:</td>
+            <td><t t-out="object.approved_by_id.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Approved Date:</td>
+            <td><t t-out="object.approved_date"/></td>
+        </tr>
+    </table>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        You can now collect the cash from the petty cash fund.
+        <br/><br/>
+        <a t-attf-href="/web#id={{ object.id }}&amp;model=dev.petty.voucher&amp;view_type=form"
+           style="background-color: #28a745; padding: 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+            View Voucher
+        </a>
+    </p>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Best regards,<br/>
+        <t t-out="object.company_id.name"/>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Email Template: Voucher Paid -->
+    <record id="email_template_voucher_paid" model="mail.template">
+        <field name="name">Petty Cash: Voucher Paid</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="subject">Petty Cash Voucher {{ object.name }} - Paid</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.requester_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear <t t-out="object.requester_id.name or 'Requester'"/>,
+        <br/><br/>
+        Your petty cash voucher has been marked as <strong style="color: blue;">paid</strong>:
+        <br/><br/>
+    </p>
+    <table border="0" cellspacing="0" cellpadding="0" style="padding-top: 8px; font-size: 13px;">
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Voucher Number:</td>
+            <td><t t-out="object.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Amount Paid:</td>
+            <td><t t-out="object.currency_id.symbol"/><t t-out="'%.2f' % object.amount"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Paid By:</td>
+            <td><t t-out="object.paid_by_id.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Payment Date:</td>
+            <td><t t-out="object.paid_date"/></td>
+        </tr>
+    </table>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Please ensure to submit all receipts for reconciliation.
+    </p>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Best regards,<br/>
+        <t t-out="object.company_id.name"/>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Email Template: Replenishment Requested -->
+    <record id="email_template_replenish_requested" model="mail.template">
+        <field name="name">Petty Cash: Replenishment Requested</field>
+        <field name="model_id" ref="model_dev_petty_replenish"/>
+        <field name="subject">Petty Cash Replenishment Request {{ object.name }} - {{ object.fund_id.name }}</field>
+        <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+        <!-- TODO: Configure finance team email or use a specific group -->
+        <field name="email_to">{{ object.fund_id.responsible_user_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear Finance Team,
+        <br/><br/>
+        A petty cash replenishment request has been submitted:
+        <br/><br/>
+    </p>
+    <table border="0" cellspacing="0" cellpadding="0" style="padding-top: 8px; font-size: 13px;">
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Reference:</td>
+            <td><t t-out="object.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Fund:</td>
+            <td><t t-out="object.fund_id.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Requested Amount:</td>
+            <td><t t-out="object.currency_id.symbol"/><t t-out="'%.2f' % object.requested_amount"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Current Balance:</td>
+            <td><t t-out="object.currency_id.symbol"/><t t-out="'%.2f' % object.fund_id.available_balance"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Requested By:</td>
+            <td><t t-out="object.requested_by.name"/></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 10px; font-weight: bold;">Request Type:</td>
+            <td><t t-out="'Automatic (threshold triggered)' if object.method == 'auto' else 'Manual'"/></td>
+        </tr>
+    </table>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Please review and process this replenishment request.
+        <br/><br/>
+        <a t-attf-href="/web#id={{ object.id }}&amp;model=dev.petty.replenish&amp;view_type=form"
+           style="background-color: #875A7B; padding: 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+            View Request
+        </a>
+    </p>
+    <p style="margin: 16px 0px 0px 0px; padding: 0px; font-size: 13px;">
+        Best regards,<br/>
+        <t t-out="object.company_id.name"/>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+</odoo>

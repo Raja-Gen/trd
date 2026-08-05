@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Dashboard Alert Cron Jobs                   -->
+    <!-- ============================================ -->
+
+    <!-- Cron: Alert on Unreconciled Vouchers -->
+    <record id="ir_cron_alert_unreconciled_vouchers" model="ir.cron">
+        <field name="name">Petty Cash: Alert Unreconciled Vouchers</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_alert_unreconciled_vouchers()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!-- <field name="numbercall">-1</field> -->
+        <field name="active" eval="True"/>
+        <!-- <field name="doall" eval="False"/> -->
+        <!-- Run at 9:00 AM daily -->
+        <field name="nextcall" eval="'2024-01-01 09:00:00'"/>
+    </record>
+
+    <!-- Cron: Weekly Dashboard Summary Email -->
+    <record id="ir_cron_dashboard_summary_email" model="ir.cron">
+        <field name="name">Petty Cash: Weekly Dashboard Summary</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_dashboard_summary()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+        <!-- <field name="numbercall">-1</field> -->
+        <field name="active" eval="False"/>
+        <!-- <field name="doall" eval="False"/> -->
+        <!-- Run Monday at 8:00 AM -->
+        <field name="nextcall" eval="'2024-01-01 08:00:00'"/>
+    </record>
+
+</odoo>

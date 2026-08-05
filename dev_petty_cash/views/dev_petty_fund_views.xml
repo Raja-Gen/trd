@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Fund Views                       -->
+    <!-- ============================================ -->
+
+    <!-- Fund Tree View -->
+    <record id="view_dev_petty_fund_tree" model="ir.ui.view">
+        <field name="name">dev.petty.fund.tree</field>
+        <field name="model">dev.petty.fund</field>
+        <field name="arch" type="xml">
+            <list string="Petty Cash Funds" decoration-danger="available_balance &lt;= replenish_threshold" decoration-muted="state == 'blocked'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="journal_id"/>
+                <field name="float_amount" sum="Total Float"/>
+                <field name="available_balance" sum="Total Available"/>
+                <field name="replenish_threshold"/>
+                <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-danger="state == 'blocked'"/>
+                <field name="voucher_count" string="Vouchers"/>
+                <field name="pending_voucher_count" string="Pending"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Fund Form View -->
+    <record id="view_dev_petty_fund_form" model="ir.ui.view">
+        <field name="name">dev.petty.fund.form</field>
+        <field name="model">dev.petty.fund</field>
+        <field name="arch" type="xml">
+            <form string="Petty Cash Fund">
+                <header>
+                    <button name="action_request_replenish" type="object" string="Request Replenishment" class="btn-primary" invisible="state != 'active'"/>
+                    <button name="action_block" type="object" string="Block Fund" class="btn-secondary" invisible="state != 'active'" groups="dev_petty_cash.group_petty_manager"/>
+                    <button name="action_unblock" type="object" string="Unblock Fund" class="btn-primary" invisible="state != 'blocked'" groups="dev_petty_cash.group_petty_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,blocked"/>
+                </header>
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_vouchers" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="voucher_count" string="Vouchers" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_replenishments" type="object" class="oe_stat_button" icon="fa-refresh">
+                            <span class="o_stat_text">Replenishments</span>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Blocked" bg_color="text-bg-danger" invisible="state != 'blocked'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g., Office Petty Cash"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Fund Details">
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="journal_id" options="{'no_create': True}"/>
+                            <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group string="Amounts">
+                            <field name="float_amount"/>
+                            <field name="available_balance" class="oe_inline"/>
+                            <field name="replenish_threshold"/>
+                        </group>
+                    </group>
+                    <group string="Replenishment Configuration">
+                        <group>
+                            <field name="replenish_journal_id" options="{'no_create': True}"/>
+                            <field name="replenish_account_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="variance_account_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div> -->
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Fund Kanban View -->
+    <record id="view_dev_petty_fund_kanban" model="ir.ui.view">
+        <field name="name">dev.petty.fund.kanban</field>
+        <field name="model">dev.petty.fund</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="float_amount"/>
+                <field name="available_balance"/>
+                <field name="currency_id"/>
+                <field name="responsible_user_id"/>
+                <field name="state"/>
+                <field name="replenish_threshold"/>
+                <field name="pending_voucher_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <field name="state" widget="label_selection" options="{'classes': {'active': 'success', 'blocked': 'danger'}}"/>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span class="text-muted">Float:</span>
+                                            <field name="float_amount" widget="monetary"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted">Available:</span>
+                                            <strong t-attf-class="#{record.available_balance.raw_value &lt;= record.replenish_threshold.raw_value ? 'text-danger' : 'text-success'}">
+                                                <field name="available_balance" widget="monetary"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2" t-if="record.pending_voucher_count.raw_value > 0">
+                                        <div class="col-12">
+                                            <span class="badge text-bg-warning">
+                                                <field name="pending_voucher_count"/> pending vouchers
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="responsible_user_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Fund Search View -->
+    <record id="view_dev_petty_fund_search" model="ir.ui.view">
+        <field name="name">dev.petty.fund.search</field>
+        <field name="model">dev.petty.fund</field>
+        <field name="arch" type="xml">
+            <search string="Search Petty Cash Funds">
+                <field name="name"/>
+                <field name="responsible_user_id"/>
+                <field name="journal_id"/>
+                <field name="available_balance"/>
+                <field name="replenish_threshold"/>
+                <filter string="Active" name="filter_active" domain="[('state', '=', 'active')]"/>
+                <filter string="Blocked" name="filter_blocked" domain="[('state', '=', 'blocked')]"/>
+                <separator/>
+                <filter string="Below Threshold" name="filter_below_threshold" domain="[('is_below_threshold', '=', True)]"/>
+                <separator/>
+                <filter string="My Funds" name="filter_my_funds" domain="[('responsible_user_id', '=', uid)]"/>
+                <group>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Responsible" name="group_responsible" context="{'group_by': 'responsible_user_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Fund Action -->
+    <record id="action_dev_petty_fund" model="ir.actions.act_window">
+        <field name="name">Petty Cash Funds</field>
+        <field name="res_model">dev.petty.fund</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_dev_petty_fund_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Petty Cash Fund
+            </p>
+            <p>
+                A petty cash fund allows you to manage small cash expenses.
+                Configure the fund float amount, responsible person, and replenishment settings.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Voucher QWeb Report Template     -->
+    <!-- ============================================ -->
+
+    <!-- Main Report Template -->
+    <template id="report_petty_voucher_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>PETTY CASH VOUCHER</h2>
+                            </div>
+                        </div>
+
+                        <!-- Voucher Details -->
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="text-muted" style="width: 40%;">Voucher No:</td>
+                                        <td><strong t-field="doc.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Date:</td>
+                                        <td><span t-field="doc.date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Fund:</td>
+                                        <td><span t-field="doc.fund_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Status:</td>
+                                        <td>
+                                            <t t-set="status_colors" t-value="{'draft': '#6c757d', 'requested': '#ffc107', 'approved': '#17a2b8', 'paid': '#28a745', 'reconciled': '#28a745', 'cancelled': '#dc3545'}"/>
+                                            <span t-field="doc.state" class="badge"
+                                                  t-attf-style="background-color: #{status_colors.get(doc.state, '#6c757d')}; color: white;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="text-muted" style="width: 40%;">Requester:</td>
+                                        <td><span t-field="doc.requester_id.name"/></td>
+                                    </tr>
+                                    <tr t-if="doc.requester_employee_id">
+                                        <td class="text-muted">Department:</td>
+                                        <td><span t-field="doc.requester_employee_id.department_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Company:</td>
+                                        <td><span t-field="doc.company_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Purpose -->
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <strong>Purpose:</strong>
+                                <p t-field="doc.purpose" class="mt-1"/>
+                            </div>
+                        </div>
+
+                        <!-- Line Items -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <table class="table table-sm table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 5%;">#</th>
+                                            <th style="width: 45%;">Description</th>
+                                            <th class="text-end" style="width: 15%;">Quantity</th>
+                                            <th class="text-end" style="width: 15%;">Unit Price</th>
+                                            <th class="text-end" style="width: 20%;">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="line_no" t-value="0"/>
+                                        <t t-foreach="doc.line_ids" t-as="line">
+                                            <t t-set="line_no" t-value="line_no + 1"/>
+                                            <tr>
+                                                <td><t t-esc="line_no"/></td>
+                                                <td>
+                                                    <span t-field="line.description"/>
+                                                    <br t-if="line.account_id"/>
+                                                    <small class="text-muted" t-if="line.account_id">
+                                                        Account: <span t-field="line.account_id.code"/>
+                                                    </small>
+                                                </td>
+                                                <td class="text-end"><span t-field="line.quantity"/></td>
+                                                <td class="text-end">
+                                                    <span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span t-field="line.subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-light">
+                                            <td colspan="4" class="text-end"><strong>Total Amount:</strong></td>
+                                            <td class="text-end">
+                                                <strong>
+                                                    <span t-field="doc.amount" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Amount in Words (optional enhancement) -->
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <p>
+                                    <strong>Amount in figures:</strong>
+                                    <span t-field="doc.currency_id.symbol"/>
+                                    <span t-field="doc.amount" t-options="{'widget': 'float', 'precision': 2}"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Attachments List -->
+                        <div class="row mt-4" t-if="doc.attachment_ids">
+                            <div class="col-12">
+                                <strong>Attached Receipts:</strong>
+                                <ul class="mt-2">
+                                    <t t-foreach="doc.attachment_ids" t-as="attachment">
+                                        <li><span t-esc="attachment.name"/></li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Reconciliation Info -->
+                        <div class="row mt-3" t-if="doc.state == 'reconciled'">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <strong>Reconciliation:</strong>
+                                    Receipt Total: <span t-field="doc.receipt_total" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    | Variance: <span t-field="doc.variance_amount" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signature Section -->
+                        <div class="row mt-5">
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #000; margin-top: 50px; padding-top: 5px;">
+                                    <strong>Requested By</strong>
+                                    <br/>
+                                    <span t-field="doc.requester_id.name"/>
+                                    <br/>
+                                    <small class="text-muted">Date: <span t-field="doc.date"/></small>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #000; margin-top: 50px; padding-top: 5px;">
+                                    <strong>Approved By</strong>
+                                    <br/>
+                                    <span t-if="doc.approved_by_id" t-field="doc.approved_by_id.name"/>
+                                    <span t-else="">_________________</span>
+                                    <br/>
+                                    <small class="text-muted" t-if="doc.approved_date">
+                                        Date: <span t-field="doc.approved_date" t-options="{'widget': 'date'}"/>
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #000; margin-top: 50px; padding-top: 5px;">
+                                    <strong>Received By</strong>
+                                    <br/>
+                                    <span t-if="doc.paid_by_id" t-field="doc.paid_by_id.name"/>
+                                    <span t-else="">_________________</span>
+                                    <br/>
+                                    <small class="text-muted" t-if="doc.paid_date">
+                                        Date: <span t-field="doc.paid_date" t-options="{'widget': 'date'}"/>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Journal Entry Reference -->
+                        <div class="row mt-4" t-if="doc.payment_move_id">
+                            <div class="col-12">
+                                <small class="text-muted">
+                                    Journal Entry: <span t-field="doc.payment_move_id.name"/>
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Footer Note -->
+                        <div class="row mt-4">
+                            <div class="col-12 text-center">
+                                <small class="text-muted">
+                                    This is a computer-generated document. Keep all original receipts for audit purposes.
+                                </small>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
