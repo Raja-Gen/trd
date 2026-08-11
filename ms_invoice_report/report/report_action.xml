@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- The Print menu evaluates `domain` server-side through filtered_domain,
+         so a dotted path on the company works: the entry only appears for
+         customer invoices of a company flagged with the MicroSolutions layout. -->
+    <record id="action_report_ms_invoice" model="ir.actions.report">
+        <field name="name">Invoice (MicroSolutions)</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ms_invoice_report.report_ms_invoice</field>
+        <field name="report_file">ms_invoice_report.report_ms_invoice</field>
+        <field name="print_report_name">'Invoice - {}'.format(object.name)</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="domain">[('company_id.ms_invoice_brand', '=', True), ('move_type', '=', 'out_invoice')]</field>
+        <field name="paperformat_id" ref="paperformat_ms_invoice"/>
+    </record>
+
+</odoo>
