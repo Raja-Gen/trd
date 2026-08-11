@@ -10,7 +10,8 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">ms_invoice_report.report_ms_invoice</field>
         <field name="report_file">ms_invoice_report.report_ms_invoice</field>
-        <field name="print_report_name">'Invoice - {}'.format(object.name)</field>
+        <!-- a draft move has no name yet, and 'Invoice - False.pdf' is what you get -->
+        <field name="print_report_name">'Invoice - {}'.format(object.name or 'Draft')</field>
         <field name="binding_model_id" ref="account.model_account_move"/>
         <field name="binding_type">report</field>
         <field name="domain">[('company_id.ms_invoice_brand', '=', True), ('move_type', '=', 'out_invoice')]</field>

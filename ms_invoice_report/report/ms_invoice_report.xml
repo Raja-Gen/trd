@@ -13,29 +13,14 @@
 
     <div class="ms-inv">
 
-        <!-- ================================================ page furniture -->
+        <!-- ================================================ page furniture
+             The brand band lives in its own template so it can be rendered
+             into wkhtmltopdf's repeating header region; what stays here is
+             the per-document block, which belongs on page 1 only. -->
         <div class="ms-top">
 
-            <img class="ms-logo" src="/ms_invoice_report/static/src/img/ms_logo.png"
-                 alt="Micro Solutions Kuwait"/>
-            <img class="ms-badge" src="/ms_invoice_report/static/src/img/ms_badge.png"
-                 alt="Celebrating 20 years of service"/>
-            <div class="ms-hrule"/>
-
-            <div class="ms-contact ms-contact-1">+965 2484 4696 | 799</div>
-            <div class="ms-contact ms-contact-2">webinfo@mskuwait.com</div>
-            <div class="ms-contact ms-contact-3">www.mskuwait.com</div>
-            <div class="ms-contact ms-contact-4">P.O. Box: 4121, Safat 13042, Kuwait</div>
-
-            <!-- full-width navy hairline with the raked tab on the left -->
-            <svg class="ms-divider" width="794" height="8" viewBox="0 0 794 8"
-                 xmlns="http://www.w3.org/2000/svg">
-                <rect x="38" y="0" width="718" height="2" fill="#161F3B"/>
-                <polygon points="38,1.5 141.3,1.5 132.2,8 38,8" fill="#161F3B"/>
-            </svg>
-
             <div class="ms-title">INVOICE</div>
-            <div class="ms-number">#<span t-out="o.name"/></div>
+            <div class="ms-number" t-out="o.name"/>
 
             <!-- meta grid -->
             <div class="ms-mrule"/>
@@ -114,7 +99,7 @@
                             <div class="ms-ln-title" t-out="line['title']"/>
                             <div class="ms-ln-desc" t-out="line['desc']"/>
                         </td>
-                        <td class="ms-c3"><span t-out="'{0:,.2f}'.format(line['qty'])"/></td>
+                        <td class="ms-c3"><span t-out="line['qty']"/></td>
                         <td class="ms-c4"><span t-out="'{0:,.{1}f}'.format(line['price'], dp)"/></td>
                         <td class="ms-c5"><span t-out="'{0:,.{1}f}'.format(line['amount'], dp)"/></td>
                     </tr>
@@ -221,6 +206,34 @@
 
 
 <!-- ==================================================================== -->
+<!--  Header: logo / contact / anniversary badge / navy rule. Sits in the  -->
+<!--  46.57 mm top margin so it repeats on every page.                     -->
+<!-- ==================================================================== -->
+<template id="report_ms_invoice_header">
+    <t t-call="ms_invoice_report.ms_invoice_styles"/>
+    <div class="ms-inv ms-head">
+        <img class="ms-logo" src="/ms_invoice_report/static/src/img/ms_logo.png"
+             alt="Micro Solutions Kuwait"/>
+        <img class="ms-badge" src="/ms_invoice_report/static/src/img/ms_badge.png"
+             alt="Celebrating 20 years of service"/>
+        <div class="ms-hrule"/>
+
+        <div class="ms-contact ms-contact-1">+965 2484 4696 | 799</div>
+        <div class="ms-contact ms-contact-2">webinfo@mskuwait.com</div>
+        <div class="ms-contact ms-contact-3">www.mskuwait.com</div>
+        <div class="ms-contact ms-contact-4">P.O. Box: 4121, Safat 13042, Kuwait</div>
+
+        <!-- full-width navy hairline with the raked tab on the left -->
+        <svg class="ms-divider" width="794" height="8" viewBox="0 0 794 8"
+             xmlns="http://www.w3.org/2000/svg">
+            <rect x="38" y="0" width="718" height="2" fill="#161F3B"/>
+            <polygon points="38,1.5 141.3,1.5 132.2,8 38,8" fill="#161F3B"/>
+        </svg>
+    </div>
+</template>
+
+
+<!-- ==================================================================== -->
 <!--  Footer: official partners strip + the pale band that bleeds off the  -->
 <!--  bottom edge. Sits in the 26 mm bottom margin so it repeats per page. -->
 <!-- ==================================================================== -->
@@ -236,7 +249,7 @@
         </table>
         <img class="ms-partners" src="/ms_invoice_report/static/src/img/ms_partners.png"
              alt="Official partners"/>
-        <div class="ms-botband"/>
+        <div class="ms-botband">A Registered Trademark of Raja General Trading Company W.L.L.</div>
     </div>
 </template>
 
@@ -244,9 +257,12 @@
 <template id="report_ms_invoice">
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="o">
-            <!-- The styles must live INSIDE .article / .footer: _prepare_html
-                 lifts those two subtrees into standalone documents and anything
-                 outside them is dropped. -->
+            <!-- The styles must live INSIDE .header / .article / .footer:
+                 _prepare_html lifts those subtrees into standalone documents
+                 and anything outside them is dropped. -->
+            <div class="header">
+                <t t-call="ms_invoice_report.report_ms_invoice_header"/>
+            </div>
             <div class="article o_report_layout_standard"
                  t-att-data-oe-model="o and 'account.move'"
                  t-att-data-oe-id="o and o.id">

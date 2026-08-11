@@ -49,44 +49,54 @@ body.o_body_pdf, body.o_body_html,
 .ms-navy { color: #161F3B; }
 
 /* ---------------------------------------------------------------- header
-   Fixed-height, absolutely positioned block: nothing in it depends on the
-   length of the invoice, and it must not move when the line table grows. */
-.ms-top { position: relative; height: 449px; width: 100%; }
+   .ms-head is the repeating brand band, rendered into the 46.57 mm top
+   margin; its 176 px are page coordinates. .ms-top is the page-1-only block
+   below it, so its children are the design's coordinates MINUS 176. Both are
+   fixed height: nothing in them depends on the length of the invoice, and
+   they must not move when the line table grows. */
+.ms-head { position: relative; height: 176px; width: 793.7px; }
+.ms-head > * { position: absolute; }
+.ms-top { position: relative; height: 273px; width: 100%; }
 .ms-top > * { position: absolute; }
 
-.ms-logo   { left: 38px;  top: 27px;  width: 223px; height: 115px; }
-.ms-badge  { left: 646px; top: 37px;  width: 113px; height: 103px; }
-.ms-hrule  { left: 334px; top: 40px;  width: 2px;   height: 113px; background: #C8C7C7; }
+.ms-logo   { left: 38px;  top: 24.85px;  width: 223px; height: 115px; }
+.ms-badge  { left: 646px; top: 34.85px;  width: 113px; height: 103px; }
+.ms-hrule  { left: 334px; top: 37.85px;  width: 2px;   height: 113px; background: #C8C7C7; }
 
 .ms-contact { left: 397px; font-family: 'MSPopR', sans-serif; font-size: 11px; line-height: 16px; }
-.ms-contact-1 { top: 32.7px; }
-.ms-contact-2 { top: 63.0px; }
-.ms-contact-3 { top: 93.4px; }
-.ms-contact-4 { top: 123.7px; }
+.ms-contact-1 { top: 30.55px; }
+.ms-contact-2 { top: 60.85px; }
+.ms-contact-3 { top: 91.25px; }
+.ms-contact-4 { top: 121.55px; }
 
-.ms-divider { left: 0; top: 168px; width: 793.7px; height: 8px; }
+.ms-divider { left: 0; top: 165.85px; width: 793.7px; height: 8px; }
 
-.ms-title  { left: 38px; top: 180.4px; font-family: 'MSPopS', sans-serif;
+.ms-title  { left: 38px; top: 4.4px; font-family: 'MSPopS', sans-serif;
              font-size: 48px; line-height: 67px; color: #161F3B; letter-spacing: -0.5px; }
-.ms-number { left: 38px; top: 238.2px; font-size: 14px; line-height: 20px; color: #161F3B; }
+/* Enlarged from the design's 10.25 pt to 18 pt on the client's request. The
+   top is baseline-anchored (top = baseline - ascent). At this size the '/'
+   glyphs reach ~4 pt above cap height and would touch the INVOICE title's
+   baseline, so the line also sits ~4 pt lower than the design's 189.89 pt;
+   BILL TO starts at 216.42 pt, so there is room to spare below. */
+.ms-number { left: 38px; top: 57.67px; font-size: 24px; line-height: 33px; color: #161F3B; }
 
 /* meta grid (Invoice Date / Due Date / ...) */
-.ms-mrule  { left: 433px; top: 186px; width: 2px; height: 157px; background: #C8C7C7; }
-.ms-meta   { left: 459px; top: 189.5px; width: 300px; font-size: 12px; line-height: 17px; }
+.ms-mrule  { left: 433px; top: 10px; width: 2px; height: 157px; background: #C8C7C7; }
+.ms-meta   { left: 459px; top: 13.5px; width: 300px; font-size: 12px; line-height: 17px; }
 .ms-meta td { padding: 0; height: 32px; vertical-align: top; }
 .ms-meta .ms-meta-l { width: 112px; font-family: 'MSPopS', sans-serif; }
 .ms-meta .ms-meta-c { width: 22px; }
 
 /* BILL TO tag: navy trapezoid, right edge raked outwards */
-.ms-billtag { left: 36px; top: 288.6px; height: 22px; }
+.ms-billtag { left: 36px; top: 112.6px; height: 22px; }
 .ms-billtag td { vertical-align: top; }
 .ms-billtag .ms-billtag-box {
     width: 81px; height: 22px; background: #161F3B;
     padding: 2px 0 0 14px; font-family: 'MSPopS', sans-serif;
     font-size: 12px; line-height: 17px; color: #FFFFFF;
 }
-.ms-billrule { left: 36px; top: 310.6px; width: 2px; height: 116px; background: #C8C7C7; }
-.ms-billto   { left: 50px; top: 318.8px; width: 300px; }
+.ms-billrule { left: 36px; top: 134.6px; width: 2px; height: 116px; background: #C8C7C7; }
+.ms-billto   { left: 50px; top: 142.8px; width: 300px; }
 .ms-billto .ms-billto-name { font-family: 'MSPopS', sans-serif; font-size: 12px; line-height: 17px; }
 .ms-billto .ms-billto-addr { font-size: 12px; line-height: 18.33px; padding-top: 3.3px; }
 
@@ -197,7 +207,12 @@ body.o_body_pdf, body.o_body_html,
                               font-family: 'MSPopS', sans-serif; font-size: 12px;
                               line-height: 17px; color: #161F3B; }
 .ms-partners { margin: 0 37.7px 0 38px; width: 718px; height: 52px; }
-.ms-botband { margin-top: 3.9px; width: 793.7px; height: 22px; background: #F2FBFE; font-size: 0; }
+/* The band is 22 px but only its first 19 px are on the paper (the rest bleeds
+   off the bottom edge), so the trademark line is centred within those 19. */
+.ms-botband { margin-top: 3.9px; width: 793.7px; height: 22px; background: #F2FBFE;
+              padding-top: 5px; text-align: center;
+              font-family: 'MSPopM', sans-serif; font-size: 9px; line-height: 12px;
+              color: #161F3B; }
 
 </style>
 </template>

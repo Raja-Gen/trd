@@ -21,6 +21,21 @@ class AccountMove(models.Model):
             parts = parts[1:]
         return title, " ".join(parts)
 
+    def _ms_format_qty(self, qty):
+        """Whole quantities print bare - the client wants "1", not "1.00".
+
+        Fractions keep the digits they need, so 2.5 still prints as 2.5.
+        """
+        # Read the precision off the field itself: the decimal.precision
+        # application was renamed "Product Unit of Measure" -> "Product Unit"
+        # in v19, and a stale name silently falls back to 2 digits.
+        digits = self.env["account.move.line"]._fields["quantity"].get_digits(self.env)
+        precision = digits[1] if digits else 2
+        text = "{0:,.{1}f}".format(qty, precision)
+        if "." in text:
+            text = text.rstrip("0").rstrip(".")
+        return text or "0"
+
     def _ms_report_lines(self):
         """Printable lines, in order, numbered from 1."""
         self.ensure_one()
@@ -32,7 +47,7 @@ class AccountMove(models.Model):
                 "seq": index,
                 "title": title,
                 "desc": desc,
-                "qty": line.quantity,
+                "qty": self._ms_format_qty(line.quantity),
                 "price": line.price_unit,
                 "amount": line.price_subtotal,
             })

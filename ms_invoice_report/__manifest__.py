@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "MS Invoice Report",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.4.1",
     "summary": "MicroSolutions Kuwait branded customer invoice PDF.",
     "description": """
             Customer invoice PDF traced from the MicroSolutions Kuwait design
