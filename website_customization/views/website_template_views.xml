@@ -3,16 +3,19 @@
     <template id="website_sale_product_extension" inherit_id="website_sale.cta_wrapper">
         <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
             <t t-if="not product.freeze_stock">
-                <t t-if="product.sudo().qty_available &gt; 0">
-                    <p class="text-success mt-3">
-                        <span t-esc="'Available: %s' % (product.sudo().qty_available)"/>
-                    </p>
-                </t>
-                <t t-else="">
-                    <p class="text-danger mt-3">
-                        <strong>Out of stock</strong>
-                    </p>
-                </t>
+                <!-- Quantity of the *selected variant*, kept in sync by
+                     website_customization/static/src/js/variant_availability.js -->
+                <t
+                    t-set="variant_qty"
+                    t-value="combination_info.get('website_variant_qty_available', 0.0)"
+                />
+                <div t-attf-class="o_wc_variant_availability o_not_editable text-success mt-3 #{'' if variant_qty &gt; 0 else 'd-none'}">
+                    <span>Available: </span>
+                    <span
+                        class="o_wc_variant_available_qty"
+                        t-out="combination_info.get('website_variant_qty_available_str', '0')"
+                    />
+                </div>
             </t>
         </xpath>
     </template>
