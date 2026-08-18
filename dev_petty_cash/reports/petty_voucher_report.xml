@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Voucher Report Definitions       -->
+    <!-- ============================================ -->
+
+    <!-- Report Action -->
+    <record id="action_report_petty_voucher" model="ir.actions.report">
+        <field name="name">Petty Cash Voucher</field>
+        <field name="model">dev.petty.voucher</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dev_petty_cash.report_petty_voucher_document</field>
+        <field name="report_file">dev_petty_cash.report_petty_voucher_document</field>
+        <field name="print_report_name">'Petty Cash Voucher - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_dev_petty_voucher"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Paper Format (optional, uses default if not set) -->
+    <record id="paperformat_petty_voucher" model="report.paperformat">
+        <field name="name">Petty Cash Voucher</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- ==================================================================== -->
+<!--  MicroSolutions Kuwait customer invoice                               -->
+<!--  Traced from ~/Downloads/MS Invoice.pdf                               -->
+<!-- ==================================================================== -->
+<template id="report_ms_invoice_document">
+    <t t-set="dp" t-value="o.currency_id.decimal_places"/>
+    <t t-set="lines" t-value="o._ms_report_lines()"/>
+    <t t-set="tot" t-value="o._ms_report_totals()"/>
+    <t t-set="company" t-value="o.company_id"/>
+
+    <div class="ms-inv">
+
+        <!-- ================================================ page furniture
+             The brand band lives in its own template so it can be rendered
+             into wkhtmltopdf's repeating header region; what stays here is
+             the per-document block, which belongs on page 1 only. -->
+        <div class="ms-top">
+
+            <div class="ms-title">INVOICE</div>
+            <div class="ms-number" t-out="o.name"/>
+
+            <!-- meta grid -->
+            <div class="ms-mrule"/>
+            <table class="ms-meta">
+                <tr>
+                    <td class="ms-meta-l">Invoice Date</td>
+                    <td class="ms-meta-c">:</td>
+                    <td><span t-out="o.invoice_date"
+                              t-options="{'widget': 'date', 'format': 'dd MMM yyyy'}"/></td>
+                </tr>
+                <tr>
+                    <td class="ms-meta-l">Due Date</td>
+                    <td class="ms-meta-c">:</td>
+                    <td><span t-out="o.invoice_date_due"
+                              t-options="{'widget': 'date', 'format': 'dd MMM yyyy'}"/></td>
+                </tr>
+                <tr>
+                    <td class="ms-meta-l">Prepared By</td>
+                    <td class="ms-meta-c">:</td>
+                    <td><span t-out="o.invoice_user_id.name"/></td>
+                </tr>
+                <tr>
+                    <td class="ms-meta-l">Currency</td>
+                    <td class="ms-meta-c">:</td>
+                    <td><span t-out="o.currency_id.name"/></td>
+                </tr>
+                <tr>
+                    <td class="ms-meta-l">Payment Terms</td>
+                    <td class="ms-meta-c">:</td>
+                    <td><span t-out="o.invoice_payment_term_id.name"/></td>
+                </tr>
+            </table>
+
+            <!-- bill to -->
+            <table class="ms-billtag">
+                <tr>
+                    <td class="ms-billtag-box">BILL TO</td>
+                    <td>
+                        <svg width="16" height="22" viewBox="0 0 16 22"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="0,0 16,22 0,22" fill="#161F3B"/>
+                        </svg>
+                    </td>
+                </tr>
+            </table>
+            <div class="ms-billrule"/>
+            <div class="ms-billto">
+                <div class="ms-billto-name" t-out="o.partner_id.name"/>
+                <div class="ms-billto-addr">
+                    <t t-foreach="o._ms_partner_lines()" t-as="line">
+                        <div t-out="line"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== body -->
+        <div class="ms-body">
+
+            <!-- line items -->
+            <table class="ms-lt">
+                <thead>
+                    <tr>
+                        <th class="ms-c1" style="width: 44px;">#</th>
+                        <th class="ms-c2" style="width: 306px;">DESCRIPTION</th>
+                        <th class="ms-c3" style="width: 83px;">QTY</th>
+                        <th class="ms-c4" style="width: 145px;">UNIT PRICE (<span t-out="o.currency_id.name"/>)</th>
+                        <th class="ms-c5" style="width: 140px;">AMOUNT (<span t-out="o.currency_id.name"/>)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="lines" t-as="line"
+                        t-attf-class="#{'ms-first ' if line_first else ''}#{'ms-last' if line_last else ''}">
+                        <td class="ms-c1"><span t-out="line['seq']"/></td>
+                        <td class="ms-c2">
+                            <div class="ms-ln-title" t-out="line['title']"/>
+                            <div class="ms-ln-desc" t-out="line['desc']"/>
+                        </td>
+                        <td class="ms-c3"><span t-out="line['qty']"/></td>
+                        <td class="ms-c4"><span t-out="'{0:,.{1}f}'.format(line['price'], dp)"/></td>
+                        <td class="ms-c5"><span t-out="'{0:,.{1}f}'.format(line['amount'], dp)"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- amount in words + the summary -->
+            <table class="ms-tot">
+                <tr>
+                    <td class="ms-tot-l">
+                        <div class="ms-aiw-label">AMOUNT IN WORDS</div>
+                        <div class="ms-aiw-value" t-out="o._ms_amount_in_words()"/>
+                        <div class="ms-aiw-rule"/>
+                    </td>
+                    <td class="ms-tot-r">
+                        <div class="ms-sum">
+                            <div class="ms-sum-top">
+                                <table class="ms-sum-row">
+                                    <tr class="ms-sum-first">
+                                        <td class="ms-sum-lbl">SUBTOTAL</td>
+                                        <td class="ms-sum-val"><span t-out="'{0:,.{1}f}'.format(tot['gross'], dp)"/></td>
+                                    </tr>
+                                </table>
+                                <div class="ms-sum-sep"/>
+                                <table class="ms-sum-row">
+                                    <tr class="ms-sum-next">
+                                        <td class="ms-sum-lbl">DISCOUNT</td>
+                                        <td class="ms-sum-val"><span t-out="'{0:,.{1}f}'.format(tot['discount'], dp)"/></td>
+                                    </tr>
+                                </table>
+                                <t t-if="tot['tax']">
+                                    <div class="ms-sum-sep"/>
+                                    <table class="ms-sum-row">
+                                        <tr class="ms-sum-next">
+                                            <td class="ms-sum-lbl">TAX</td>
+                                            <td class="ms-sum-val"><span t-out="'{0:,.{1}f}'.format(tot['tax'], dp)"/></td>
+                                        </tr>
+                                    </table>
+                                </t>
+                            </div>
+                            <table class="ms-sum-row ms-sum-total">
+                                <tr>
+                                    <td class="ms-sum-lbl">TOTAL AMOUNT (<span t-out="o.currency_id.name"/>)</td>
+                                    <td class="ms-sum-val"><span t-out="'{0:,.{1}f}'.format(tot['total'], dp)"/></td>
+                                </tr>
+                            </table>
+                            <table class="ms-sum-row ms-sum-due">
+                                <tr>
+                                    <td class="ms-sum-lbl">AMOUNT DUE (<span t-out="o.currency_id.name"/>)</td>
+                                    <td class="ms-sum-val"><span t-out="'{0:,.{1}f}'.format(tot['due'], dp)"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- payment information / notes -->
+            <div class="ms-payrule"/>
+            <table class="ms-pay">
+                <tr>
+                    <td class="ms-pay-l">
+                        <div class="ms-pay-head">PAYMENT INFORMATION</div>
+                        <div class="ms-pay-underline"/>
+                        <table class="ms-bank">
+                            <tr>
+                                <td class="ms-bank-l">ACCOUNT NAME</td>
+                                <td class="ms-bank-c">:</td>
+                                <td class="ms-bank-v">RAJA GENERAL TRADING COMPANY WLL</td>
+                            </tr>
+                            <tr>
+                                <td class="ms-bank-l">BANK NAME</td>
+                                <td class="ms-bank-c">:</td>
+                                <td class="ms-bank-v">GULF BANK</td>
+                            </tr>
+                            <tr>
+                                <td class="ms-bank-l">ACCOUNT NO.</td>
+                                <td class="ms-bank-c">:</td>
+                                <td class="ms-bank-v">91164696</td>
+                            </tr>
+                            <tr>
+                                <td class="ms-bank-l">IBAN</td>
+                                <td class="ms-bank-c">:</td>
+                                <td class="ms-bank-v">KW04 GULB 0000 0000 0000 0091 1646 96</td>
+                            </tr>
+                            <tr>
+                                <td class="ms-bank-l">SWIFT CODE</td>
+                                <td class="ms-bank-c">:</td>
+                                <td class="ms-bank-v">GULBKWKW</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="ms-pay-r">
+                        <div class="ms-pay-head">NOTES</div>
+                        <div class="ms-pay-underline"/>
+                        <div class="ms-notes ms-notes-1">Thank you for your business.</div>
+                        <div class="ms-notes ms-notes-2">We appreciate your trust<br/>and confidence in<br/>MicroSolutions Kuwait.</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</template>
+
+
+<!-- ==================================================================== -->
+<!--  Header: logo / contact / anniversary badge / navy rule. Sits in the  -->
+<!--  46.57 mm top margin so it repeats on every page.                     -->
+<!-- ==================================================================== -->
+<template id="report_ms_invoice_header">
+    <t t-call="ms_invoice_report.ms_invoice_styles"/>
+    <div class="ms-inv ms-head">
+        <img class="ms-logo" src="/ms_invoice_report/static/src/img/ms_logo.png"
+             alt="Micro Solutions Kuwait"/>
+        <img class="ms-badge" src="/ms_invoice_report/static/src/img/ms_badge.png"
+             alt="Celebrating 20 years of service"/>
+        <div class="ms-hrule"/>
+
+        <div class="ms-contact ms-contact-1">+965 2484 4696 | 799</div>
+        <div class="ms-contact ms-contact-2">webinfo@mskuwait.com</div>
+        <div class="ms-contact ms-contact-3">www.mskuwait.com</div>
+        <div class="ms-contact ms-contact-4">P.O. Box: 4121, Safat 13042, Kuwait</div>
+
+        <!-- full-width navy hairline with the raked tab on the left -->
+        <svg class="ms-divider" width="794" height="8" viewBox="0 0 794 8"
+             xmlns="http://www.w3.org/2000/svg">
+            <rect x="38" y="0" width="718" height="2" fill="#161F3B"/>
+            <polygon points="38,1.5 141.3,1.5 132.2,8 38,8" fill="#161F3B"/>
+        </svg>
+    </div>
+</template>
+
+
+<!-- ==================================================================== -->
+<!--  Footer: official partners strip + the pale band that bleeds off the  -->
+<!--  bottom edge. Sits in the 26 mm bottom margin so it repeats per page. -->
+<!-- ==================================================================== -->
+<template id="report_ms_invoice_footer">
+    <t t-call="ms_invoice_report.ms_invoice_styles"/>
+    <div class="ms-inv ms-foot">
+        <table class="ms-oprule">
+            <tr>
+                <td class="ms-oprule-line"><div/></td>
+                <td class="ms-oprule-label">OFFICIAL PARTNERS</td>
+                <td class="ms-oprule-line"><div/></td>
+            </tr>
+        </table>
+        <img class="ms-partners" src="/ms_invoice_report/static/src/img/ms_partners.png"
+             alt="Official partners"/>
+        <div class="ms-botband">A Registered Trademark of Raja General Trading Company W.L.L.</div>
+    </div>
+</template>
+
+
+<template id="report_ms_invoice">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <!-- The styles must live INSIDE .header / .article / .footer:
+                 _prepare_html lifts those subtrees into standalone documents
+                 and anything outside them is dropped. -->
+            <div class="header">
+                <t t-call="ms_invoice_report.report_ms_invoice_header"/>
+            </div>
+            <div class="article o_report_layout_standard"
+                 t-att-data-oe-model="o and 'account.move'"
+                 t-att-data-oe-id="o and o.id">
+                <t t-call="ms_invoice_report.ms_invoice_styles"/>
+                <t t-call="ms_invoice_report.report_ms_invoice_document"/>
+            </div>
+            <div class="footer" t-if="report_type == 'pdf'">
+                <t t-call="ms_invoice_report.report_ms_invoice_footer"/>
+            </div>
+        </t>
+    </t>
+</template>
+
+</odoo>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Petty Cash Aging Report QWeb Templates      -->
+    <!-- ============================================ -->
+
+    <!-- Main Aging Detail Report Template -->
+    <template id="report_petty_aging_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">Petty Cash Aging Report</h2>
+                    <p class="text-center text-muted">
+                        Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                    </p>
+
+                    <t t-if="docs">
+                        <table class="table table-sm table-bordered mt-4">
+                            <thead>
+                                <tr class="bg-primary text-white">
+                                    <th>Voucher</th>
+                                    <th>Fund</th>
+                                    <th>Requester</th>
+                                    <th>Date</th>
+                                    <th class="text-right">Amount</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Days</th>
+                                    <th>Aging Bucket</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="line">
+                                    <tr t-attf-class="#{line.aging_bucket == 'above_30_days' and 'table-danger' or line.aging_bucket == '16_30_days' and 'table-warning' or ''}">
+                                        <td><t t-esc="line.voucher_name"/></td>
+                                        <td><t t-esc="line.fund_name"/></td>
+                                        <td><t t-esc="line.requester_id.name"/></td>
+                                        <td><t t-esc="line.voucher_date" t-options='{"widget": "date"}'/></td>
+                                        <td class="text-right">
+                                            <t t-esc="line.amount" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                        </td>
+                                        <td><t t-esc="line.state_display"/></td>
+                                        <td class="text-center"><t t-esc="line.days_pending"/></td>
+                                        <td>
+                                            <span class="badge rounded-pill" t-attf-style="#{line.aging_bucket == 'above_30_days' and 'background-color: #dc3545; color: white;' or line.aging_bucket == '16_30_days' and 'background-color: #ffc107; color: black;' or line.aging_bucket == '8_15_days' and 'background-color: #0dcaf0; color: black;' or 'background-color: #198754; color: white;'}">
+                                                <t t-if="line.aging_bucket == '0_7_days'">0-7 Days</t>
+                                                <t t-if="line.aging_bucket == '8_15_days'">8-15 Days</t>
+                                                <t t-if="line.aging_bucket == '16_30_days'">16-30 Days</t>
+                                                <t t-if="line.aging_bucket == 'above_30_days'">30+ Days</t>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Summary Section -->
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <h5>Summary by Aging Bucket</h5>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><span class="badge rounded-pill" style="background-color: #198754; color: white;">0-7 Days</span></td>
+                                        <td class="text-right"><t t-esc="len([d for d in docs if d.aging_bucket == '0_7_days'])"/> vouchers</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge rounded-pill" style="background-color: #0dcaf0; color: black;">8-15 Days</span></td>
+                                        <td class="text-right"><t t-esc="len([d for d in docs if d.aging_bucket == '8_15_days'])"/> vouchers</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge rounded-pill" style="background-color: #ffc107; color: black;">16-30 Days</span></td>
+                                        <td class="text-right"><t t-esc="len([d for d in docs if d.aging_bucket == '16_30_days'])"/> vouchers</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge rounded-pill" style="background-color: #dc3545; color: white;">30+ Days</span></td>
+                                        <td class="text-right"><t t-esc="len([d for d in docs if d.aging_bucket == 'above_30_days'])"/> vouchers</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h5>Summary by Status</h5>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td>Pending Approval</td>
+                                        <td class="text-right"><t t-esc="len([d for d in docs if d.state == 'requested'])"/> vouchers</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pending Reconciliation</td>
+                                        <td class="text-right"><t t-esc="len([d for d in docs if d.state == 'paid'])"/> vouchers</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="alert alert-info mt-4">
+                            <strong>No pending vouchers found.</strong>
+                            <p>There are no vouchers awaiting approval or reconciliation.</p>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Aging Summary Report Template -->
+    <template id="report_petty_aging_summary_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">Petty Cash Aging Summary</h2>
+                    <p class="text-center text-muted">
+                        Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                    </p>
+
+                    <t t-if="docs">
+                        <table class="table table-sm table-bordered mt-4">
+                            <thead>
+                                <tr class="bg-primary text-white">
+                                    <th>Fund</th>
+                                    <th>Pending Type</th>
+                                    <th>Aging Bucket</th>
+                                    <th class="text-center">Count</th>
+                                    <th class="text-right">Total Amount</th>
+                                    <th class="text-center">Avg Days</th>
+                                    <th class="text-center">Max Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="line">
+                                    <tr t-attf-class="#{line.aging_bucket == 'above_30_days' and 'table-danger' or line.aging_bucket == '16_30_days' and 'table-warning' or ''}">
+                                        <td><t t-esc="line.fund_name"/></td>
+                                        <td>
+                                            <t t-if="line.pending_type == 'approval'">Pending Approval</t>
+                                            <t t-else="">Pending Reconciliation</t>
+                                        </td>
+                                        <td>
+                                            <span class="badge rounded-pill" t-attf-style="#{line.aging_bucket == 'above_30_days' and 'background-color: #dc3545; color: white;' or line.aging_bucket == '16_30_days' and 'background-color: #ffc107; color: black;' or line.aging_bucket == '8_15_days' and 'background-color: #0dcaf0; color: black;' or 'background-color: #198754; color: white;'}">
+                                                <t t-if="line.aging_bucket == '0_7_days'">0-7 Days</t>
+                                                <t t-if="line.aging_bucket == '8_15_days'">8-15 Days</t>
+                                                <t t-if="line.aging_bucket == '16_30_days'">16-30 Days</t>
+                                                <t t-if="line.aging_bucket == 'above_30_days'">30+ Days</t>
+                                            </span>
+                                        </td>
+                                        <td class="text-center"><t t-esc="line.voucher_count"/></td>
+                                        <td class="text-right">
+                                            <t t-esc="line.total_amount" t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                        </td>
+                                        <td class="text-center"><t t-esc="'%.1f' % line.avg_days_pending"/></td>
+                                        <td class="text-center"><t t-esc="line.max_days_pending"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr class="font-weight-bold">
+                                    <td colspan="3">Total</td>
+                                    <td class="text-center"><t t-esc="sum(d.voucher_count for d in docs)"/></td>
+                                    <td class="text-right">
+                                        <t t-esc="sum(d.total_amount for d in docs)" t-options='{"widget": "monetary", "display_currency": docs[0].currency_id if docs else env.company.currency_id}'/>
+                                    </td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+                    <t t-else="">
+                        <div class="alert alert-info mt-4">
+                            <strong>No aging data found.</strong>
+                            <p>There are no vouchers awaiting approval or reconciliation.</p>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

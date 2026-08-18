@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- Security Groups for Petty Cash Management   -->
+    <!-- ============================================ -->
+
+    <!-- Module Category -->
+    <record model="res.groups.privilege" id="module_category_petty_cash">
+        <field name="name">Petty Cash</field>
+        <field name="description">Petty Cash Management Groups</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Group: Petty Cash User -->
+    <!-- Can create voucher requests and view their own vouchers -->
+    <record id="group_petty_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="privilege_id" ref="module_category_petty_cash"/>
+        <field name="comment">
+            Petty Cash Users can:
+            - Create petty cash voucher requests
+            - View their own vouchers only
+            - Upload attachments to their vouchers
+        </field>
+    </record>
+
+    <!-- Group: Petty Cash Cashier -->
+    <!-- Can manage vouchers for assigned funds -->
+    <record id="group_petty_cashier" model="res.groups">
+        <field name="name">Cashier</field>
+        <field name="privilege_id" ref="module_category_petty_cash"/>
+        <field name="implied_ids" eval="[(4, ref('group_petty_user'))]"/>
+        <field name="comment">
+            Petty Cash Cashiers can:
+            - All User permissions
+            - View and manage funds they are responsible for
+            - Approve and pay vouchers for assigned funds
+            - Request replenishments for assigned funds
+            - Reconcile vouchers
+        </field>
+    </record>
+
+    <!-- Group: Petty Cash Manager -->
+    <!-- Full access to all petty cash features -->
+    <record id="group_petty_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="module_category_petty_cash"/>
+        <field name="implied_ids" eval="[(4, ref('group_petty_cashier'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">
+            Petty Cash Managers can:
+            - All Cashier permissions
+            - Create and configure petty cash funds
+            - Block/unblock funds
+            - Approve replenishment requests
+            - Full access to all vouchers and funds
+            - Configure fund settings and thresholds
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Record Rules                                -->
+    <!-- ============================================ -->
+
+    <!-- Rule: Voucher - User can only see their own vouchers -->
+    <record id="voucher_rule_user_own" model="ir.rule">
+        <field name="name">Petty Voucher: User sees own vouchers</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="groups" eval="[(4, ref('group_petty_user'))]"/>
+        <field name="domain_force">[('requester_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Rule: Voucher - Cashier can see vouchers for assigned funds -->
+    <record id="voucher_rule_cashier_assigned" model="ir.rule">
+        <field name="name">Petty Voucher: Cashier sees assigned fund vouchers</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="groups" eval="[(4, ref('group_petty_cashier'))]"/>
+        <field name="domain_force">['|', ('requester_id', '=', user.id), ('fund_id.responsible_user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Rule: Voucher - Manager sees all vouchers -->
+    <record id="voucher_rule_manager_all" model="ir.rule">
+        <field name="name">Petty Voucher: Manager sees all vouchers</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="groups" eval="[(4, ref('group_petty_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Rule: Fund - User cannot see funds (only via voucher relation) -->
+    <record id="fund_rule_user_none" model="ir.rule">
+        <field name="name">Petty Fund: User has no direct fund access</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="groups" eval="[(4, ref('group_petty_user'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Rule: Fund - Cashier can see/edit assigned funds -->
+    <record id="fund_rule_cashier_assigned" model="ir.rule">
+        <field name="name">Petty Fund: Cashier manages assigned funds</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="groups" eval="[(4, ref('group_petty_cashier'))]"/>
+        <field name="domain_force">[('responsible_user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Rule: Fund - Manager has full access -->
+    <record id="fund_rule_manager_all" model="ir.rule">
+        <field name="name">Petty Fund: Manager has full access</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="groups" eval="[(4, ref('group_petty_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Rule: Replenish - Cashier can see their fund replenishments -->
+    <record id="replenish_rule_cashier_assigned" model="ir.rule">
+        <field name="name">Petty Replenish: Cashier sees assigned fund replenishments</field>
+        <field name="model_id" ref="model_dev_petty_replenish"/>
+        <field name="groups" eval="[(4, ref('group_petty_cashier'))]"/>
+        <field name="domain_force">[('fund_id.responsible_user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Rule: Replenish - Manager has full access -->
+    <record id="replenish_rule_manager_all" model="ir.rule">
+        <field name="name">Petty Replenish: Manager has full access</field>
+        <field name="model_id" ref="model_dev_petty_replenish"/>
+        <field name="groups" eval="[(4, ref('group_petty_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Multi-Company Record Rules                  -->
+    <!-- ============================================ -->
+
+    <!-- Rule: Voucher - Company isolation -->
+    <record id="voucher_rule_company" model="ir.rule">
+        <field name="name">Petty Voucher: Company isolation</field>
+        <field name="model_id" ref="model_dev_petty_voucher"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Rule: Fund - Company isolation -->
+    <record id="fund_rule_company" model="ir.rule">
+        <field name="name">Petty Fund: Company isolation</field>
+        <field name="model_id" ref="model_dev_petty_fund"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Rule: Replenish - Company isolation -->
+    <record id="replenish_rule_company" model="ir.rule">
+        <field name="name">Petty Replenish: Company isolation</field>
+        <field name="model_id" ref="model_dev_petty_replenish"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Rule: Line - Company isolation -->
+    <record id="line_rule_company" model="ir.rule">
+        <field name="name">Petty Line: Company isolation</field>
+        <field name="model_id" ref="model_dev_petty_line"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Dashboard Record Rules                      -->
+    <!-- ============================================ -->
+
+    <!-- Rule: Dashboard KPI - Company isolation -->
+    <record id="dashboard_kpi_rule_company" model="ir.rule">
+        <field name="name">Dashboard KPI: Company isolation</field>
+        <field name="model_id" ref="model_dev_petty_dashboard_kpi"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Rule: Dashboard Fund - Company isolation -->
+    <record id="dashboard_fund_rule_company" model="ir.rule">
+        <field name="name">Dashboard Fund: Company isolation</field>
+        <field name="model_id" ref="model_dev_petty_dashboard_fund"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

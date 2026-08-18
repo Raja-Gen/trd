@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--
+    Everything here is traced from "MS Invoice.pdf" (A4, 595.276 x 841.89 pt).
+    The paperformat runs at dpi 96 with smart shrinking off, so 1 CSS px is
+    exactly 1 device pixel and 1 pt = 4/3 px. All coordinates below are the
+    design's points converted to px, measured from the top-left of the paper.
+
+    Content box: left 38 px, width 718 px (10 mm side margins).
+-->
+<template id="ms_invoice_styles">
+<style type="text/css">
+
+/* Poppins, renamed to four self-consistent single-weight families: QtWebKit
+   picks the nearest DECLARED face by weight, so four @font-face rules sharing
+   one family name make it render 400 text with the 500 face. */
+@font-face { font-family: 'MSPopR'; src: url('/ms_invoice_report/static/src/fonts/MSPopR.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'MSPopM'; src: url('/ms_invoice_report/static/src/fonts/MSPopM.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'MSPopS'; src: url('/ms_invoice_report/static/src/fonts/MSPopS.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'MSPopB'; src: url('/ms_invoice_report/static/src/fonts/MSPopB.ttf') format('truetype'); font-weight: normal; font-style: normal; }
+
+/* Odoo wraps every report region's body in a Bootstrap .container; undo it so
+   the sheet can run edge to edge. */
+body.o_body_pdf, body.o_body_html,
+.ms-inv .container, .ms-inv .container-fluid {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.ms-inv {
+    font-family: 'MSPopR', sans-serif;
+    color: #231F20;
+    font-size: 12px;
+    line-height: 17px;
+    -webkit-font-smoothing: antialiased;
+}
+.ms-inv * { box-sizing: border-box; }
+/* QtWebKit invents vertical rules between collapsed bordered cells unless every
+   cell carries an explicit border. */
+.ms-inv td, .ms-inv th { border: 0 solid transparent; padding: 0; }
+
+.ms-r  { font-family: 'MSPopR', sans-serif; }
+.ms-m  { font-family: 'MSPopM', sans-serif; }
+.ms-s  { font-family: 'MSPopS', sans-serif; }
+.ms-b  { font-family: 'MSPopB', sans-serif; }
+.ms-navy { color: #161F3B; }
+
+/* ---------------------------------------------------------------- header
+   .ms-head is the repeating brand band, rendered into the 46.57 mm top
+   margin; its 176 px are page coordinates. .ms-top is the page-1-only block
+   below it, so its children are the design's coordinates MINUS 176. Both are
+   fixed height: nothing in them depends on the length of the invoice, and
+   they must not move when the line table grows. */
+.ms-head { position: relative; height: 176px; width: 793.7px; }
+.ms-head > * { position: absolute; }
+.ms-top { position: relative; height: 273px; width: 100%; }
+.ms-top > * { position: absolute; }
+
+.ms-logo   { left: 38px;  top: 24.85px;  width: 223px; height: 115px; }
+.ms-badge  { left: 646px; top: 34.85px;  width: 113px; height: 103px; }
+.ms-hrule  { left: 334px; top: 37.85px;  width: 2px;   height: 113px; background: #C8C7C7; }
+
+.ms-contact { left: 397px; font-family: 'MSPopR', sans-serif; font-size: 11px; line-height: 16px; }
+.ms-contact-1 { top: 30.55px; }
+.ms-contact-2 { top: 60.85px; }
+.ms-contact-3 { top: 91.25px; }
+.ms-contact-4 { top: 121.55px; }
+
+.ms-divider { left: 0; top: 165.85px; width: 793.7px; height: 8px; }
+
+.ms-title  { left: 38px; top: 4.4px; font-family: 'MSPopS', sans-serif;
+             font-size: 48px; line-height: 67px; color: #161F3B; letter-spacing: -0.5px; }
+/* Enlarged from the design's 10.25 pt to 18 pt on the client's request. The
+   top is baseline-anchored (top = baseline - ascent). At this size the '/'
+   glyphs reach ~4 pt above cap height and would touch the INVOICE title's
+   baseline, so the line also sits ~4 pt lower than the design's 189.89 pt;
+   BILL TO starts at 216.42 pt, so there is room to spare below. */
+.ms-number { left: 38px; top: 57.67px; font-size: 24px; line-height: 33px; color: #161F3B; }
+
+/* meta grid (Invoice Date / Due Date / ...) */
+.ms-mrule  { left: 433px; top: 10px; width: 2px; height: 157px; background: #C8C7C7; }
+.ms-meta   { left: 459px; top: 13.5px; width: 300px; font-size: 12px; line-height: 17px; }
+.ms-meta td { padding: 0; height: 32px; vertical-align: top; }
+.ms-meta .ms-meta-l { width: 112px; font-family: 'MSPopS', sans-serif; }
+.ms-meta .ms-meta-c { width: 22px; }
+
+/* BILL TO tag: navy trapezoid, right edge raked outwards */
+.ms-billtag { left: 36px; top: 112.6px; height: 22px; }
+.ms-billtag td { vertical-align: top; }
+.ms-billtag .ms-billtag-box {
+    width: 81px; height: 22px; background: #161F3B;
+    padding: 2px 0 0 14px; font-family: 'MSPopS', sans-serif;
+    font-size: 12px; line-height: 17px; color: #FFFFFF;
+}
+.ms-billrule { left: 36px; top: 134.6px; width: 2px; height: 116px; background: #C8C7C7; }
+.ms-billto   { left: 50px; top: 142.8px; width: 300px; }
+.ms-billto .ms-billto-name { font-family: 'MSPopS', sans-serif; font-size: 12px; line-height: 17px; }
+.ms-billto .ms-billto-addr { font-size: 12px; line-height: 18.33px; padding-top: 3.3px; }
+
+/* ------------------------------------------------------------------ body */
+.ms-body { padding: 0 37.7px 0 38px; }
+
+/* ------------------------------------------------------------- line table
+   border-collapse must stay 'separate' or QtWebKit drops the rounded corners. */
+.ms-lt { width: 718px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.ms-lt th {
+    background: #161F3B; color: #FFFFFF;
+    font-family: 'MSPopS', sans-serif; font-size: 12px; line-height: 17px;
+    font-weight: normal; text-align: center;
+    padding: 11px 0 8px 0;
+}
+.ms-lt th.ms-c1 { border-top-left-radius: 9px; }
+.ms-lt th.ms-c5 { border-top-right-radius: 9px; }
+.ms-lt th.ms-c2 { text-align: left; padding-left: 76px; }
+
+.ms-lt td {
+    background: #F2FBFE; vertical-align: top;
+    border-right: 1px solid #C8C7C7; border-bottom: 1px solid #C8C7C7;
+    text-align: center; font-size: 12px; line-height: 17px;
+    padding-top: 15px; padding-bottom: 6px;
+}
+.ms-lt td.ms-c1 { border-left: 1px solid #C8C7C7; font-family: 'MSPopS', sans-serif; }
+.ms-lt td.ms-c5 { font-family: 'MSPopS', sans-serif; }
+.ms-lt tr.ms-first td { border-top: 1px solid #C8C7C7; }
+.ms-lt tr.ms-last td.ms-c1 { border-bottom-left-radius: 9px; }
+.ms-lt tr.ms-last td.ms-c5 { border-bottom-right-radius: 9px; }
+
+.ms-lt td.ms-c2 { text-align: left; padding: 10px 8px 7px 17px; }
+.ms-lt .ms-ln-title { font-family: 'MSPopS', sans-serif; font-size: 12px; line-height: 15px; }
+/* min-height keeps the row rhythm when a line has no sub-description */
+.ms-lt .ms-ln-desc  { font-size: 11px; line-height: 16px; min-height: 16px; }
+
+/* ------------------------------------------------- amount in words + totals */
+.ms-tot { width: 718px; border-collapse: collapse; table-layout: fixed; }
+.ms-tot > tbody > tr > td { vertical-align: top; }
+.ms-tot .ms-tot-l { width: 401px; }
+.ms-tot .ms-tot-r { width: 317px; }
+
+.ms-aiw-label { padding-top: 28.6px; font-family: 'MSPopB', sans-serif;
+                font-size: 13px; line-height: 19px; color: #161F3B; }
+.ms-aiw-value { font-size: 11px; line-height: 16px; color: #161F3B; }
+.ms-aiw-rule  { margin-top: 9.1px; width: 333px; height: 1px; background: #C8C7C7; font-size: 0; }
+
+.ms-sum { margin-top: 12px; width: 317px; }
+.ms-sum-top {
+    background: #F2FBFE;
+    border: 2px solid #161F3B; border-bottom: 0;
+    border-radius: 11px 11px 0 0;
+    padding-bottom: 6.3px;
+}
+.ms-sum-row { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.ms-sum-row td { font-size: 12px; line-height: 17px; }
+.ms-sum-row .ms-sum-lbl { font-family: 'MSPopS', sans-serif; text-align: left; }
+.ms-sum-row .ms-sum-val { text-align: right; }
+.ms-sum-top .ms-sum-row td { padding: 0 11.2px 0 19px; }
+.ms-sum-top .ms-sum-first td { padding-top: 7.45px; }
+.ms-sum-top .ms-sum-next  td { padding-top: 4.1px; }
+.ms-sum-sep { margin: 4.15px 8px 0 19px; height: 1px; background: #C8C7C7; font-size: 0; }
+
+.ms-sum-total { background: #161F3B; height: 40px; }
+.ms-sum-total td { color: #FFFFFF; }
+.ms-sum-total .ms-sum-lbl { padding: 12.5px 0 0 21px; }
+.ms-sum-total .ms-sum-val { font-family: 'MSPopS', sans-serif; font-size: 17px;
+                            line-height: 24px; padding: 10.2px 12.4px 5.8px 0; }
+
+.ms-sum-due { background: #A7D3F2; height: 39px; border-radius: 0 0 11px 11px; }
+.ms-sum-due td { color: #161F3B; }
+.ms-sum-due .ms-sum-lbl { padding: 12.3px 0 0 21px; }
+.ms-sum-due .ms-sum-val { font-family: 'MSPopS', sans-serif; font-size: 20px;
+                          line-height: 28px; padding: 4.9px 12.4px 6.1px 0; }
+
+/* ------------------------------------------------- payment information block */
+.ms-payrule { margin-top: 12px; width: 718px; height: 2px; background: #C8C7C7; font-size: 0; }
+.ms-pay { width: 718px; border-collapse: collapse; table-layout: fixed; }
+.ms-pay > tbody > tr > td { vertical-align: top; }
+.ms-pay .ms-pay-l { width: 371px; padding-left: 24px; }
+.ms-pay .ms-pay-r { width: 347px; }
+.ms-pay-head { padding-top: 13.84px; font-family: 'MSPopB', sans-serif;
+               font-size: 12px; line-height: 17px; color: #161F3B; }
+.ms-pay-underline { margin-top: 2.26px; width: 21.4px; height: 2px;
+                    background: #161F3B; font-size: 0; }
+
+.ms-bank { width: 100%; border-collapse: collapse; table-layout: fixed;
+           color: #161F3B; margin-top: 6.04px; }
+.ms-bank td { font-size: 9px; line-height: 14.07px; vertical-align: top; }
+.ms-bank .ms-bank-l { width: 85px; font-family: 'MSPopB', sans-serif; }
+.ms-bank .ms-bank-c { width: 17px; font-family: 'MSPopM', sans-serif; }
+.ms-bank .ms-bank-v { font-family: 'MSPopM', sans-serif; }
+
+.ms-notes { font-family: 'MSPopM', sans-serif; font-size: 9px; line-height: 15px; color: #161F3B; }
+.ms-notes-1 { padding-top: 5.7px; }
+.ms-notes-2 { padding-top: 5.2px; }
+
+/* ---------------------------------------------------------------- footer
+   Lives in the 26 mm bottom margin, so it repeats on every page. */
+/* padding, not margin: a margin on the first child collapses out of the
+   footer viewport and the whole strip rides up against the top edge. */
+.ms-foot { width: 793.7px; padding-top: 5.44px; font-family: 'MSPopR', sans-serif; }
+.ms-oprule { margin: 0 37.7px 0 38px; width: 718px; border-collapse: collapse; table-layout: fixed; }
+.ms-oprule td { vertical-align: middle; }
+.ms-oprule .ms-oprule-line { width: 293px; }
+.ms-oprule .ms-oprule-line div { height: 1px; background: #C8C7C7; font-size: 0; }
+.ms-oprule .ms-oprule-label { width: 132px; text-align: center; white-space: nowrap;
+                              font-family: 'MSPopS', sans-serif; font-size: 12px;
+                              line-height: 17px; color: #161F3B; }
+.ms-partners { margin: 0 37.7px 0 38px; width: 718px; height: 52px; }
+/* The band is 22 px but only its first 19 px are on the paper (the rest bleeds
+   off the bottom edge), so the trademark line is centred within those 19. */
+.ms-botband { margin-top: 3.9px; width: 793.7px; height: 22px; background: #F2FBFE;
+              padding-top: 5px; text-align: center;
+              font-family: 'MSPopM', sans-serif; font-size: 9px; line-height: 12px;
+              color: #161F3B; }
+
+</style>
+</template>
+
+</odoo>

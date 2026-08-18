@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Reduce only the attendee name and company name font sizes on the badge
+         so they do not overlap. Everything else keeps the Odoo defaults. -->
+    <template id="event_report_template_badge_card_font_size"
+              inherit_id="event.event_report_template_badge_card"
+              name="Event Badge Card - Smaller Attendee/Company Name">
+        <xpath expr="//div[hasclass('o_event_badge_ticket_wrapper')]" position="inside">
+            <style>
+                /* attendee name - h2: 2rem */
+                .o_event_badge_ticket_wrapper h2 { font-size: 1.4rem; }
+                /* company name - h4: 1.5rem */
+                .o_event_badge_ticket_wrapper h4 { font-size: 1.05rem; }
+            </style>
+        </xpath>
+    </template>
+
+</odoo>

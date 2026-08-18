@@ -13,6 +13,7 @@
     'depends': ['website_event_sale'],
     'data': [
         'views/registration_thankyou.xml',
+        'views/event_badge_report.xml',
         'views/event_registration_views.xml',
     ],
     'installable': True,
