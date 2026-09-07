@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- The Purchase root and Reporting menus are reserved to the two standard
+         purchase groups; open them to the read-only level as well. Configuration
+         stays restricted to Administrator. -->
+    <record id="purchase.menu_purchase_root" model="ir.ui.menu">
+        <field name="group_ids" eval="[(4, ref('group_purchase_readonly'))]"/>
+    </record>
+
+    <record id="purchase.purchase_report_main" model="ir.ui.menu">
+        <field name="group_ids" eval="[(4, ref('group_purchase_readonly'))]"/>
+    </record>
+
+    <record id="purchase.purchase_report" model="ir.ui.menu">
+        <field name="group_ids" eval="[(4, ref('group_purchase_readonly'))]"/>
+    </record>
+
+</odoo>

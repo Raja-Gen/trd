@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Purchase price and landed cost on the Operations lines of transfers.
+         Both are optional columns, so they can be toggled per user, and both are
+         reserved to Inventory Administrators - the same level that already gates
+         the Landed Costs menu and the valuation reports. -->
+    <record id="view_picking_form_cost_columns" model="ir.ui.view">
+        <field name="name">stock.picking.form.cost.columns</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_ids']/list/field[@name='product_uom']" position="after">
+                <field name="company_currency_id" column_invisible="True"/>
+                <field name="price_unit" string="Purchase Price" readonly="1" optional="show"
+                       widget="monetary" options="{'currency_field': 'company_currency_id'}"
+                       groups="stock.group_stock_manager"/>
+                <field name="landed_cost_unit" readonly="1" optional="show"
+                       widget="monetary" options="{'currency_field': 'company_currency_id'}"
+                       groups="stock.group_stock_manager"/>
+                <field name="landed_cost_value" readonly="1" optional="hide"
+                       widget="monetary" options="{'currency_field': 'company_currency_id'}"
+                       groups="stock.group_stock_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Same columns on the standalone stock move list (Inventory > Reporting). -->
+    <record id="view_move_tree_cost_columns" model="ir.ui.view">
+        <field name="name">stock.move.list.cost.columns</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="company_currency_id" column_invisible="True"/>
+                <field name="price_unit" string="Purchase Price" readonly="1" optional="hide"
+                       widget="monetary" options="{'currency_field': 'company_currency_id'}"
+                       groups="stock.group_stock_manager"/>
+                <field name="landed_cost_unit" readonly="1" optional="hide"
+                       widget="monetary" options="{'currency_field': 'company_currency_id'}"
+                       groups="stock.group_stock_manager"/>
+                <field name="landed_cost_value" readonly="1" optional="hide"
+                       widget="monetary" options="{'currency_field': 'company_currency_id'}"
+                       groups="stock.group_stock_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

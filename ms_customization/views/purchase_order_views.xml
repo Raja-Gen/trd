@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Odoo forbids group_ids on an inherited view record, so the read-only
+         behaviour is expressed with `groups` on the elements themselves.
+
+         Every workflow button is reserved to purchase.group_purchase_user. The
+         read-only group does not imply that group, so for a read-only user the
+         header keeps only the status bar and the Print actions - no buttons that
+         would raise an AccessError on click. Create / Edit / Delete affordances
+         are dropped by the web client on their own, from the read-only ACLs. -->
+
+    <record id="purchase_order_form_readonly" model="ir.ui.view">
+        <field name="name">purchase.order.form.readonly</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Send RFQ (draft) / Send RFQ (sent) / Send PO (purchase) -->
+            <xpath expr="(//header/button[@name='action_rfq_send'])[1]" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="(//header/button[@name='action_rfq_send'])[2]" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="(//header/button[@name='action_rfq_send'])[3]" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+
+            <xpath expr="//header/button[@id='bid_confirm']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@id='draft_confirm']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_acknowledge']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='button_draft']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='button_cancel']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='button_lock']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+            <xpath expr="//header/widget[@name='purchase_file_uploader']" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </xpath>
+
+            <!-- button_approve and button_unlock already carry
+                 purchase.group_purchase_manager; Print already carries
+                 base.group_user, which read-only users keep. -->
+
+        </field>
+    </record>
+
+</odoo>

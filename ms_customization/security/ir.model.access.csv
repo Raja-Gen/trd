@@ -1,0 +1,25 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_order_readonly,purchase.order readonly,purchase.model_purchase_order,group_purchase_readonly,1,0,0,0
+access_purchase_order_line_readonly,purchase.order.line readonly,purchase.model_purchase_order_line,group_purchase_readonly,1,0,0,0
+access_purchase_report_readonly,purchase.report readonly,purchase.model_purchase_report,group_purchase_readonly,1,0,0,0
+access_purchase_bill_union_readonly,purchase.bill.union readonly,purchase.model_purchase_bill_union,group_purchase_readonly,1,0,0,0
+access_vendor_delay_report_readonly,vendor.delay.report readonly,purchase_stock.model_vendor_delay_report,group_purchase_readonly,1,0,0,0
+access_product_product_readonly,product.product readonly,product.model_product_product,group_purchase_readonly,1,0,0,0
+access_product_template_readonly,product.template readonly,product.model_product_template,group_purchase_readonly,1,0,0,0
+access_product_supplierinfo_readonly,product.supplierinfo readonly,product.model_product_supplierinfo,group_purchase_readonly,1,0,0,0
+access_res_partner_readonly,res.partner readonly,base.model_res_partner,group_purchase_readonly,1,0,0,0
+access_account_tax_readonly,account.tax readonly,account.model_account_tax,group_purchase_readonly,1,0,0,0
+access_account_account_tag_readonly,account.account.tag readonly,account.model_account_account_tag,group_purchase_readonly,1,0,0,0
+access_account_fiscal_position_readonly,account.fiscal.position readonly,account.model_account_fiscal_position,group_purchase_readonly,1,0,0,0
+access_account_journal_readonly,account.journal readonly,account.model_account_journal,group_purchase_readonly,1,0,0,0
+access_account_account_readonly,account.account readonly,account.model_account_account,group_purchase_readonly,1,0,0,0
+access_account_move_readonly,account.move readonly,account.model_account_move,group_purchase_readonly,1,0,0,0
+access_account_move_line_readonly,account.move.line readonly,account.model_account_move_line,group_purchase_readonly,1,0,0,0
+access_account_analytic_line_readonly,account.analytic.line readonly,account.model_account_analytic_line,group_purchase_readonly,1,0,0,0
+access_stock_location_readonly,stock.location readonly,stock.model_stock_location,group_purchase_readonly,1,0,0,0
+access_stock_warehouse_readonly,stock.warehouse readonly,stock.model_stock_warehouse,group_purchase_readonly,1,0,0,0
+access_stock_picking_readonly,stock.picking readonly,stock.model_stock_picking,group_purchase_readonly,1,0,0,0
+access_stock_move_readonly,stock.move readonly,stock.model_stock_move,group_purchase_readonly,1,0,0,0
+access_stock_warehouse_orderpoint_readonly,stock.warehouse.orderpoint readonly,stock.model_stock_warehouse_orderpoint,group_purchase_readonly,1,0,0,0
+access_crm_lead_product_line_salesman,crm.lead.product.line salesman,model_crm_lead_product_line,sales_team.group_sale_salesman,1,1,1,1
+access_crm_lead_product_line_manager,crm.lead.product.line manager,model_crm_lead_product_line,sales_team.group_sale_manager,1,1,1,1
