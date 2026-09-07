@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Customer Type (Trader / End User) on the contact form. It sits in the
+         main form, next to the VAT and Tags, so it can be set while the
+         customer is being created - not buried in a tab. -->
+    <record id="view_partner_form_customer_type" model="ir.ui.view">
+        <field name="name">res.partner.form.customer.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="ms_customer_type" placeholder="Trader or End User"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- The simplified form is what opens from "Create and edit..." on a
+         customer field, e.g. while writing a quotation, so the option has to be
+         on it too or it can only ever be set afterwards. -->
+    <record id="view_partner_simple_form_customer_type" model="ir.ui.view">
+        <field name="name">res.partner.simplified.form.customer.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_simple_form"/>
+        <field name="arch" type="xml">
+            <field name="phone" position="after">
+                <field name="ms_customer_type" placeholder="Trader or End User"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_partner_tree_customer_type" model="ir.ui.view">
+        <field name="name">res.partner.list.customer.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="ms_customer_type" optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_customer_type" model="ir.ui.view">
+        <field name="name">res.partner.select.customer.type</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <filter name="type_company" position="after">
+                <separator/>
+                <filter string="Traders" name="ms_customer_type_trader"
+                        domain="[('ms_customer_type', '=', 'trader')]"/>
+                <filter string="End Users" name="ms_customer_type_end_user"
+                        domain="[('ms_customer_type', '=', 'end_user')]"/>
+                <filter string="Customer Type Not Set" name="ms_customer_type_unset"
+                        domain="[('ms_customer_type', '=', False)]"/>
+            </filter>
+            <xpath expr="//group[@name='group_by']" position="inside">
+                <filter string="Customer Type" name="group_ms_customer_type"
+                        context="{'group_by': 'ms_customer_type'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
