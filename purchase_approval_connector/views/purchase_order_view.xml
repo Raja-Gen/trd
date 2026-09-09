@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="purchase_order_form_inherit_approval" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.approval.connector</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,sent,to_approve,approved,purchase"/>
+            </xpath>
+
+            <xpath expr="//button[@name='button_confirm' and @id='draft_confirm']" position="attributes">
+                <attribute name="string">Submit for Approval</attribute>
+                <attribute name="class">btn-primary</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='button_cancel']" position="after">
+                <field name="is_approval_allowed" invisible="1"/>
+                <button name="action_direct_approve" type="object" string="Approve Request" class="btn-primary" invisible="state != 'to_approve' or not is_approval_allowed" />
+                <button name="action_direct_reject" type="object" string="Reject" class="btn-primary" invisible="state != 'to_approve' or not is_approval_allowed" />
+            </xpath>
+
+            <xpath expr="//button[@name='button_confirm']" position="replace">
+                <button name="button_confirm" string="Confirm" class="btn-primary" type="object" invisible="state not in ['approved','sent']"/>
+                <field name="is_approved" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="invisible">state not in ['draft', 'to_approve','approved'] or not id</attribute>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Approval History" name="approval_history_page" invisible="not approval_history_ids">
+                    <field name="approval_history_ids">
+                        <list string="Approval History" editable="bottom">
+                            <field name="user_id"/>
+                            <field name="action"/>
+                            <field name="note"/>
+                            <field name="date"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+
+        </field>
+    </record>
+</odoo>

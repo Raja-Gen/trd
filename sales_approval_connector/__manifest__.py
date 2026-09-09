@@ -1,0 +1,20 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Sale Approval Connector",
+    'version': "19.0.1.0.0",
+    'category': 'Sales',
+    'summary': """Sales Approval Connector helps in setting up a system where all sale""",
+    'description': """Sales Approval Connector helps in setting up a system where all sale""",
+    'author': "Microsulutions Kuwait",
+    'company': "Microsulutions Kuwait",
+    'depends': ['sale_management', 'approvals'],
+    'data': ['data/approval_connector_data.xml',
+             'security/ir.model.access.csv',
+             'views/approval_category_views.xml',
+             'views/sale_order_views.xml',
+             'views/approval_request_views.xml',
+             ],
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+}

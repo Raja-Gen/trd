@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="approval_category_view_form_purchase" model="ir.ui.view">
+        <field name="name">approval.category.form.inherit.purchase.connector</field>
+        <field name="model">approval.category</field>
+        <field name="inherit_id" ref="approvals.approval_category_view_form"/>
+        <field name="arch" type="xml">
+            <field name="approval_minimum" position="after">
+                <field name="company_currency_id" invisible="1"/>
+                <field name="po_approval_threshold"
+                       invisible="approval_type != 'purchase'"/>
+                <field name="po_final_approver_id"
+                       invisible="approval_type != 'purchase'"/>
+            </field>
+        </field>
+    </record>
+</odoo>
