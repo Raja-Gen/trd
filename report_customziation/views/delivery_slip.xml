@@ -21,6 +21,54 @@
                 <t t-esc="bo_line_index + 1"/>
             </td>
         </xpath>
+        <!-- The Raja group companies do not want the ordered quantity, nor the
+             "Remaining quantities not yet delivered" section, on their delivery
+             notes. Everything below is gated on this one flag.
+
+             Restricted to OUTGOING pickings: this same report also prints
+             receipts and internal transfers, and on a receipt the ordered
+             quantity is what shows whether the supplier shipped short.
+
+             Note it reads o.company_id - the company of the DOCUMENT - so a
+             delivery note prints identically whoever prints it. (The
+             acknowledgement block further down still reads env.company, the
+             active company of the user printing; that is a separate defect.)
+
+             The t-set sits right after core's format_number so it is in scope
+             for both tables, for the backorder section, and inside the
+             sub-templates that t-call into this one. -->
+        <xpath expr="//t[@t-set='format_number']" position="after">
+            <t t-set="ms_raja_delivery_co" t-value="o.picking_type_id.code == 'outgoing' and o.company_id.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']"/>
+        </xpath>
+
+        <!-- (a) Ordered column - undelivered pickings (state != done) -->
+        <xpath expr="//table[@name='stock_move_table']/thead/tr/th[@name='th_sm_ordered']" position="attributes">
+            <attribute name="t-if">not ms_raja_delivery_co</attribute>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']/tbody/tr/td[span/@t-out='format_number(move.product_uom_qty)']" position="attributes">
+            <attribute name="t-if">not ms_raja_delivery_co</attribute>
+        </xpath>
+
+        <!-- (b) Ordered column - delivered pickings (state == done).
+             The Lot/Serial header is core's t-else to this one, so hiding the
+             Ordered header alone would make Lot/Serial take its place. Turn that
+             t-else into an explicit t-elif so both can be absent at once. -->
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/th[@name='th_sml_qty_ordered']" position="attributes">
+            <attribute name="t-if">not has_serial_number and not ms_raja_delivery_co</attribute>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/th[@name='lot_serial']" position="attributes">
+            <attribute name="t-else"/>
+            <attribute name="t-elif">has_serial_number</attribute>
+        </xpath>
+
+        <!-- (c) "Remaining quantities not yet delivered" + its table.
+             Core renders an empty oe_structure when there is nothing to show and
+             the section in the t-else. Widening that first condition drops the
+             whole section, heading included, without touching the t-else. -->
+        <xpath expr="//div[@t-if='not (o.backorder_ids and backorders)']" position="attributes">
+            <attribute name="t-if">ms_raja_delivery_co or not (o.backorder_ids and backorders)</attribute>
+        </xpath>
+
         <xpath expr="//div[hasclass('page')]" position="inside">
             <t t-if="env.company.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']">
                 <div style="margin-top: 30px;line-height: 1.6;">
@@ -78,6 +126,12 @@
             <td style="text-align:center;">
                 <t t-esc="line_index + 1"/>
             </td>
+        </xpath>
+        <!-- Ordered value on a delivered picking; the header it belongs to is
+             hidden by (b) above. ms_raja_delivery_co reaches here through the
+             t-call from stock.report_delivery_document. -->
+        <xpath expr="//td[@name='move_line_aggregated_qty_ordered']" position="attributes">
+            <attribute name="t-if">not ms_raja_delivery_co</attribute>
         </xpath>
     </template>
 </odoo>
