@@ -21,6 +21,19 @@ class SaleOrder(models.Model):
         string="Approval History"
     )
 
+    is_approval_required = fields.Boolean(
+        compute="_compute_is_approval_required",
+        string="Approval Required",
+        help="True when an approval category with approvers is configured for "
+             "this order's company. Drives which confirm button the form shows: "
+             "companies with no approval set up keep the standard Confirm.",
+    )
+
+    @api.depends('company_id')
+    def _compute_is_approval_required(self):
+        for order in self:
+            order.is_approval_required = bool(order._ms_approval_category())
+
     # this method is used to allow direst approve from sale order form
 
     @api.depends()
@@ -111,56 +124,87 @@ class SaleOrder(models.Model):
             if order.state not in {'draft', 'sent', 'approve', 'approved'}:
                 return _("Some orders are not in a state that allows confirmation.")
         return False
+    def _ms_approval_category(self):
+        """The approval category that governs THIS order, or an empty recordset.
+
+        Matched on the order's OWN company, so configuring approval for one
+        company leaves every other company alone. Categories with no approvers
+        are ignored: an empty one means "approval is not set up for this
+        company", which must confirm normally rather than gate the order or -
+        worse - park it in To Approve with nobody able to move it. That filter
+        is also what keeps Odoo's own empty "Create RFQ's" category (shipped by
+        approvals_purchase, sequence 80) from hijacking the lookup.
+
+        Read in sudo on purpose: whether an order needs approval is a property
+        of the order, not of which companies the person confirming happens to
+        have ticked in the company switcher.
+        """
+        self.ensure_one()
+        return self.env['approval.category'].sudo().search([
+            ('approval_type', '=', 'sale'),
+            ('company_id', '=', self.company_id.id),
+            ('approver_ids', '!=', False),
+        ], order='sequence, id', limit=1)
+
     def action_confirm(self):
         """Method is used to confirm the order"""
         if not self:
             return super().action_confirm()
 
-        approval = self.env['approval.category'].search([('approval_type', '=', 'sale')], limit=1)
-        if not approval:
-            return super().action_confirm()
+        # Decide per order: the governing category depends on the order's company.
+        categories = {}
+        for order in self:
+            if not order.is_approved:
+                category = order._ms_approval_category()
+                if category:
+                    categories[order.id] = category
 
-        orders_requiring_approval = self.filtered(lambda o: not o.is_approved)
-        orders_not_requiring_approval = self.filtered(lambda o: o.is_approved)
+        orders_requiring_approval = self.filtered(lambda o: o.id in categories)
+        orders_not_requiring_approval = self - orders_requiring_approval
 
-        if orders_requiring_approval:
-            for order in orders_requiring_approval:
-                if approval.approver_ids:
-                    history_vals = []
-                    for approver in approval.approver_ids:
-                        history_vals.append({
-                            'sale_order_id': order.id,
-                            'user_id': approver.user_id.id,
-                            'action': 'requested',
-                            'note': 'Approval required from this user',
-                        })
-                    self.env['sale.approval.history'].sudo().create(history_vals)
+        for order in orders_requiring_approval:
+            approval = categories[order.id]
+            history_vals = []
+            for approver in approval.approver_ids:
+                history_vals.append({
+                    'sale_order_id': order.id,
+                    'user_id': approver.user_id.id,
+                    'action': 'requested',
+                    'note': 'Approval required from this user',
+                })
+            self.env['sale.approval.history'].sudo().create(history_vals)
 
-                self.env['approval.request'].create({
-                    'name': order.name,
-                    'request_owner_id': order.user_id.id,
-                    'category_id': approval.id,
-                    'date_start': fields.Datetime.now(),
-                    'date_end': fields.Datetime.now(),
-                    'order_id': order.id,
-                }).action_confirm()
-                approver_names = ", ".join(approval.approver_ids.mapped("user_id.name"))
-                order.message_post(
-                    body=_("%s created a request for approval for %s") % (self.env.user.name, order.name),
-                    message_type="comment",
-                )
-                # Change state
-                order.write({"state": "approve"})
+            # Created in the ORDER's company: approval.product.line picks up a
+            # warehouse from the ambient company, which would otherwise be the
+            # confirming user's active company rather than the order's.
+            self.env['approval.request'].with_company(order.company_id).create({
+                'name': order.name,
+                'request_owner_id': order.user_id.id,
+                'category_id': approval.id,
+                'date_start': fields.Datetime.now(),
+                'date_end': fields.Datetime.now(),
+                'order_id': order.id,
+            }).action_confirm()
+            approver_names = ", ".join(approval.approver_ids.mapped("user_id.name"))
+            order.message_post(
+                body=_("%s created a request for approval for %s") % (self.env.user.name, order.name),
+                message_type="comment",
+            )
+            # Change state
+            order.write({"state": "approve"})
 
-                # Post approver info message
-                order.message_post(
-                    body=_("Approval request created. This Sale order will be reviewed by: %s") % approver_names,
-                    subtype_xmlid="mail.mt_comment",
-                    message_type="comment",
-                )
-    
+            # Post approver info message
+            order.message_post(
+                body=_("Approval request created. This Sale order will be reviewed by: %s") % approver_names,
+                subtype_xmlid="mail.mt_comment",
+                message_type="comment",
+            )
+
         if orders_not_requiring_approval:
-            orders_not_requiring_approval.write({'state': 'draft'})
+            # Orders coming back from a completed approval sit in 'approved';
+            # the standard confirmation only accepts draft/sent.
+            orders_not_requiring_approval.filtered(
+                lambda o: o.state == 'approved').write({'state': 'draft'})
             return super(SaleOrder, orders_not_requiring_approval).action_confirm()
 
         return True

@@ -27,6 +27,19 @@ class PurchaseOrder(models.Model):
         string="Approval History"
     )
 
+    is_approval_required = fields.Boolean(
+        compute="_compute_is_approval_required",
+        string="Approval Required",
+        help="True when an approval category with approvers is configured for "
+             "this order's company. Drives which confirm button the form shows: "
+             "companies with no approval set up keep the standard Confirm Order.",
+    )
+
+    @api.depends('company_id')
+    def _compute_is_approval_required(self):
+        for order in self:
+            order.is_approval_required = bool(order._ms_approval_category())
+
     # this method is used to allow direct approve from purchase order form
 
     @api.depends()
@@ -107,15 +120,36 @@ class PurchaseOrder(models.Model):
                 order.is_approved = False
         return res
 
+    def _ms_approval_category(self):
+        """The approval category that governs THIS order, or an empty recordset.
+
+        Matched on the order's OWN company, so configuring approval for one
+        company leaves every other company alone. Categories with no approvers
+        are ignored: an empty one means "approval is not set up for this
+        company", which must confirm normally rather than gate the order. That
+        filter is also what keeps Odoo's own "Create RFQ's" category (shipped by
+        approvals_purchase at sequence 80, with no approvers) from winning the
+        lookup and silently skipping the gate altogether.
+
+        Read in sudo on purpose: whether an order needs approval is a property
+        of the order, not of which companies the person confirming happens to
+        have ticked in the company switcher.
+        """
+        self.ensure_one()
+        return self.env['approval.category'].sudo().search([
+            ('approval_type', '=', 'purchase'),
+            ('company_id', '=', self.company_id.id),
+            ('approver_ids', '!=', False),
+        ], order='sequence, id', limit=1)
+
     def button_confirm(self):
-        approval = self.env['approval.category'].search(
-            [('approval_type', '=', 'purchase')], limit=1
-        )
         orders_to_confirm = self.env['purchase.order']
         for order in self:
-            # Trigger the approval flow only when a sale category with approvers
-            # exists and the order has not been approved yet.
-            if approval and approval.approver_ids and not order.is_approved:
+            # Decide per order: the governing category depends on the order's
+            # company, so a configuration made for one company does not reach
+            # the others.
+            approval = order._ms_approval_category() if not order.is_approved else False
+            if approval:
                 history_vals = [{
                     'purchase_order_id': order.id,
                     'user_id': approver.user_id.id,
@@ -125,7 +159,10 @@ class PurchaseOrder(models.Model):
                 self.env['purchase.approval.history'].sudo().create(history_vals)
 
                 order.write({'state': 'to_approve'})
-                self.env['approval.request'].create({
+                # Created in the ORDER's company: approval.product.line picks up
+                # a warehouse from the ambient company, which would otherwise be
+                # the confirming user's active company, not the order's.
+                self.env['approval.request'].with_company(order.company_id).create({
                     'name': order.name,
                     'request_owner_id': order.user_id.id,
                     'category_id': approval.id,
@@ -144,8 +181,9 @@ class PurchaseOrder(models.Model):
                     message_type="comment"
                 )
             else:
-                # Already approved (or no approval configured): let the standard
-                # confirmation run. Base button_confirm only processes draft/sent.
+                # Already approved, or no approval configured for this company:
+                # let the standard confirmation run. Base button_confirm only
+                # processes draft/sent.
                 if order.state == 'approved':
                     order.write({'state': 'draft'})
                 orders_to_confirm |= order

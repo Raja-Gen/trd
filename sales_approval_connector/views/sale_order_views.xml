@@ -13,10 +13,16 @@
             </xpath>
 
             <xpath expr="//header/button[@name='action_confirm']" position="before">
-                <button name="action_confirm" type="object" string="Submit for Approval" class="btn-primary" invisible="state != 'draft'"/>
+                <field name="is_approval_required" invisible="1"/>
+                <button name="action_confirm" type="object" string="Submit for Approval"
+                        class="btn-primary"
+                        invisible="state != 'draft' or not is_approval_required"/>
             </xpath>
+             <!-- Odoo's own draft Confirm. Hidden while this company has an approval
+                 flow configured (the Submit for Approval button above takes its place),
+                 shown untouched for every company that has none. -->
              <xpath expr="//header/button[@id='action_confirm']/following-sibling::button[@name='action_confirm'][1]" position="attributes">
-                <attribute name="invisible">True</attribute>
+                <attribute name="invisible">state != 'draft' or is_approval_required</attribute>
             </xpath>
 
             <xpath expr="//button[@name='action_preview_sale_order']" position="before">
