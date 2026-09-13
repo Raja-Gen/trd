@@ -244,3 +244,39 @@ class TestPurchaseApprovalCompanyScope(TransactionCase):
                  and "not is_approval_required" not in b.get("invisible")]
         self.assertTrue(plain,
                         "no standard confirm button is offered when approval is not configured")
+
+    # --- the escalation threshold is currency-agnostic ------------------------
+
+    def test_escalation_threshold_ignores_the_order_currency(self):
+        """50,000 in a weak currency must still exceed a 10,000 threshold.
+
+        Converted to the company currency it would be 5,000 and would not -
+        the conversion the client asked us to drop.
+        """
+        final = self.env["res.users"].create({
+            "name": "MS Pur Final Approver 3", "login": "ms_pur_final_approver_3",
+            "company_id": self.company_a.id,
+            "company_ids": [(6, 0, [self.company_a.id])],
+            "group_ids": [(6, 0, [self.env.ref("base.group_user").id,
+                                  self.env.ref("purchase.group_purchase_manager").id])],
+        })
+        self.category_a.write({
+            "po_approval_threshold": 10000.0,
+            "po_final_approver_id": final.id,
+        })
+        currency = self.env["res.currency"].create({
+            "name": "MSY", "symbol": "MSY", "rounding": 0.01,
+            "rate_ids": [(0, 0, {"rate": 10.0, "company_id": self.company_a.id})],
+        })
+        order = self._order(self.company_a)
+        order.currency_id = currency
+        order.order_line.price_unit = 50000.0
+        self.assertNotEqual(order.currency_id, self.company_a.currency_id)
+        self.assertEqual(order.amount_total, 50000.0)
+
+        order.button_confirm()
+        request = self.env["approval.request"].search([("purchase_order_id", "=", order.id)])
+        request.with_user(self.approver_a).action_approve()
+        self.assertEqual(order.state, "to_approve",
+                         "the plain total exceeds the threshold, so escalation applies")
+        self.assertIn(final, request.approver_ids.user_id)

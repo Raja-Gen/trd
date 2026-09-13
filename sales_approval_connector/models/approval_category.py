@@ -47,23 +47,12 @@ class ApprovalCategory(models.Model):
         help="Approval type to identify the model",
     )
 
-    company_currency_id = fields.Many2one(
-        'res.currency',
-        string="Company Currency",
-        compute='_compute_company_currency_id',
-    )
-
-    so_approval_threshold = fields.Monetary(
+    so_approval_threshold = fields.Float(
         string="Sale Approval Threshold",
-        currency_field='company_currency_id',
-        help="Sale orders are sent for approval only when their total, converted "
-             "to the company currency, reaches this amount. An order exactly on "
-             "the threshold is included. Leave at 0 to send every order for "
-             "approval.",
+        digits=(16, 2),
+        help="Sale orders are sent for approval only when their total reaches "
+             "this amount. Deliberately currency-agnostic: the order's total is "
+             "compared as a plain number, so 10,000 means 10,000 AED on an AED "
+             "order and 10,000 KWD on a KWD one. An order exactly on the "
+             "threshold is included. Leave at 0 to send every order for approval.",
     )
-
-    @api.depends('company_id')
-    def _compute_company_currency_id(self):
-        for category in self:
-            company = category.company_id or self.env.company
-            category.company_currency_id = company.currency_id

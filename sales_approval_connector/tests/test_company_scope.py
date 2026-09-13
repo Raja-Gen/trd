@@ -269,3 +269,58 @@ class TestSaleApprovalCompanyScope(TransactionCase):
         small_b = self._order(self.company_b, amount=1000.0)
         self.assertFalse(small_a.is_approval_required, "under A's 100k threshold")
         self.assertTrue(small_b.is_approval_required, "over B's 500 threshold")
+
+    # --- the threshold is currency-agnostic ----------------------------------
+
+    def _foreign_pricelist(self, company, rate=10.0):
+        """A currency worth a tenth of the company's, so a converted comparison
+        would give a different answer from a plain one."""
+        currency = self.env["res.currency"].create({
+            "name": "MSX", "symbol": "MSX", "rounding": 0.01,
+            "rate_ids": [(0, 0, {"rate": rate, "company_id": company.id})],
+        })
+        return self.env["product.pricelist"].create({
+            "name": "MS Foreign Pricelist",
+            "currency_id": currency.id,
+            "company_id": company.id,
+        })
+
+    def _foreign_order(self, company, amount):
+        pricelist = self._foreign_pricelist(company)
+        return self.env["sale.order"].with_company(company).create({
+            "company_id": company.id,
+            "partner_id": self.partner.id,
+            "pricelist_id": pricelist.id,
+            "order_line": [(0, 0, {"product_id": self.product.id, "product_uom_qty": 1,
+                                   "price_unit": amount, "tax_ids": [(6, 0, [])]})],
+        })
+
+    def test_threshold_ignores_the_order_currency(self):
+        """50,000 in a weak currency must still clear a 10,000 threshold.
+
+        Converted to the company currency it would be only 5,000 and would NOT
+        clear it - which is exactly the behaviour the client asked us to drop.
+        """
+        self.category_a.so_approval_threshold = 10000.0
+        order = self._foreign_order(self.company_a, 50000.0)
+        self.assertNotEqual(order.currency_id, self.company_a.currency_id)
+        self.assertEqual(order.amount_total, 50000.0)
+        self.assertTrue(order.is_approval_required,
+                        "the total must be compared as a plain number")
+        order.action_confirm()
+        self.assertEqual(order.state, "approve")
+
+    def test_same_number_behaves_the_same_in_any_currency(self):
+        self.category_a.so_approval_threshold = 10000.0
+        home = self._order(self.company_a, amount=10000.0)
+        foreign = self._foreign_order(self.company_a, 10000.0)
+        self.assertTrue(home.is_approval_required)
+        self.assertTrue(foreign.is_approval_required,
+                        "10,000 must mean 10,000 whatever the currency")
+
+    def test_below_the_threshold_in_a_foreign_currency(self):
+        self.category_a.so_approval_threshold = 10000.0
+        order = self._foreign_order(self.company_a, 9999.0)
+        self.assertFalse(order.is_approval_required)
+        order.action_confirm()
+        self.assertEqual(order.state, "sale")

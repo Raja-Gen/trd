@@ -44,12 +44,10 @@ class ApprovalRequest(models.Model):
         # Already escalated (final approver injected) — nothing more to do.
         if self.approver_ids.filtered(lambda a: a.user_id == final_user):
             return False
-        company = po.company_id or self.env.company
-        amount = po.currency_id._convert(
-            po.amount_total, company.currency_id, company,
-            fields.Date.context_today(self),
-        )
-        return amount > threshold
+        # Compared in the order's OWN currency, with no conversion: the client
+        # wants one number that means the same in every currency.
+        currency = po.currency_id or po.company_id.currency_id or self.env.company.currency_id
+        return currency.compare_amounts(po.amount_total, threshold) > 0
 
     def _add_final_approver(self):
         """Append the configured final approver as the last (required) approver

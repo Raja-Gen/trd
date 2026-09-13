@@ -162,13 +162,12 @@ class SaleOrder(models.Model):
         threshold = category.so_approval_threshold
         if threshold <= 0:
             return True
-        company = self.company_id or self.env.company
-        currency = company.currency_id
-        amount = self.amount_total
-        if self.currency_id and currency and self.currency_id != currency:
-            amount = self.currency_id._convert(
-                amount, currency, company, fields.Date.context_today(self))
-        return currency.compare_amounts(amount, threshold) >= 0
+        # Compared in the order's OWN currency, with no conversion: the client
+        # wants one number that means the same in every currency. Rounded
+        # through the currency so an order landing exactly on the threshold is
+        # not pushed under it by a float artefact.
+        currency = self.currency_id or self.company_id.currency_id or self.env.company.currency_id
+        return currency.compare_amounts(self.amount_total, threshold) >= 0
 
     def action_confirm(self):
         """Method is used to confirm the order"""
