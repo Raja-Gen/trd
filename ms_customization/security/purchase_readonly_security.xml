@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Sits in the standard Purchase privilege, below "User", so picking
+             User or Administrator replaces it instead of stacking with it. -->
+        <record id="group_purchase_readonly" model="res.groups">
+            <field name="name">Read Only</field>
+            <field name="sequence">5</field>
+            <field name="privilege_id" ref="purchase.res_groups_privilege_purchase"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">View requests for quotation, purchase orders and purchase reporting without being able to change them.</field>
+        </record>
+
+    </data>
+
+    <data noupdate="1">
+
+        <!-- Mirrors purchase.purchase_user_account_move_rule / _line_rule so the
+             Bills smart button only ever exposes vendor bills. -->
+        <record id="purchase_readonly_account_move_rule" model="ir.rule">
+            <field name="name">Purchase Read Only: vendor bills only</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="domain_force">[('move_type', 'in', ('in_invoice', 'in_refund', 'in_receipt'))]</field>
+            <field name="groups" eval="[(4, ref('group_purchase_readonly'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="purchase_readonly_account_move_line_rule" model="ir.rule">
+            <field name="name">Purchase Read Only: vendor bill lines only</field>
+            <field name="model_id" ref="account.model_account_move_line"/>
+            <field name="domain_force">[('move_id.move_type', 'in', ('in_invoice', 'in_refund', 'in_receipt'))]</field>
+            <field name="groups" eval="[(4, ref('group_purchase_readonly'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_lead_view_form_inventory_items" model="ir.ui.view">
+        <field name="name">crm.lead.form.inventory.items</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Inventory Items" name="ms_inventory_items">
+                    <group>
+                        <field name="warehouse_id" options="{'no_create': True}"
+                               placeholder="All warehouses of the company"/>
+                    </group>
+                    <field name="lead_product_line_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="company_id" column_invisible="True"/>
+                            <field name="product_id"
+                                   options="{'no_create_edit': True}"/>
+                            <field name="name" optional="hide"/>
+                            <field name="product_uom_qty"/>
+                            <field name="product_uom_id" groups="uom.group_uom"
+                                   options="{'no_open': True, 'no_create': True}"/>
+                            <field name="qty_available" readonly="1"/>
+                            <field name="virtual_available" readonly="1"/>
+                            <field name="free_qty" readonly="1" optional="show"/>
+                            <field name="availability_status" readonly="1" widget="badge"
+                                   decoration-success="availability_status == 'available'"
+                                   decoration-warning="availability_status == 'partial'"
+                                   decoration-danger="availability_status == 'unavailable'"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

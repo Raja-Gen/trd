@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_crm_own_leads_only" model="res.groups">
+            <field name="name">CRM: Own Leads Only</field>
+            <field name="comment">Restricts the user to the CRM leads and opportunities they are the salesperson of. Unassigned leads are hidden too. Sales Orders, Invoices and the rest of the Sales app are not affected.</field>
+        </record>
+
+    </data>
+
+    <data noupdate="1">
+
+        <!--
+            Why a *global* rule with a conditional domain, rather than a normal
+            group rule:
+
+            Record rules attached to groups are OR-ed together, so adding a
+            stricter rule to a group can never narrow what another group already
+            allows. These users are Sales Administrators, which carries
+            sales_team's "All Leads" rule, domain [(1, '=', 1)] - any rule added
+            alongside it would simply be OR-ed away.
+
+            Global rules are AND-ed with the OR-ed group rules, so a global rule
+            can narrow. To keep it inert for everyone else, the domain evaluates
+            per user: members of group_crm_own_leads_only get their own leads,
+            everybody else gets an unrestricted domain. ir.rule._compute_domain
+            is cached on env.uid, so the per-user result is cached correctly.
+
+            This is what lets the restriction apply to crm.lead alone, leaving
+            Sales Orders, Invoices and sales reporting untouched.
+        -->
+        <record id="crm_lead_own_leads_only_rule" model="ir.rule">
+            <field name="name">CRM Lead: own leads only (restricted users)</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('user_id', '=', user.id)] if user.has_group('ms_customization.group_crm_own_leads_only') else [(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <!-- create is left unrestricted so these users can still log a new
+                 lead; it lands under their own name in the standard flows. -->
+            <field name="perm_create" eval="False"/>
+        </record>
+
+        <!-- crm.activity.report is a reporting view over the same leads, and
+             Sales Administrators otherwise see every row of it. -->
+        <record id="crm_activity_report_own_leads_only_rule" model="ir.rule">
+            <field name="name">CRM Activity: own leads only (restricted users)</field>
+            <field name="model_id" ref="crm.model_crm_activity_report"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('user_id', '=', user.id)] if user.has_group('ms_customization.group_crm_own_leads_only') else [(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- The inventory items hang off the lead, so they must follow the same
+             restriction: without this a restricted user could read the lines of
+             a colleague's lead directly. -->
+        <record id="crm_lead_product_line_own_leads_only_rule" model="ir.rule">
+            <field name="name">CRM Lead Items: own leads only (restricted users)</field>
+            <field name="model_id" ref="model_crm_lead_product_line"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('lead_id.user_id', '=', user.id)] if user.has_group('ms_customization.group_crm_own_leads_only') else [(1, '=', 1)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_create" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
