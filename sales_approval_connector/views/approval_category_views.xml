@@ -9,6 +9,13 @@
             <xpath expr="//field[@name='approval_type']" position="attributes">
                 <attribute name="invisible">0</attribute>
             </xpath>
+
+            <!-- Below this amount a sale order confirms without approval. -->
+            <field name="approval_minimum" position="after">
+                <field name="company_currency_id" invisible="1"/>
+                <field name="so_approval_threshold"
+                       invisible="approval_type != 'sale'"/>
+            </field>
         </field>
     </record>
 </odoo>

@@ -29,7 +29,7 @@ class SaleOrder(models.Model):
              "companies with no approval set up keep the standard Confirm.",
     )
 
-    @api.depends('company_id')
+    @api.depends('company_id', 'currency_id', 'amount_total')
     def _compute_is_approval_required(self):
         for order in self:
             order.is_approval_required = bool(order._ms_approval_category())
@@ -140,11 +140,35 @@ class SaleOrder(models.Model):
         have ticked in the company switcher.
         """
         self.ensure_one()
-        return self.env['approval.category'].sudo().search([
+        category = self.env['approval.category'].sudo().search([
             ('approval_type', '=', 'sale'),
             ('company_id', '=', self.company_id.id),
             ('approver_ids', '!=', False),
         ], order='sequence, id', limit=1)
+        if category and not self._ms_meets_approval_threshold(category):
+            return self.env['approval.category']
+        return category
+
+    def _ms_meets_approval_threshold(self, category):
+        """Whether this order is big enough to need approval.
+
+        A threshold of 0 - the default - means every order goes for approval, so
+        setting one up is purely additive for anyone already using the module.
+        The test is >= : an order landing exactly on the threshold IS approved.
+        Compared through the currency so 100,000.00 reads as equal to 100,000
+        rather than failing on a float rounding difference.
+        """
+        self.ensure_one()
+        threshold = category.so_approval_threshold
+        if threshold <= 0:
+            return True
+        company = self.company_id or self.env.company
+        currency = company.currency_id
+        amount = self.amount_total
+        if self.currency_id and currency and self.currency_id != currency:
+            amount = self.currency_id._convert(
+                amount, currency, company, fields.Date.context_today(self))
+        return currency.compare_amounts(amount, threshold) >= 0
 
     def action_confirm(self):
         """Method is used to confirm the order"""

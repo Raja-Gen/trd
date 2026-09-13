@@ -53,12 +53,14 @@ class TestSaleApprovalCompanyScope(TransactionCase):
             vals["approver_ids"] = [(0, 0, {"user_id": approver.id, "required": True})]
         return cls.env["approval.category"].create(vals)
 
-    def _order(self, company):
+    def _order(self, company, amount=100.0):
+        """Taxes cleared so amount_total is exactly `amount` - the threshold
+        tests turn on an exact comparison."""
         return self.env["sale.order"].with_company(company).create({
             "company_id": company.id,
             "partner_id": self.partner.id,
             "order_line": [(0, 0, {"product_id": self.product.id, "product_uom_qty": 1,
-                                   "price_unit": 100.0})],
+                                   "price_unit": amount, "tax_ids": [(6, 0, [])]})],
         })
 
     # --- the requirement -----------------------------------------------------
@@ -202,3 +204,68 @@ class TestSaleApprovalCompanyScope(TransactionCase):
                  and "not is_approval_required" not in b.get("invisible")]
         self.assertTrue(plain,
                         "no standard confirm button is offered when approval is not configured")
+
+    # --- approval threshold ---------------------------------------------------
+
+    def test_no_threshold_means_every_order_is_approved(self):
+        """The default of 0 must leave existing behaviour untouched."""
+        self.assertEqual(self.category_a.so_approval_threshold, 0.0)
+        order = self._order(self.company_a, amount=1.0)
+        self.assertTrue(order.is_approval_required)
+        order.action_confirm()
+        self.assertEqual(order.state, "approve")
+
+    def test_below_the_threshold_confirms_directly(self):
+        self.category_a.so_approval_threshold = 100000.0
+        order = self._order(self.company_a, amount=99999.99)
+        self.assertFalse(order.is_approval_required,
+                         "under the threshold the form must offer plain Confirm")
+        order.action_confirm()
+        self.assertEqual(order.state, "sale")
+        self.assertFalse(self.env["approval.request"].search([("order_id", "=", order.id)]))
+
+    def test_exactly_on_the_threshold_is_approved(self):
+        """The client asked for 'equal to or greater than'."""
+        self.category_a.so_approval_threshold = 100000.0
+        order = self._order(self.company_a, amount=100000.0)
+        self.assertEqual(order.amount_total, 100000.0)
+        self.assertTrue(order.is_approval_required)
+        order.action_confirm()
+        self.assertEqual(order.state, "approve")
+
+    def test_above_the_threshold_is_approved(self):
+        self.category_a.so_approval_threshold = 100000.0
+        order = self._order(self.company_a, amount=250000.0)
+        self.assertTrue(order.is_approval_required)
+        order.action_confirm()
+        self.assertEqual(order.state, "approve")
+        request = self.env["approval.request"].search([("order_id", "=", order.id)])
+        self.assertEqual(request.approver_ids.user_id, self.approver_a)
+
+    def test_threshold_reacts_to_the_order_total(self):
+        """The button must flip as lines are added, not just on reload."""
+        self.category_a.so_approval_threshold = 100000.0
+        order = self._order(self.company_a, amount=50000.0)
+        self.assertFalse(order.is_approval_required)
+        order.order_line.price_unit = 150000.0
+        order.invalidate_recordset(["is_approval_required"])
+        self.assertTrue(order.is_approval_required)
+
+    def test_threshold_does_not_leak_to_another_company(self):
+        """A big order in an unconfigured company is still not approved."""
+        self.category_a.so_approval_threshold = 100.0
+        order = self._order(self.company_b, amount=999999.0)
+        self.assertFalse(order.is_approval_required)
+        order.action_confirm()
+        self.assertEqual(order.state, "sale")
+
+    def test_threshold_is_per_company(self):
+        """Each company's category carries its own threshold."""
+        category_b = self._make_category(self.company_b, self.approver_b, "B")
+        self.category_a.so_approval_threshold = 100000.0
+        category_b.so_approval_threshold = 500.0
+
+        small_a = self._order(self.company_a, amount=1000.0)
+        small_b = self._order(self.company_b, amount=1000.0)
+        self.assertFalse(small_a.is_approval_required, "under A's 100k threshold")
+        self.assertTrue(small_b.is_approval_required, "over B's 500 threshold")
