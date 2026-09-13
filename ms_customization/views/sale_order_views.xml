@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- "Attn To" sits directly under Revision, which ms_sale_order_revision
+         adds after Payment Terms - hence the dependency on that module, which
+         also guarantees this view is applied after it and so can see the field.
+
+         Shown only for the Raja group companies. The condition reads the
+         order's own company, not the active one, so a Raja quotation carries
+         the field whoever opens it. -->
+    <record id="view_order_form_attn_to" model="ir.ui.view">
+        <field name="name">sale.order.form.attn.to</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="order_revise" position="after">
+                <field name="ms_is_raja_company" invisible="1"/>
+                <field name="ms_attn_to_id"
+                       invisible="not ms_is_raja_company"
+                       options="{'no_create_edit': True}"
+                       placeholder="For the attention of..."/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

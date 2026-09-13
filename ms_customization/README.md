@@ -1,7 +1,7 @@
 # MS Customization
 
-In-house customizations for MicroSolutions / Raja. Two independent features
-shipped in one module.
+In-house customizations for MicroSolutions / Raja. Several independent
+features shipped in one module.
 
 ---
 
@@ -228,6 +228,42 @@ colleague's lead directly, bypassing the restriction on the lead itself.
 
 ---
 
+## 5. Customer Type (Trader / End User)
+
+A **Customer Type** option on the contact, so a customer can be recorded as a
+**Trader** (buys to resell) or an **End User** (buys for their own use).
+
+`res.partner.ms_customer_type` is a selection of `trader` / `end_user`. It is
+optional: every contact that predates the module, and every one nobody has
+classified, reads blank rather than being forced into one of the two.
+
+### Where it appears
+
+| Where | View | Notes |
+|---|---|---|
+| Contact form | `base.view_partner_form` | Under **Tags**, in the same column as VAT and Website — visible while the customer is being created, not behind a tab. |
+| Quick-create form | `base.view_partner_simple_form` | The dialog that opens from *Create and edit…* on a customer field, e.g. from a quotation. Without it the type could only ever be set after the fact. |
+| Contact list | `base.view_partner_tree` | Optional column, hidden by default — switch it on from the column picker. |
+| Contact search | `base.view_res_partner_filter` | Filters **Traders**, **End Users** and **Customer Type Not Set**, plus a **Customer Type** Group By. |
+
+The field is on `res.partner`, which every customer, vendor and child contact
+shares, so it is offered on vendors and contacts as well. It is left blank there
+and nothing reads it, so this is cosmetic rather than a constraint — it is the
+same trade-off Odoo makes with VAT and Tags.
+
+Changes are **tracked**: setting or changing the type posts to the contact's
+chatter, so a reclassification can be traced back to who made it.
+
+### Not done, deliberately
+
+- Nothing keys off the type yet — it does not drive pricelists, taxes or
+  reports. It is a classification to file and filter on. Say the word if a
+  pricelist or a report should read it.
+- Child contacts do not inherit the type from their parent company. Each record
+  carries its own value; the type is not in `_commercial_fields()`.
+
+---
+
 ## Install
 
 The module lives in an addons path already configured in `odoo19.conf`.
@@ -238,5 +274,5 @@ or from the command line:
 
     python3 odoo-bin -c odoo19.conf -d <database> -i ms_customization --stop-after-init
 
-Note the two features ship together: the manifest depends on both the purchase /
+Note the features ship together: the manifest depends on both the purchase /
 stock chain and on crm / sale_crm, and they install and uninstall as one unit.

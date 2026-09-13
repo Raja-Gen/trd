@@ -21,6 +21,27 @@
                 <t t-esc="bo_line_index + 1"/>
             </td>
         </xpath>
+        <!-- The Raja group companies want their Shipping Date printed as a plain
+             date, with no time. Set before #informations because the Shipping
+             Date sits at the top of the page, above core's format_number where
+             the delivery flag below is defined.
+
+             t-options takes an expression, so handing it a dict chosen here
+             keeps this to two attribute changes instead of replacing nodes that
+             sale_stock and stock_delivery anchor their own xpaths to. An empty
+             dict is exactly what core renders with today. -->
+        <xpath expr="//div[@id='informations']" position="before">
+            <t t-set="ms_raja_co" t-value="o.company_id.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']"/>
+            <t t-set="ms_sched_date_options" t-value="{'widget': 'date'} if ms_raja_co else {}"/>
+        </xpath>
+
+        <xpath expr="//div[@name='div_sched_date']/div[@t-field='o.date_done']" position="attributes">
+            <attribute name="t-options">ms_sched_date_options</attribute>
+        </xpath>
+        <xpath expr="//div[@name='div_sched_date']/div[@t-field='o.scheduled_date']" position="attributes">
+            <attribute name="t-options">ms_sched_date_options</attribute>
+        </xpath>
+
         <!-- The Raja group companies do not want the ordered quantity, nor the
              "Remaining quantities not yet delivered" section, on their delivery
              notes. Everything below is gated on this one flag.
@@ -38,7 +59,7 @@
              for both tables, for the backorder section, and inside the
              sub-templates that t-call into this one. -->
         <xpath expr="//t[@t-set='format_number']" position="after">
-            <t t-set="ms_raja_delivery_co" t-value="o.picking_type_id.code == 'outgoing' and o.company_id.name in ['Raja International General Trading FZE','KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C','RAJA INTERNATIONAL GENERAL TRADING (LLC)']"/>
+            <t t-set="ms_raja_delivery_co" t-value="o.picking_type_id.code == 'outgoing' and ms_raja_co"/>
         </xpath>
 
         <!-- (a) Ordered column - undelivered pickings (state != done) -->

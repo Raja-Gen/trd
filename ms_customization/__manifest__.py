@@ -37,6 +37,8 @@ deliberately leaves alone.
         "crm",
         "sale_crm",
         "sale",
+        # "Attn To" is placed under the Revision field this module adds
+        "ms_sale_order_revision",
     ],
     "data": [
         "security/purchase_readonly_security.xml",
@@ -48,6 +50,8 @@ deliberately leaves alone.
         "views/crm_lead_views.xml",
         "views/stock_picking_views.xml",
         "views/res_partner_views.xml",
+        "views/sale_order_views.xml",
+        "views/sale_order_report.xml",
     ],
     "installable": True,
     "application": False,

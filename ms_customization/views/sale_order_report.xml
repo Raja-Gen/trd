@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- "Attn To" under the customer address on the quotation / sale order PDF.
+
+         Printed only when the field is filled, and only for the Raja group
+         companies (doc.ms_is_raja_company reads the ORDER's own company).
+
+         The customer's TRN is NOT added here: Odoo already prints it in this
+         same block, straight after this line, gated on the customer having one -
+         and it uses the country's own VAT label, which is "TRN" for the UAE. -->
+    <template id="report_saleorder_document_attn_to" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-set='address']/div[@t-field='doc.partner_id']" position="after">
+            <p t-if="doc.ms_is_raja_company and doc.ms_attn_to_id" class="mb-0">
+                Attn To: <span t-field="doc.ms_attn_to_id.name"/>
+            </p>
+        </xpath>
+    </template>
+
+    <!-- Footer on the quotation / sale order PDF for the Raja group companies.
+
+         The footer is normally one HTML blob, res.company.report_footer, edited
+         in Settings > Companies. Overriding it here rather than editing that
+         field keeps every other document - delivery notes, invoices, purchase
+         orders, portal pages and outgoing mail - on the company's real details.
+
+         "'ms_is_raja_company' in o" is how core itself tests for a field on the
+         document (see web.external_layout), and it doubles as the scope: only
+         sale.order carries that field, so no other report can match.
+
+         The TRN is kept from each company's own VAT - only the three values the
+         client gave are replaced. Note this patches external_layout_boxed, the
+         layout all three Raja companies use; switching a company to another
+         layout would quietly bring the old footer back. -->
+    <template id="external_layout_boxed_raja_sale_footer" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[hasclass('o_footer_content')]//span[@t-field='company.report_footer']" position="replace">
+            <t t-if="o and 'ms_is_raja_company' in o and o.ms_is_raja_company">
+                <!-- Same shape as the stored footer it replaces: one centred
+                     paragraph, the website as a real link so it renders blue and
+                     stays clickable, then the company's own TRN after a nbsp. -->
+                <p style="text-align: center;">+971582563078 sc1@rajacompany.com <a href="https://safetyplusworld.com">https://safetyplusworld.com</a><t t-if="company.vat">&#160;<t t-out="company.vat"/></t></p>
+            </t>
+            <t t-else="">
+                <span t-field="company.report_footer"/>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

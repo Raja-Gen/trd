@@ -31,8 +31,13 @@
                 <button name="action_direct_reject" type="object" string="Reject" class="btn-primary" invisible="state != 'to_approve' or not is_approval_allowed" />
             </xpath>
 
+            <!-- Keeps id="bid_confirm": ms_customization's Purchase Read Only view
+                 anchors on that id to reserve the button to purchase users. Drop
+                 the id and whichever of the two modules loads second fails with
+                 "Element cannot be located in parent view", depending purely on
+                 install order. -->
             <xpath expr="//button[@id='bid_confirm']" position="replace">
-                <button name="button_confirm" string="Confirm" class="btn-primary" type="object" invisible="state not in ['approved','sent']"/>
+                <button name="button_confirm" id="bid_confirm" string="Confirm" class="btn-primary" type="object" invisible="state not in ['approved','sent']"/>
                 <field name="is_approved" invisible="1"/>
             </xpath>
 
