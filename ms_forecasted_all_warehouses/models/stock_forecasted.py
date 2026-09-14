@@ -7,6 +7,15 @@ from odoo.tools import float_repr
 # Context flag set by the client action when "All Warehouses" is picked.
 ALL_WAREHOUSES = "ms_all_warehouses"
 
+# The Raja group companies. ms_customization and report_customziation each carry
+# their own copy of this list; a flag on res.company would be sturdier than three
+# hardcoded copies - see the README.
+MS_RAJA_COMPANIES = [
+    "Raja International General Trading FZE",
+    "KARO INTERNATIONAL GENERAL TRADING  SOLE PROPRIETORSHIP L.L.C",
+    "RAJA INTERNATIONAL GENERAL TRADING (LLC)",
+]
+
 
 class StockForecasted_Product_Product(models.AbstractModel):
     _inherit = "stock.forecasted_product_product"
@@ -34,6 +43,27 @@ class StockForecasted_Product_Product(models.AbstractModel):
     # Entry point
     # ------------------------------------------------------------------
     def _get_report_data(self, product_template_ids=False, product_ids=False):
+        """Adds the two keys the client action needs on top of the report.
+
+        Wrapped rather than patched at each return, because the aggregation
+        below has three of them.
+        """
+        res = self._ms_forecast_report_data(product_template_ids, product_ids)
+        # Whether to offer the Incoming / Outgoing links at all. Reads the ACTIVE
+        # company: unlike a sale order or a delivery note, a forecast has no
+        # document of its own - it is computed for whoever is looking.
+        res["ms_is_raja_company"] = self.env.company.name in MS_RAJA_COMPANIES
+        # The warehouses these figures cover, so the move lists behind the links
+        # are scoped exactly the same way.
+        res["ms_warehouse_ids"] = self._ms_report_warehouse_ids()
+        return res
+
+    def _ms_report_warehouse_ids(self):
+        if self.env.context.get(ALL_WAREHOUSES):
+            return self._ms_aggregated_warehouses().ids
+        return self._get_warehouse().ids
+
+    def _ms_forecast_report_data(self, product_template_ids=False, product_ids=False):
         if not self.env.context.get(ALL_WAREHOUSES):
             return super()._get_report_data(product_template_ids, product_ids)
 

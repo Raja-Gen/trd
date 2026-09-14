@@ -21,9 +21,12 @@ single warehouse and only aggregates when the new entry is picked.
     "assets": {
         "web.assets_backend": [
             "ms_forecasted_all_warehouses/static/src/forecasted_all_warehouses.js",
+            "ms_forecasted_all_warehouses/static/src/forecasted_header_links.js",
+            "ms_forecasted_all_warehouses/static/src/forecasted_header_links.xml",
         ],
         "web.assets_tests": [
             "ms_forecasted_all_warehouses/static/tests/tours/all_warehouses_tour.js",
+            "ms_forecasted_all_warehouses/static/tests/tours/forecast_links_tour.js",
         ],
     },
     "installable": True,
