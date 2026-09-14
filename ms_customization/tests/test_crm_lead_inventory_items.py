@@ -2,20 +2,31 @@
 from odoo.tests.common import TransactionCase, tagged
 
 
+RAJA_NAME = "RAJA INTERNATIONAL GENERAL TRADING (LLC)"
+
+
 @tagged("post_install", "-at_install")
 class TestCrmLeadInventoryItems(TransactionCase):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # The Inventory Items tab and its quotation sync are Raja-only, so the
+        # lead has to belong to one of those companies for the flow to run.
+        # See test_crm_inventory_scope.py for the other side of that gate.
+        cls.company = cls.env["res.company"].search([("name", "=", RAJA_NAME)], limit=1) \
+            or cls.env["res.company"].create({"name": RAJA_NAME})
+        cls.env.user.company_ids = [(4, cls.company.id)]
+
         cls.partner = cls.env["res.partner"].create({"name": "Test Customer"})
         cls.product = cls.env["product.product"].create({
             "name": "Safety Helmet",
             "is_storable": True,
         })
-        cls.lead = cls.env["crm.lead"].create({
+        cls.lead = cls.env["crm.lead"].with_company(cls.company).create({
             "name": "Test Lead with Inventory",
             "type": "opportunity",
+            "company_id": cls.company.id,
             "partner_id": cls.partner.id,
         })
 
@@ -47,7 +58,8 @@ class TestCrmLeadInventoryItems(TransactionCase):
             "product_id": self.product.id,
             "product_uom_qty": 20.0,
         })
-        so = self.env["sale.order"].create({
+        so = self.env["sale.order"].with_company(self.company).create({
+            "company_id": self.company.id,
             "partner_id": self.partner.id,
             "opportunity_id": self.lead.id,
         })

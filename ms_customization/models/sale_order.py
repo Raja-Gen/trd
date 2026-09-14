@@ -45,7 +45,8 @@ class SaleOrder(models.Model):
         # Covers quotations built in code, where no onchange runs. A quotation
         # that already has lines is left exactly as it was passed in.
         for order in quotations:
-            if order.opportunity_id and not order.order_line:
+            if (order.opportunity_id and not order.order_line
+                    and order.ms_is_raja_company):
                 order.order_line = order._ms_prepare_lines_from_lead()
         quotations._ms_leads_to_sync()._ms_move_to_quotation_stage()
         return orders
@@ -65,8 +66,14 @@ class SaleOrder(models.Model):
 
     # --- Pre-fill quotation lines from the lead's inventory items -------------
     def _ms_prepare_lines_from_lead(self):
-        """Order line values mirroring the opportunity's Inventory Items."""
+        """Order line values mirroring the opportunity's Inventory Items.
+
+        Empty outside the Raja companies: the Inventory Items tab is not offered
+        there, so there is nothing to mirror.
+        """
         self.ensure_one()
+        if not self.ms_is_raja_company:
+            return []
         return [
             (0, 0, {
                 "product_id": line.product_id.id,
@@ -83,5 +90,5 @@ class SaleOrder(models.Model):
         Only ever fills an empty quotation, so lines already keyed in by hand are
         never overwritten.
         """
-        if self.opportunity_id and not self.order_line:
+        if self.opportunity_id and not self.order_line and self.ms_is_raja_company:
             self.order_line = self._ms_prepare_lines_from_lead()

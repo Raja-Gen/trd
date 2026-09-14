@@ -115,3 +115,35 @@ class TestAttnTo(TransactionCase):
         self.partner.vat = False
         order = self._order(self.raja)
         self.assertNotIn("100236860100003", self._html(order))
+
+    # --- unit price shown with 2 decimals (display only) ----------------------
+
+    def test_the_module_does_not_redefine_price_unit(self):
+        """Deliberate: this fix is display-only.
+
+        Re-attaching digits='Product Price' to the field would fix the display
+        too, but it rounds every stored unit price when the column converts -
+        181 live lines on production carry a 3rd decimal. If someone adds that
+        override later, this test is the reminder of why it was avoided.
+        """
+        field = self.env["ir.model.fields"].search([
+            ("model", "=", "sale.order.line"), ("name", "=", "price_unit")], limit=1)
+        self.assertNotIn("ms_customization", (field.modules or "").split(","),
+                         "price_unit must not be redefined by this module")
+
+    def test_form_pins_the_unit_price_column(self):
+        view = self.env.ref("sale.view_order_form")
+        arch = etree.fromstring(
+            self.env["sale.order"].get_view(view_id=view.id, view_type="form")["arch"])
+        nodes = arch.xpath("//field[@name='order_line']//field[@name='price_unit']")
+        self.assertTrue(nodes, "the order line unit price is missing from the form")
+        self.assertEqual(nodes[0].get("digits"), "[16, 2]")
+
+    def test_report_pins_the_unit_price(self):
+        """Read the COMBINED arch - the attribute lives in our inheriting view."""
+        view = self.env.ref("sale.report_saleorder_document")
+        arch = view._get_combined_arch() if hasattr(view, "_get_combined_arch") \
+            else etree.fromstring(view.read_combined(["arch"])["arch"])
+        node = arch.xpath("//td[@name='td_product_priceunit']/span[@t-field='line.price_unit']")
+        self.assertTrue(node, "the printed unit price node moved")
+        self.assertIn("'precision': 2", node[0].get("t-options") or "")

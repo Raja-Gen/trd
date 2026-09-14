@@ -6,3 +6,4 @@ from . import test_crm_lead_inventory_items
 from . import test_customer_type
 from . import test_attn_to
 from . import test_sale_report_footer
+from . import test_crm_inventory_scope

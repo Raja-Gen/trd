@@ -46,4 +46,12 @@
         </xpath>
     </template>
 
+    <!-- Same 2-decimal pin on the printed unit price. Display only:
+         the stored value is untouched. -->
+    <template id="report_saleorder_document_price_unit_digits" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//td[@name='td_product_priceunit']/span[@t-field='line.price_unit']" position="attributes">
+            <attribute name="t-options">{'widget': 'float', 'precision': 2}</attribute>
+        </xpath>
+    </template>
+
 </odoo>

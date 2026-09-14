@@ -23,4 +23,21 @@
         </field>
     </record>
 
+    <!-- The client's Odoo build (19.0+e) declares price_unit with NO fixed
+         precision, so Decimal Accuracy > Product Price no longer reaches it and a
+         price stored as 1.0211 is shown in full. Pinning the column here fixes
+         the DISPLAY only - stored values keep their precision and no existing
+         data is touched, which is the deliberate choice over re-attaching the
+         field precision (that would round live prices irreversibly). -->
+    <record id="view_order_form_price_unit_digits" model="ir.ui.view">
+        <field name="name">sale.order.form.price.unit.digits</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//field[@name='price_unit']" position="attributes">
+                <attribute name="digits">[16, 2]</attribute>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
