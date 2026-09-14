@@ -19,7 +19,7 @@ patch(PaymentForm.prototype, {
      */
     async _prepareInlineForm(providerId, providerCode, paymentOptionId, paymentMethodCode, flow) {
         if (providerCode !== 'credit') {
-            return this._super(...arguments);
+            return super._prepareInlineForm(...arguments);
         }
         this._setPaymentFlow('direct');
     },
@@ -37,7 +37,7 @@ patch(PaymentForm.prototype, {
      */
     async _processDirectFlow(providerCode, paymentOptionId, paymentMethodCode, processingValues) {
             if (providerCode !== 'credit') {
-                return this._super(...arguments);
+                return super._prepareInlineForm(...arguments);
             }
 
             try {
