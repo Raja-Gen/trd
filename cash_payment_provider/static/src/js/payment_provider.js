@@ -20,8 +20,7 @@ patch(PaymentForm.prototype, {
      */
     async _prepareInlineForm(providerId, providerCode, paymentOptionId, paymentMethodCode, flow) {
         if (providerCode !== 'cash') {
-            this._super(...arguments);
-            return;
+            return super._prepareInlineForm(...arguments);
         } else if (flow === 'token') {
             return;
         }
@@ -43,8 +42,7 @@ patch(PaymentForm.prototype, {
      */
     async _processDirectFlow(providerCode, paymentOptionId, paymentMethodCode, processingValues) {
     if (providerCode !== 'cash') {
-        this._super(...arguments);
-        return;
+        return super._processDirectFlow(...arguments);
     }
 
     try {
