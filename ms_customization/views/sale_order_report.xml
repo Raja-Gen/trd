@@ -7,10 +7,11 @@
          companies (doc.ms_is_raja_company reads the ORDER's own company).
 
          The customer's TRN is NOT added here: Odoo already prints it in this
-         same block, straight after this line, gated on the customer having one -
-         and it uses the country's own VAT label, which is "TRN" for the UAE. -->
+         same block, gated on the customer having one, using the country's own VAT
+         label ("TRN" for the UAE). The client wants TRN first, so Attn To is
+         anchored after that paragraph; with no TRN it simply follows the address. -->
     <template id="report_saleorder_document_attn_to" inherit_id="sale.report_saleorder_document">
-        <xpath expr="//t[@t-set='address']/div[@t-field='doc.partner_id']" position="after">
+        <xpath expr="//t[@t-set='address']/p[@t-if='doc.partner_id.vat']" position="after">
             <p t-if="doc.ms_is_raja_company and doc.ms_attn_to_id" class="mb-0">
                 Attn To: <span t-field="doc.ms_attn_to_id.name"/>
             </p>
@@ -43,14 +44,6 @@
             <t t-else="">
                 <span t-field="company.report_footer"/>
             </t>
-        </xpath>
-    </template>
-
-    <!-- Same 2-decimal pin on the printed unit price. Display only:
-         the stored value is untouched. -->
-    <template id="report_saleorder_document_price_unit_digits" inherit_id="sale.report_saleorder_document">
-        <xpath expr="//td[@name='td_product_priceunit']/span[@t-field='line.price_unit']" position="attributes">
-            <attribute name="t-options">{'widget': 'float', 'precision': 2}</attribute>
         </xpath>
     </template>
 
