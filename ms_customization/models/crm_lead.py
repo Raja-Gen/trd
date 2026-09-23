@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
 
+from .sale_order import MS_RAJA_COMPANIES
+
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
@@ -41,6 +43,19 @@ class CrmLead(models.Model):
             lead.sudo().stage_id = stage.id
 
     # --- Inventory items selected on the lead ---------------------------------
+    ms_is_raja_company = fields.Boolean(
+        compute="_compute_ms_is_raja_company",
+        string="Is Raja Company",
+        help="Whether the Inventory Items tab applies. Reads the LEAD's own "
+             "company, so an opportunity keeps the same behaviour whoever opens "
+             "it, not the company that happens to be active.",
+    )
+
+    @api.depends("company_id")
+    def _compute_ms_is_raja_company(self):
+        for lead in self:
+            lead.ms_is_raja_company = lead.company_id.name in MS_RAJA_COMPANIES
+
     warehouse_id = fields.Many2one(
         "stock.warehouse", string="Warehouse",
         domain="[('company_id', '=', company_id)]",

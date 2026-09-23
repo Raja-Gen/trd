@@ -8,7 +8,9 @@
         <field name="arch" type="xml">
 
             <xpath expr="//notebook" position="inside">
-                <page string="Inventory Items" name="ms_inventory_items">
+                <page string="Inventory Items" name="ms_inventory_items"
+                      invisible="not ms_is_raja_company">
+                    <field name="ms_is_raja_company" invisible="1"/>
                     <group>
                         <field name="warehouse_id" options="{'no_create': True}"
                                placeholder="All warehouses of the company"/>

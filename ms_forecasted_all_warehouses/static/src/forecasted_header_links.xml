@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="ms_forecasted_all_warehouses.ForecastedHeader"
+       t-inherit="stock.ForecastedHeader" t-inherit-mode="extension">
+
+        <xpath expr="//t[@t-out='_formatFloat(this.incomingQty)']" position="replace">
+            <a t-if="props.docs.ms_is_raja_company" href="#" name="ms_incoming_link"
+               t-on-click.prevent="() => this._msOpenForecastMoves('in')"
+               t-out="_formatFloat(this.incomingQty)"/>
+            <t t-else="" t-out="_formatFloat(this.incomingQty)"/>
+        </xpath>
+
+        <xpath expr="//t[@t-out='_formatFloat(this.outgoingQty)']" position="replace">
+            <a t-if="props.docs.ms_is_raja_company" href="#" name="ms_outgoing_link"
+               t-on-click.prevent="() => this._msOpenForecastMoves('out')"
+               t-out="_formatFloat(this.outgoingQty)"/>
+            <t t-else="" t-out="_formatFloat(this.outgoingQty)"/>
+        </xpath>
+
+    </t>
+
+</templates>
