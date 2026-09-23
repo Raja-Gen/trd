@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_config_settings_daily_report" model="ir.ui.view">
+        <field name="name">res.config.settings.daily.report</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="mail.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='emails']" position="after">
+                <block title="Daily Business Performance" id="business_kpi_report">
+
+                    <!-- Enable/Disable Feature -->
+                    <setting id="daily_report_toggle_setting" string="Enable Daily Business Performance Report" help="If enabled, Odoo will send daily KPI summaries using email or SMS.">
+                        <field name="activate_kpi"/>
+                    </setting>
+
+                    <!-- KPI Selection -->
+                    <setting string="Select KPIs" help="Choose which KPIs you want to receive" invisible="not activate_kpi">
+                        <field name="kpi_ids" 
+                            widget="many2many_tags" 
+                            required="activate_kpi" 
+                            context="{
+                                'search_default_group_by_category': 1, 
+                                'search_view_ref': 'business_kpi_report.view_as_kpi_search'
+                            }"/>
+                    </setting>
+
+                    <!-- Recipients -->
+                    <setting string="Recipients" help="Select users who will receive the report." invisible="not activate_kpi">
+                        <field name="send_user_ids" placeholder="Choose users" widget="many2many_tags" required="activate_kpi"/>
+                    </setting>
+
+                    <!-- Send Via Type -->
+                    <setting string="Deliver Report Via" help="Choose how the summary should be delivered (Email or SMS). Leave empty → send both Email and SMS" invisible="not activate_kpi">
+                        <field name="send_via" placeholder="Select Email or SMS (leave empty for both)"/>
+                    </setting>
+
+                    <!-- Duration -->
+                    <setting string="Reporting Period" help="Choose whether KPIs should be calculated for day, week, month, or year." invisible="not activate_kpi">
+                        <field name="duration" required="activate_kpi"/>
+                    </setting>
+
+                    <setting string="Companies" invisible="not activate_kpi"
+                            help="Select companies for which the KPI report should run. If none selected, the report will run for all companies.">
+                        <field name="company_ids" widget="many2many_tags" placeholder="Select companies (leave empty for all)"/>
+                    </setting>
+
+                    <!-- Email Template -->
+                    <setting string="KPI Email Template" help="Select the email template used to send the report." invisible="not activate_kpi">
+                        <field name="email_template_id" invisible="1"/>
+                        <button type="object" name="action_open_email_template" icon="oi-eye" class="btn-link"><i class="o_button_icon oi oi-fw oi-arrow-right me-1"></i> View Email Template</button>
+                    </setting>
+
+                    <!-- SMS Template -->
+                    <setting string="KPI SMS Template" help="Select the SMS template used to send the report." invisible="not activate_kpi">
+                        <field name="sms_template_id" invisible="1"/>
+                        <button type="object" name="action_open_sms_template"  icon="oi-eye" class="btn-link"><i class="o_button_icon oi oi-fw oi-arrow-right me-1"></i> View SMS Template</button>
+                    </setting>
+
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

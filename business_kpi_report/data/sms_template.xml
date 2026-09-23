@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- SMS TEMPLATE -->
+        <record id="sms_template_daily_kpi_report" model="sms.template">
+            <field name="name">Daily KPI Report</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+    
+            <field name="body">
+    {{ user_name }} : Here is your {{duration_label}} business performance overview for company {{ company_name }}.
+    
+    {{ kpi_data_str }}
+    
+    This summary is based on your KPI configuration in Odoo Settings. You can update your KPI selections at any time.
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_as_kpi_search" model="ir.ui.view">
+        <field name="name">view.as_kpi.search</field>
+        <field name="model">as.kpi</field>
+        <field name="arch" type="xml">
+            <search string="KPI Search">
+                <filter string="Category" name="group_by_category" context="{'group_by':'category_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_as_kpi_list" model="ir.ui.view">
+        <field name="name">as.kpi.list</field>
+        <field name="model">as.kpi</field>
+        <field name="arch" type="xml">
+            <list default_order="sequence">
+                <field name="sequence" column_invisible="True"/>
+                <field name="name"/>
+                <field name="category_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_as_kpi_form" model="ir.ui.view">
+        <field name="name">as.kpi.form</field>
+        <field name="model">as.kpi</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="category_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

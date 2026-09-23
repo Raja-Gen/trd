@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ========================= -->
+    <!-- SALES KPIs       -->
+    <!-- ========================= -->
+    <record id="kpi_total_sales_orders" model="as.kpi">
+        <field name="name">New Sales Orders</field>
+        <field name="technical_name">total_sales_orders</field>
+        <field name="category_id" ref="kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="kpi_confirmed_sales_orders" model="as.kpi">
+        <field name="name">Confirmed Sales Orders</field>
+        <field name="technical_name">confirmed_sales_orders</field>
+        <field name="category_id" ref="kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="kpi_draft_sales_orders" model="as.kpi">
+        <field name="name">Quotation Orders</field>
+        <field name="technical_name">draft_sales_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="kpi_cancelled_sales_orders" model="as.kpi">
+        <field name="name">Cancelled Sales Orders</field>
+        <field name="technical_name">cancelled_sales_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <record id="kpi_sent_quotations" model="as.kpi">
+        <field name="name">Sent Quotations</field>
+        <field name="technical_name">sent_quotations</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <record id="kpi_expired_quotations" model="as.kpi">
+        <field name="name">Expired Quotations</field>
+        <field name="technical_name">expired_quotations</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="kpi_total_revenue" model="as.kpi">
+        <field name="name">Total Revenue (Untaxed)</field>
+        <field name="technical_name">total_revenue</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record id="kpi_average_order_value" model="as.kpi">
+        <field name="name">AVG. Order Value (Untaxed)</field>
+        <field name="technical_name">average_order_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record id="kpi_total_untaxed_amount" model="as.kpi">
+        <field name="name">Total Untaxed Amount</field>
+        <field name="technical_name">total_untaxed_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record id="kpi_total_tax_amount" model="as.kpi">
+        <field name="name">Total Tax Amount</field>
+        <field name="technical_name">total_tax_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">8</field>
+    </record>
+
+    <record id="kpi_total_order_value" model="as.kpi">
+        <field name="name">Total Sales Value</field>
+        <field name="technical_name">total_order_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">9</field>
+    </record>
+
+    <!-- Average Order Untaxed Amount -->
+    <record id="kpi_average_order_untaxed_amount" model="as.kpi">
+        <field name="name">Average Untaxed Amount</field>
+        <field name="technical_name">average_order_untaxed_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <!-- Average Order Tax Amount -->
+    <record id="kpi_average_order_tax_amount" model="as.kpi">
+        <field name="name">Average Tax Amount</field>
+        <field name="technical_name">average_order_tax_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <!-- Average Order Total Amount -->
+    <record id="kpi_average_order_total_amount" model="as.kpi">
+        <field name="name">Average Total Amount</field>
+        <field name="technical_name">average_order_total_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">13</field>
+    </record>
+
+    <!-- Maximum Order Value -->
+    <record id="kpi_maximum_order_value" model="as.kpi">
+        <field name="name">Maximum Order Value</field>
+        <field name="technical_name">maximum_order_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">14</field>
+    </record>
+
+    <!-- Minimum Order Value -->
+    <record id="kpi_minimum_order_value" model="as.kpi">
+        <field name="name">Minimum Order Value</field>
+        <field name="technical_name">minimum_order_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">15</field>
+    </record>
+
+    <!-- Orders Fully Delivered -->
+    <record id="kpi_orders_fully_delivered" model="as.kpi">
+        <field name="name">Orders Fully Delivered</field>
+        <field name="technical_name">orders_fully_delivered</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">16</field>
+    </record>
+
+    <!-- Orders Partially Delivered -->
+    <record id="kpi_orders_partially_delivered" model="as.kpi">
+        <field name="name">Orders Partially Delivered</field>
+        <field name="technical_name">orders_partially_delivered</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">17</field>
+    </record>
+
+    <!-- Orders Waiting Delivery -->
+    <record id="kpi_orders_waiting_delivery" model="as.kpi">
+        <field name="name">Orders Waiting Delivery</field>
+        <field name="technical_name">orders_waiting_delivery</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">18</field>
+    </record>
+
+    <record id="kpi_orders_fully_invoiced" model="as.kpi">
+        <field name="name">Orders Fully Invoiced</field>
+        <field name="technical_name">orders_fully_invoiced</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">19</field>
+    </record>
+
+    <record id="kpi_orders_to_invoice" model="as.kpi">
+        <field name="name">Orders To Be Invoiced</field>
+        <field name="technical_name">orders_to_invoice</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="kpi_orders_not_invoiced" model="as.kpi">
+        <field name="name">Orders Not Invoiced</field>
+        <field name="technical_name">orders_not_invoiced</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">21</field>
+    </record>
+
+    <record id="kpi_total_products_sold" model="as.kpi">
+        <field name="name">Total Products Sold</field>
+        <field name="technical_name">total_products_sold</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_sales" />
+        <field name="model_category">sale_order</field>
+        <field name="sequence">22</field>
+    </record>
+
+    <!-- ========================= -->
+    <!--  WEBSITE SALES KPIs       -->
+    <!-- ========================= -->
+
+    <!-- Total Website Sales Orders -->
+    <record id="kpi_total_website_sales_orders" model="as.kpi">
+        <field name="name">New Website Orders</field>
+        <field name="technical_name">web_total_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">23</field>
+    </record>
+
+    <!-- Confirmed Website Sales Orders -->
+    <record id="kpi_confirmed_website_sales_orders" model="as.kpi">
+        <field name="name">Confirmed Website Orders</field>
+        <field name="technical_name">web_confirmed_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">24</field>
+    </record>
+
+    <!-- Draft Website Sales Orders -->
+    <record id="kpi_draft_website_sales_orders" model="as.kpi">
+        <field name="name">Quotation Website Orders</field>
+        <field name="technical_name">web_draft_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <!-- Cancelled Website Sales Orders -->
+    <record id="kpi_cancelled_website_sales_orders" model="as.kpi">
+        <field name="name">Cancelled Website Orders</field>
+        <field name="technical_name">web_cancelled_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">26</field>
+    </record>
+
+    <!-- Website Sent Quotations -->
+    <record id="kpi_website_sent_quotations" model="as.kpi">
+        <field name="name">Sent Website Quotations</field>
+        <field name="technical_name">web_sent_quotations</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">27</field>
+    </record>
+
+    <!-- Website Expired Quotations -->
+    <record id="kpi_website_expired_quotations" model="as.kpi">
+        <field name="name">Expired Website Quotations</field>
+        <field name="technical_name">web_expired_quotations</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">28</field>
+    </record>
+
+    <record id="kpi_website_total_revenue" model="as.kpi">
+        <field name="name">Total Revenue (Untaxed)</field>
+        <field name="technical_name">web_total_revenue</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">29</field>
+    </record>
+
+    <record id="kpi_website_average_order_value" model="as.kpi">
+        <field name="name">AVG. Order Value (Untaxed)</field>
+        <field name="technical_name">web_average_order_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">29</field>
+    </record>
+
+    <!-- Website Total Untaxed Amount -->
+    <record id="kpi_website_total_untaxed_amount" model="as.kpi">
+        <field name="name">Website Total Untaxed Amount</field>
+        <field name="technical_name">web_total_untaxed</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <!-- Website Total Tax Amount -->
+    <record id="kpi_website_total_tax_amount" model="as.kpi">
+        <field name="name">Website Total Tax Amount</field>
+        <field name="technical_name">web_total_tax</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">31</field>
+    </record>
+
+    <!-- Website Total Order Value -->
+    <record id="kpi_website_total_order_value" model="as.kpi">
+        <field name="name">Website Total Value</field>
+        <field name="technical_name">web_total_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">32</field>
+    </record>
+
+    <!-- Website Average Order Untaxed Amount -->
+    <record id="kpi_website_average_order_untaxed_amount" model="as.kpi">
+        <field name="name">Website Average Untaxed Amount</field>
+        <field name="technical_name">web_avg_untaxed</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">34</field>
+    </record>
+
+    <!-- Website Average Order Tax Amount -->
+    <record id="kpi_website_average_order_tax_amount" model="as.kpi">
+        <field name="name">Website Average Tax Amount</field>
+        <field name="technical_name">web_avg_tax</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">35</field>
+    </record>
+
+    <!-- Website Average Order Total Amount -->
+    <record id="kpi_website_average_order_total_amount" model="as.kpi">
+        <field name="name">Website Average Total Amount</field>
+        <field name="technical_name">web_avg_total</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">36</field>
+    </record>
+
+    <!-- Website Maximum Order Value -->
+    <record id="kpi_website_maximum_order_value" model="as.kpi">
+        <field name="name">Maximum Website Order Value</field>
+        <field name="technical_name">web_max_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">37</field>
+    </record>
+
+    <!-- Website Minimum Order Value -->
+    <record id="kpi_website_minimum_order_value" model="as.kpi">
+        <field name="name">Minimum Website Order Value</field>
+        <field name="technical_name">web_min_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">38</field>
+    </record>
+
+    <!-- Website Orders Fully Delivered -->
+    <record id="kpi_website_orders_fully_delivered" model="as.kpi">
+        <field name="name">Website Orders Fully Delivered</field>
+        <field name="technical_name">web_fully_delivered</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">39</field>
+    </record>
+
+    <!-- Website Orders Partially Delivered -->
+    <record id="kpi_website_orders_partially_delivered" model="as.kpi">
+        <field name="name">Website Orders Partially Delivered</field>
+        <field name="technical_name">web_partially_delivered</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <!-- Website Orders Waiting Delivery -->
+    <record id="kpi_website_orders_waiting_delivery" model="as.kpi">
+        <field name="name">Website Orders Waiting Delivery</field>
+        <field name="technical_name">web_waiting_delivery</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">41</field>
+    </record>
+
+    <!-- Website Orders Fully Invoiced -->
+    <record id="kpi_website_orders_fully_invoiced" model="as.kpi">
+        <field name="name">Website Orders Fully Invoiced</field>
+        <field name="technical_name">web_fully_invoiced</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">42</field>
+    </record>
+
+    <!-- Website Orders To Invoice -->
+    <record id="kpi_website_orders_to_invoice" model="as.kpi">
+        <field name="name">Website Orders To Be Invoiced</field>
+        <field name="technical_name">web_to_invoiced</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">43</field>
+    </record>
+
+    <!-- Website Orders Not Invoiced -->
+    <record id="kpi_website_orders_not_invoiced" model="as.kpi">
+        <field name="name">Website Orders Not Invoiced</field>
+        <field name="technical_name">web_not_invoiced</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">44</field>
+    </record>
+
+    <!-- Website Total Products Sold -->
+    <record id="kpi_website_total_products_sold" model="as.kpi">
+        <field name="name">Website Total Products Sold</field>
+        <field name="technical_name">web_total_products_sold</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website" />
+        <field name="model_category">website_sale_order</field>
+        <field name="sequence">45</field>
+    </record>
+
+
+    <!-- Website Overview -->
+    <record id="kpi_website_visitors" model="as.kpi">
+        <field name="name">Website Visitors</field>
+        <field name="technical_name">website_visitors_count</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website_only" />
+        <field name="model_category">website_visitor</field>
+        <field name="sequence">46</field>
+    </record>
+
+    <record id="kpi_website_page_views" model="as.kpi">
+        <field name="name">Website Page Views</field>
+        <field name="technical_name">website_page_views</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website_only" />
+        <field name="model_category">website_visitor</field>
+        <field name="sequence">47</field>
+    </record>
+
+    <record id="kpi_website_product_views" model="as.kpi">
+        <field name="name">Website Product Views</field>
+        <field name="technical_name">website_product_views</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_website_only" />
+        <field name="model_category">website_visitor</field>
+        <field name="sequence">48</field>
+    </record>
+
+    <!-- Accounting -->
+    <record id="kpi_total_invoices_created" model="as.kpi">
+        <field name="name">Total New Invoices</field>
+        <field name="technical_name">total_invoices_created</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">49</field>
+    </record>
+
+    <record id="kpi_new_draft_invoices" model="as.kpi">
+        <field name="name">New Draft Invoices</field>
+        <field name="technical_name">new_draft_invoices</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="kpi_new_posted_invoices" model="as.kpi">
+        <field name="name">New Posted Invoices</field>
+        <field name="technical_name">new_posted_invoices</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">51</field>
+    </record>
+
+    <record id="kpi_count_not_paid_invoices" model="as.kpi">
+        <field name="name">Total Not Paid Invoices</field>
+        <field name="technical_name">count_not_paid_invoices</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">52</field>
+    </record>
+
+    <record id="kpi_count_in_payment_invoices" model="as.kpi">
+        <field name="name">Total In Payment Invoices</field>
+        <field name="technical_name">count_in_payment_invoices</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">53</field>
+    </record>
+
+    <record id="kpi_count_partial_invoices" model="as.kpi">
+        <field name="name">Total Partially Paid Invoices</field>
+        <field name="technical_name">count_partial_invoices</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">54</field>
+    </record>
+
+    <record id="kpi_count_paid_invoices" model="as.kpi">
+        <field name="name">Total Fully Paid Invoices</field>
+        <field name="technical_name">count_paid_invoices</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">55</field>
+    </record>
+
+    <record id="kpi_total_paid_invoice_amount" model="as.kpi">
+        <field name="name">Total Fully Paid Invoices Amount</field>
+        <field name="technical_name">total_paid_invoice_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">56</field>
+    </record>
+
+    <record id="kpi_total_posted_invoice_value" model="as.kpi">
+        <field name="name">Posted Invoices Total Value</field>
+        <field name="technical_name">total_posted_invoice_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">57</field>
+    </record>
+
+    <record id="kpi_avg_invoice_value" model="as.kpi">
+        <field name="name">Posted Invoices Avg. Value</field>
+        <field name="technical_name">avg_invoice_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">58</field>
+    </record>
+
+    <record id="kpi_total_outstanding_amount" model="as.kpi">
+        <field name="name">Posted Invoices Total Outstanding Amount</field>
+        <field name="technical_name">total_outstanding_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">59</field>
+    </record>
+
+    <record id="kpi_avg_outstanding_amount" model="as.kpi">
+        <field name="name">Posted Invoices Avg. Outstanding Amount</field>
+        <field name="technical_name">avg_outstanding_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="kpi_total_untaxed_amount_invoice" model="as.kpi">
+        <field name="name">Posted Invoices Total Untaxed Amount</field>
+        <field name="technical_name">total_untaxed_amount_invoice</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">61</field>
+    </record>
+
+    <record id="kpi_total_tax_amount_invoice" model="as.kpi">
+        <field name="name">Posted Invoices Total Taxed Amount</field>
+        <field name="technical_name">total_tax_amount_invoice</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_account" />
+        <field name="model_category">account_move</field>
+        <field name="sequence">62</field>
+    </record>
+
+
+    <!-- Payments Overview -->
+
+    <!-- Payments Transaction -->
+
+    <record id="kpi_total_payment_transactions_count" model="as.kpi">
+        <field name="name">Total Payment Transactions</field>
+        <field name="technical_name">total_payment_transactions_count</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">payment_transaction</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="kpi_total_transaction_amount" model="as.kpi">
+        <field name="name">Total Transaction Amount</field>
+        <field name="technical_name">total_transaction_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">payment_transaction</field>
+        <field name="sequence">71</field>
+    </record>
+
+    <record id="kpi_avg_transaction_amount" model="as.kpi">
+        <field name="name">Average Transaction Amount</field>
+        <field name="technical_name">avg_transaction_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">payment_transaction</field>
+        <field name="sequence">72</field>
+    </record>
+
+    <!-- Account Payments -->
+
+    <record id="kpi_total_customer_payments" model="as.kpi">
+        <field name="name">Total Customer Payments (Qty)</field>
+        <field name="technical_name">total_customer_payments</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">73</field>
+    </record>
+
+    <record id="kpi_total_customer_payment_amount" model="as.kpi">
+        <field name="name">Total Customer Payments Amount</field>
+        <field name="technical_name">total_customer_payment_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">74</field>
+    </record>
+
+    <record id="kpi_total_vendor_payments" model="as.kpi">
+        <field name="name">Total Vendor Payments (Qty)</field>
+        <field name="technical_name">total_vendor_payments</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">75</field>
+    </record>
+
+    <record id="kpi_total_vendor_payment_amount" model="as.kpi">
+        <field name="name">Total Vendor Payments Amount</field>
+        <field name="technical_name">total_vendor_payment_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">76</field>
+    </record>
+
+    <record id="kpi_count_customer_payments_in_process" model="as.kpi">
+        <field name="name">Total In-Process Customer Payments (Qty)</field>
+        <field name="technical_name">count_customer_payments_in_process</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">77</field>
+    </record>
+
+    <record id="kpi_total_customer_payments_in_process_amount" model="as.kpi">
+        <field name="name">In-Process Customer Payments Amount</field>
+        <field name="technical_name">total_customer_payments_in_process_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">78</field>
+    </record>
+
+    <record id="kpi_count_customer_payments_paid" model="as.kpi">
+        <field name="name">Total Paid Customer Payments (Qty)</field>
+        <field name="technical_name">count_customer_payments_paid</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">79</field>
+    </record>
+
+    <record id="kpi_total_customer_payments_paid_amount" model="as.kpi">
+        <field name="name">Paid Customer Payments Amount</field>
+        <field name="technical_name">total_customer_payments_paid_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="kpi_count_vendor_payments_in_process" model="as.kpi">
+        <field name="name">In-Process Vendor Payments (Qty)</field>
+        <field name="technical_name">count_vendor_payments_in_process</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">81</field>
+    </record>
+
+    <record id="kpi_total_vendor_payments_in_process_amount" model="as.kpi">
+        <field name="name">In-Process Vendor Payments Amount</field>
+        <field name="technical_name">total_vendor_payments_in_process_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">82</field>
+    </record>
+
+    <record id="kpi_count_vendor_payments_paid" model="as.kpi">
+        <field name="name">Total Paid Vendor Payments (Qty)</field>
+        <field name="technical_name">count_vendor_payments_paid</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">83</field>
+    </record>
+
+    <record id="kpi_total_vendor_payments_paid_amount" model="as.kpi">
+        <field name="name">Total Paid Vendor Payments Amount</field>
+        <field name="technical_name">total_vendor_payments_paid_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_payments" />
+        <field name="model_category">account_payment</field>
+        <field name="sequence">84</field>
+    </record>
+
+
+    <!-- POS Overview -->
+
+    <record id="kpi_count_new_pos_orders" model="as.kpi">
+        <field name="name">POS Orders Created</field>
+        <field name="technical_name">count_new_pos_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="kpi_count_paid_pos_orders" model="as.kpi">
+        <field name="name">Paid POS Orders</field>
+        <field name="technical_name">count_paid_pos_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">101</field>
+    </record>
+
+    <record id="kpi_count_posted_pos_orders" model="as.kpi">
+        <field name="name">Posted POS Orders</field>
+        <field name="technical_name">count_posted_pos_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">102</field>
+    </record>
+
+    <record id="kpi_count_cancelled_pos_orders" model="as.kpi">
+        <field name="name">Cancelled POS Orders</field>
+        <field name="technical_name">count_cancelled_pos_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">103</field>
+    </record>
+
+    <record id="kpi_count_pos_orders_to_invoice" model="as.kpi">
+        <field name="name">POS Orders To Invoice</field>
+        <field name="technical_name">count_pos_orders_to_invoice</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">104</field>
+    </record>
+
+    <record id="kpi_count_pos_orders_invoiced" model="as.kpi">
+        <field name="name">Fully Invoiced POS Orders</field>
+        <field name="technical_name">count_pos_orders_invoiced</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">105</field>
+    </record>
+
+    <record id="kpi_total_pos_invoiced_amount" model="as.kpi">
+        <field name="name">Total Invoiced POS Amount</field>
+        <field name="technical_name">total_pos_invoiced_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">106</field>
+    </record>
+
+    <record id="kpi_total_pos_amount" model="as.kpi">
+        <field name="name">Total POS Gross Amount</field>
+        <field name="technical_name">total_pos_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">107</field>
+    </record>
+
+    <record id="kpi_total_pos_paid_amount" model="as.kpi">
+        <field name="name">Total POS Paid Amount</field>
+        <field name="technical_name">total_pos_paid_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">108</field>
+    </record>
+
+    <record id="kpi_total_pos_tax_amount" model="as.kpi">
+        <field name="name">Total POS Tax Amount</field>
+        <field name="technical_name">total_pos_tax_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">109</field>
+    </record>
+
+    <record id="kpi_avg_pos_order_value" model="as.kpi">
+        <field name="name">Average POS Order Value</field>
+        <field name="technical_name">avg_pos_order_value</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_order</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record id="kpi_total_pos_payments_count" model="as.kpi">
+        <field name="name">Total POS Payments (Qty)</field>
+        <field name="technical_name">total_pos_payments_count</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_payment</field>
+        <field name="sequence">111</field>
+    </record>
+
+    <record id="kpi_total_pos_payments_amount" model="as.kpi">
+        <field name="name">Total POS Payments Amount</field>
+        <field name="technical_name">total_pos_payments_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_payment</field>
+        <field name="sequence">112</field>
+    </record>
+
+    <record id="kpi_avg_pos_payment_amount" model="as.kpi">
+        <field name="name">Average POS Payment Amount</field>
+        <field name="technical_name">avg_pos_payment_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_pos" />
+        <field name="model_category">pos_payment</field>
+        <field name="sequence">113</field>
+    </record>
+
+
+    <!-- Purchase Overview -->
+
+    <record id="kpi_count_draft_rfqs" model="as.kpi">
+        <field name="name">Total Draft RFQs</field>
+        <field name="technical_name">count_draft_rfqs</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="kpi_count_rfq_sent" model="as.kpi">
+        <field name="name">Total RFQ Sent</field>
+        <field name="technical_name">count_rfq_sent</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">131</field>
+    </record>
+
+    <record id="kpi_count_confirmed_purchase_orders" model="as.kpi">
+        <field name="name">Total Purchase Orders</field>
+        <field name="technical_name">count_confirmed_purchase_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">132</field>
+    </record>
+
+    <record id="kpi_count_cancelled_purchase_orders" model="as.kpi">
+        <field name="name">Total Cancelled Purchase Orders</field>
+        <field name="technical_name">count_cancelled_purchase_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">133</field>
+    </record>
+
+    <record id="kpi_total_purchase_order_amount" model="as.kpi">
+        <field name="name">Total Purchase Order Amount</field>
+        <field name="technical_name">total_purchase_order_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">134</field>
+    </record>
+
+    <record id="kpi_total_purchase_order_tax_amount" model="as.kpi">
+        <field name="name">Total Purchase Order Tax Amount</field>
+        <field name="technical_name">total_purchase_order_tax_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">135</field>
+    </record>
+
+    <record id="kpi_total_purchase_order_untaxed_amount" model="as.kpi">
+        <field name="name">Total Purchase Order Untaxed Amount</field>
+        <field name="technical_name">total_purchase_order_untaxed_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">136</field>
+    </record>
+
+    <record id="kpi_avg_purchase_order_amount" model="as.kpi">
+        <field name="name">Avg Purchase Order Amount</field>
+        <field name="technical_name">avg_purchase_order_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">137</field>
+    </record>
+
+    <record id="kpi_total_rfq_amount" model="as.kpi">
+        <field name="name">Total RFQs Order Amount</field>
+        <field name="technical_name">total_rfq_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">138</field>
+    </record>
+
+    <record id="kpi_total_rfq_tax_amount" model="as.kpi">
+        <field name="name">Total RFQs Order Tax Amount</field>
+        <field name="technical_name">total_rfq_tax_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">139</field>
+    </record>
+
+    <record id="kpi_total_rfq_untaxed_amount" model="as.kpi">
+        <field name="name">Total RFQs Untaxed Amount</field>
+        <field name="technical_name">total_rfq_untaxed_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">140</field>
+    </record>
+
+    <record id="kpi_avg_rfq_amount" model="as.kpi">
+        <field name="name">Avg RFQs Amount Total</field>
+        <field name="technical_name">avg_rfq_amount</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">141</field>
+    </record>
+
+    <record id="kpi_count_fully_billed_purchase_orders" model="as.kpi">
+        <field name="name">Fully Billed Purchase Orders</field>
+        <field name="technical_name">count_fully_billed_purchase_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">142</field>
+    </record>
+
+    <record id="kpi_count_waiting_bills_purchase_orders" model="as.kpi">
+        <field name="name">Waiting Bills Purchase Orders</field>
+        <field name="technical_name">count_waiting_bills_purchase_orders</field>
+        <field name="category_id" ref="business_kpi_report.kpi_category_purchase" />
+        <field name="model_category">purchase_order</field>
+        <field name="sequence">143</field>
+    </record>
+
+
+</odoo>

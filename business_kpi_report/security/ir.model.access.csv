@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_as_kpi,access_as_kpi,model_as_kpi,base.group_user,1,0,0,0
+access_as_kpi_category,access_as_kpi_category,model_as_kpi_category,base.group_user,1,0,0,0

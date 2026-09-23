@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="kpi_category_sales" model="as.kpi.category">
+        <field name="name">Sales Overview</field>
+    </record>
+    <record id="kpi_category_website" model="as.kpi.category">
+        <field name="name">Website Sales Overview</field>
+    </record>
+    <record id="kpi_category_website_only" model="as.kpi.category">
+        <field name="name">Website Overview</field>
+    </record>
+    <record id="kpi_category_account" model="as.kpi.category">
+        <field name="name">Accounting Overview</field>
+    </record>
+    <record id="kpi_category_payments" model="as.kpi.category">
+        <field name="name">Payments Overview</field>
+    </record>
+    <record id="kpi_category_pos" model="as.kpi.category">
+        <field name="name">POS Overview</field>
+    </record>
+    <record id="kpi_category_purchase" model="as.kpi.category">
+        <field name="name">Purchase Overview</field>
+    </record>
+</odoo>

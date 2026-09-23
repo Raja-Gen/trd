@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_daily_kpi_report" model="mail.template">
+            <field name="name">Daily Business KPI Report</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">{{ user.email_formatted or user.company_id.email_formatted }}</field>
+            <field name="use_default_to" eval="True"/>
+            <field name="subject">Daily Business Performance Summary - {{ ctx.get('company_name', '') }}</field>
+    
+            <field name="body_html" type="html">
+                <div style="margin:0; padding:0; font-family:Arial, sans-serif; background:#f8f9fb;">
+    
+                    <!-- HEADER -->
+                    <div style="padding:20px 0; text-align:center;">
+                        <h2 style="margin:0; font-size:22px; color:#333;">
+                            <t t-if="ctx.get('duration_label')">
+                                <t t-out="ctx.get('duration_label')"/> Business Performance Summary
+                            </t>
+                            <t t-if="not ctx.get('duration_label')">
+                                Business Performance Summary
+                            </t>
+                        </h2>
+                        <p style="margin:5px 0 0; font-size:14px; color:#555;">
+                            <span t-out="ctx.get('company_name', '')"/>
+                        </p>
+                    </div>
+    
+                    <div style="padding:0 20px;">
+    
+                        <p style="font-size:15px; color:#444;">
+                            Hello <strong t-out="ctx.get('user_name', '')"/>,<br/><br/>
+                            <t t-if="ctx.get('duration_label')">
+                                Here is your <t t-esc="ctx.get('duration_label').lower()"/> business performance overview:
+                            </t>
+                            <t t-if="not ctx.get('duration_label')">
+                                Here is your business performance overview:
+                            </t>
+                        </p>
+    
+                        <!-- KPI DATA -->
+                        <t t-set="kpi_data" t-value="ctx.get('kpi_data', {})"/>
+                        <t t-foreach="kpi_data.items()" t-as="cat">
+                            
+                            <!-- CATEGORY TITLE -->
+                            <h3 style="margin:20px 0 20px; font-size:27px; color:#333; border-left-width: 9px; border-left:5px solid #4a90e2;border-radius:5px; padding-left:8px;">
+                                <t t-out="cat[0]"/>
+                            </h3>
+    
+                            <!-- KPI GRID -->
+                            <div style="display:grid;    grid-template-columns: repeat(6, 1fr); gap:12px;margin-bottom:50px;">
+                                <t t-foreach="cat[1]" t-as="kpi">
+                                    
+                                    <!-- KPI TILE -->
+                                    <div style="
+                                        flex: 0;
+                                        border-radius: 8px;
+                                        border: 1px solid #e2e8f0;
+                                        padding:12px;
+                                        width: 100%;
+                                        background: #ffffff;
+                                        padding: 15px 20px;
+                                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Soft shadow */
+                                        border-left-width: 5px;
+                                        border-left-style: solid; 
+                                        border-left-color: #4a90e2; 
+                                    ">
+                                        <div style="text-align:center;">
+                                            
+                                            <!-- KPI LABEL -->
+                                            <div style="
+                                                font-size: 15px;
+                                                font-weight: 800;
+                                                color: #64748b; /* Muted label */
+                                                text-transform: uppercase;
+                                                letter-spacing: 1px;
+                                                margin-bottom: 5px;
+                                            ">
+                                                <t t-out="kpi.get('name', 'Metric')"/>
+                                            </div>
+    
+                                            <!-- KPI VALUE -->
+                                            <div style="
+                                                font-size: 24px;
+                                                font-weight: 700;
+                                                color: #4a90e2;
+                                            ">
+                                                <t t-out="kpi['value']"/>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+    
+                                </t>
+                            </div>
+                        </t>
+    
+                        <br/>
+    
+                        <!-- FOOTER TEXT -->
+                        <p style="font-size:15px; color:#666;">
+                            This summary is based on your KPI configuration in Odoo Settings.
+                            You can update your KPI selections at any time.
+                        </p>
+    
+                        <p style="font-size:15px; color:#333;">
+                            Best regards,<br/>
+                            <strong t-out="ctx.get('company_name', '')"/>
+                        </p>
+                    </div>
+                </div>
+            </field>
+    
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
