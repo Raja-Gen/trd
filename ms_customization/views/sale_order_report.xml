@@ -18,6 +18,48 @@
         </xpath>
     </template>
 
+    <!-- Quantity and Unit Price printed with 2 decimals, Raja group companies only.
+
+         DISPLAY ONLY - the stored values keep every decimal they have, and the
+         Decimal Accuracy settings (Product Price and Product Unit are both 3
+         here) are untouched, so every other document and every other company
+         prints exactly what it printed before.
+
+         t-options takes an EXPRESSION, so the options dict is decided once per
+         document and handed to the cells as a variable: an empty dict leaves a
+         t-field on its normal behaviour, which is what the other companies get.
+         The two t-sets go before the address block, which is above the lines
+         table, so they are in scope inside the line loop.
+
+         Note for the client: a price that really carries a third decimal now
+         prints rounded (1.021 -> 1.02). On the 2026-09-28 data that is 178 Raja
+         order lines. Nothing is rounded in the database and the order totals
+         still come from the full values, so a printed unit price x quantity may
+         not exactly match the printed line total on those lines. -->
+    <template id="report_saleorder_document_two_decimals" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-set='address']" position="before">
+            <t t-set="ms_2dp" t-value="{'widget': 'float', 'precision': 2} if doc.ms_is_raja_company else {}"/>
+            <t t-set="ms_2dp_price" t-value="{'widget': 'float', 'precision': 2} if doc.ms_is_raja_company else {'widget': 'float', 'decimal_precision': 'Product Price'}"/>
+            <t t-set="ms_2dp_qty" t-value="{'widget': 'float', 'precision': 2} if doc.ms_is_raja_company else {'widget': 'float', 'decimal_precision': 'Product Unit'}"/>
+        </xpath>
+        <!-- QUANTITY column, and the second line it prints when the sales UoM
+             differs from the product's own UoM. -->
+        <xpath expr="//td[@name='td_product_quantity']/span[@t-field='line.product_uom_qty']" position="attributes">
+            <attribute name="t-options">ms_2dp</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_product_quantity']//span[@t-esc='quantity_in_product_uom']" position="attributes">
+            <attribute name="t-options">ms_2dp_qty</attribute>
+        </xpath>
+        <!-- UNIT PRICE column: the plain price, and the one core prints instead
+             when the line carries a negative discount. -->
+        <xpath expr="//td[@name='td_product_priceunit']/span[@t-field='line.price_unit']" position="attributes">
+            <attribute name="t-options">ms_2dp</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_product_priceunit']/span[@t-out]" position="attributes">
+            <attribute name="t-options">ms_2dp_price</attribute>
+        </xpath>
+    </template>
+
     <!-- Footer on the quotation / sale order PDF for the Raja group companies.
 
          The footer is normally one HTML blob, res.company.report_footer, edited
