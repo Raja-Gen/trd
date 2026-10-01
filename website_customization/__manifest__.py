@@ -15,6 +15,12 @@
         "wizards/freeze_stock_views.xml",
         "security/ir.model.access.csv"
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "website_customization/static/src/js/variant_availability.js",
+            "website_customization/static/src/scss/ibuysafety_mobile.scss",
+        ],
+    },
     "license": "LGPL-3",
     "installable": True,
     "application": False,
