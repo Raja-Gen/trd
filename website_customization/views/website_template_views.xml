@@ -23,7 +23,7 @@
 
     <template id="website_sale_product_disable_add_to_cart" inherit_id="website_sale.cta_wrapper">
         <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
-            <attribute name="t-attf-class">#{'btn btn-light js_add_cart' + (' disabled' if product.freeze_stock else '')}</attribute>
+            <attribute name="t-attf-class" add="{{'opacity-50 pe-none' if product.freeze_stock else ''}}" separator=" "/>
         </xpath>
 
        <xpath expr="//div[@id='add_to_cart_wrap']" position="after">

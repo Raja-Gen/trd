@@ -1,0 +1,202 @@
+// iBuySafety homepage: mobile-only layout fixes. Desktop is untouched.
+// The selectors target ids saved in the editor-built homepage, so these rules
+// stop applying if the hero carousel or the category section is replaced.
+html[data-website-id="3"] {
+    @include media-breakpoint-down(md) {
+        // Hero banner: show the whole 16:9 image instead of a cropped, tall slide.
+        #myCarousel1780296237548 .carousel-item {
+            min-height: 0 !important;
+            aspect-ratio: 16 / 9;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            background-size: cover;
+
+            // Only the slides Bootstrap is showing; hidden slides keep display: none.
+            &.active,
+            &.carousel-item-next,
+            &.carousel-item-prev {
+                display: flex;
+            }
+
+            > .container {
+                align-self: center;
+            }
+
+            .carousel-content h2 {
+                font-size: 1.4rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .carousel-content .btn {
+                padding: 0.25rem 0.75rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        // Shop by Category: two cards per row with square images.
+        #Head-Protection {
+            .row > .s_col_no_bgcolor {
+                flex: 0 0 50%;
+                max-width: 50%;
+                padding-bottom: 1rem !important;
+            }
+
+            .card-img-top {
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+            }
+
+            .card-body {
+                padding: 0.5rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+// Page-specific blocks: homepage is website.page 12, About Us is website.page 13.
+html[data-main-object="website.page(12,)"] {
+    @include media-breakpoint-down(md) {
+        // Brands in Our Portfolio: three small logos per row instead of one huge one.
+        .s_references {
+            .o_grid_mode > .o_grid_item_image {
+                flex: 0 0 33.333%;
+                max-width: 33.333%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .o_grid_item_image img {
+                max-height: 56px;
+                width: auto;
+                object-fit: contain;
+            }
+        }
+
+        // Customer testimonials: one swipeable row instead of four stacked cards.
+        .s_reviews_wall {
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+
+            .row {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                > [data-name="Review"] {
+                    flex: 0 0 85%;
+                    max-width: 85%;
+                    scroll-snap-align: center;
+                    // Room for the quote icon that sits on the card's top edge.
+                    padding-top: 1.75rem !important;
+                }
+            }
+        }
+
+        // FAQ: drop the side image and the empty line, tighten the spacing.
+        .s_accordion_image {
+            padding-top: 32px !important;
+            padding-bottom: 32px !important;
+
+            .row > .offset-lg-1:has(> img) {
+                display: none;
+            }
+
+            p:has(> br:only-child) {
+                display: none;
+            }
+        }
+    }
+}
+
+html[data-main-object="website.page(13,)"] {
+    @include media-breakpoint-down(md) {
+        // Key metrics: the three numbers side by side on one line.
+        .s_numbers {
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+
+            .row > .col-lg-2 {
+                flex: 0 0 33.333%;
+                max-width: 33.333%;
+                margin-left: 0;
+            }
+
+            .s_number {
+                font-size: 2rem;
+            }
+
+            .h5-fs {
+                font-size: 0.85rem;
+            }
+
+            // "Key Metrics of / Our Achievements" on a single line.
+            h2 br {
+                display: none;
+            }
+        }
+
+        // Process steps: compact list, small number on the left, text on the right.
+        .s_process_steps {
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+
+            .s_process_step {
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+                padding-top: 0.75rem !important;
+                padding-bottom: 0.75rem !important;
+            }
+
+            .s_process_step_number {
+                flex: 0 0 2.75rem;
+                width: 2.75rem !important;
+                height: 2.75rem !important;
+                margin: 0 !important;
+
+                h3 {
+                    font-size: 1.1rem;
+                }
+            }
+
+            .s_process_step_content {
+                margin-top: 0 !important;
+                padding: 0 !important;
+                text-align: start !important;
+
+                h3 {
+                    font-size: 1.1rem;
+                    margin-bottom: 0.25rem;
+                }
+
+                p {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+// Contact Us is website.page 20.
+html[data-main-object="website.page(20,)"] {
+    @include media-breakpoint-down(md) {
+        // The grid stacks blocks in the order they were added, which put the
+        // cover image after the contact details; show it first instead.
+        .s_contact_info .o_grid_mode > .o_grid_item_image {
+            order: -1;
+            margin-bottom: 1rem !important;
+        }
+    }
+}

@@ -18,6 +18,7 @@
     "assets": {
         "web.assets_frontend": [
             "website_customization/static/src/js/variant_availability.js",
+            "website_customization/static/src/scss/ibuysafety_mobile.scss",
         ],
     },
     "license": "LGPL-3",
