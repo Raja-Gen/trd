@@ -1,7 +1,32 @@
-// iBuySafety homepage: mobile-only layout fixes. Desktop is untouched.
+// iBuySafety layout fixes. Everything is mobile-only except the desktop hero
+// banner rule just below.
 // The selectors target ids saved in the editor-built homepage, so these rules
 // stop applying if the hero carousel or the category section is replaced.
 html[data-website-id="3"] {
+    @include media-breakpoint-up(md) {
+        // Hero banner on desktop: a fixed wide shape that drops the top strip of
+        // the 16:9 images (sky) and keeps everything from there to the taglines.
+        #myCarousel1780296237548 .carousel-item {
+            min-height: 0 !important;
+            aspect-ratio: 2.75 / 1;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            // Not !important: a focus point set with the editor's crosshair wins.
+            background-position: center 27%;
+
+            // Only the slides Bootstrap is showing; hidden slides keep display: none.
+            &.active,
+            &.carousel-item-next,
+            &.carousel-item-prev {
+                display: flex;
+            }
+
+            > .container {
+                align-self: center;
+            }
+        }
+    }
+
     @include media-breakpoint-down(md) {
         // Hero banner: show the whole 16:9 image instead of a cropped, tall slide.
         #myCarousel1780296237548 .carousel-item {
