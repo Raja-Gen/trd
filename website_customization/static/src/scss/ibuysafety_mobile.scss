@@ -48,6 +48,17 @@ html[data-website-id="3"] {
             }
         }
 
+        // Welcome-offer popup: its image block was forced to half the screen
+        // height and cropped left/right; take the 3:2 shape of the image instead.
+        #sPopup1790497029306 .modal-content > section.oe_img_bg {
+            min-height: 0 !important;
+            aspect-ratio: 3 / 2;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            background-size: cover;
+            background-position: center;
+        }
+
         // Hero banner text: small enough to fit the short mobile banner.
         #myCarousel1780296237548 .carousel-item {
             .carousel-content h2 {
