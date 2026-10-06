@@ -1,60 +1,63 @@
-// iBuySafety layout fixes. Everything is mobile-only except the desktop hero
-// banner rule just below.
+// iBuySafety layout fixes. Everything is mobile-only except the hero banner
+// shape just below, which applies to every screen size.
 // The selectors target ids saved in the editor-built homepage, so these rules
 // stop applying if the hero carousel or the category section is replaced.
 html[data-website-id="3"] {
-    @include media-breakpoint-up(md) {
-        // Hero banner on desktop: a fixed wide shape that drops the top strip of
-        // the 16:9 images (sky) and keeps everything from there to the taglines.
-        #myCarousel1780296237548 .carousel-item {
-            min-height: 0 !important;
-            aspect-ratio: 2.75 / 1;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            // Not !important: a focus point set with the editor's crosshair wins.
-            background-position: center 27%;
+    // Hero banner, all screen sizes: one fixed 2.75:1 shape, so a banner image
+    // made at 1920x698 shows whole on desktop and mobile alike. Older 16:9
+    // images lose their top strip (sky) and keep everything down to the taglines.
+    #myCarousel1780296237548 .carousel-item {
+        min-height: 0 !important;
+        aspect-ratio: 2.75 / 1;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        background-size: cover;
+        // Not !important: a focus point set with the editor's crosshair wins.
+        background-position: center 27%;
 
-            // Only the slides Bootstrap is showing; hidden slides keep display: none.
-            &.active,
-            &.carousel-item-next,
-            &.carousel-item-prev {
-                display: flex;
-            }
+        // Only the slides Bootstrap is showing; hidden slides keep display: none.
+        &.active,
+        &.carousel-item-next,
+        &.carousel-item-prev {
+            display: flex;
+        }
 
-            > .container {
-                align-self: center;
-            }
+        > .container {
+            align-self: center;
         }
     }
 
     @include media-breakpoint-down(md) {
-        // Hero banner: show the whole 16:9 image instead of a cropped, tall slide.
+        // Mobile header: the wide logo at the theme's 3.75rem height pushed the
+        // menu button onto a second line. Smaller logo, everything on one row.
+        header .o_header_mobile {
+            .o_main_nav {
+                flex-wrap: nowrap;
+                align-items: center;
+            }
+
+            .navbar-brand {
+                font-size: 1.6rem;
+                padding-top: 0.25rem;
+                padding-bottom: 0.25rem;
+
+                img {
+                    height: 2.5rem;
+                    width: auto;
+                }
+            }
+        }
+
+        // Hero banner text: small enough to fit the short mobile banner.
         #myCarousel1780296237548 .carousel-item {
-            min-height: 0 !important;
-            aspect-ratio: 16 / 9;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            background-size: cover;
-
-            // Only the slides Bootstrap is showing; hidden slides keep display: none.
-            &.active,
-            &.carousel-item-next,
-            &.carousel-item-prev {
-                display: flex;
-            }
-
-            > .container {
-                align-self: center;
-            }
-
             .carousel-content h2 {
-                font-size: 1.4rem;
-                margin-bottom: 0.5rem;
+                font-size: 1.1rem;
+                margin-bottom: 0.25rem;
             }
 
             .carousel-content .btn {
-                padding: 0.25rem 0.75rem;
-                font-size: 0.85rem;
+                padding: 0.15rem 0.6rem;
+                font-size: 0.75rem;
             }
         }
 
