@@ -35,4 +35,19 @@
         </xpath>
 
     </template>
+
+    <template id="website_sale_product_document" inherit_id="website_sale.product">
+        <xpath expr="//t[@t-call='website_sale.product_terms_and_conditions']" position="after">
+            <div t-if="website.is_ibuysafety_company and product.website_document" class="o_wc_product_document o_not_editable mt-3">
+                <t t-set="document_url" t-value="'/web/content/product.template/%s/website_document?filename_field=website_document_name' % product.id"/>
+                <i class="fa fa-file-text-o me-1" role="img" aria-label="Document"/>
+                <a t-att-href="document_url" target="_blank" rel="noopener"
+                   t-out="product.website_document_name or 'Product Document'"/>
+                <a t-att-href="document_url" target="_blank" rel="noopener"
+                   class="ms-2" title="Open in a new tab" aria-label="Open in a new tab">
+                    <i class="fa fa-external-link"/>
+                </a>
+            </div>
+        </xpath>
+    </template>
 </odoo>

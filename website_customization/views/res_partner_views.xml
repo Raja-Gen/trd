@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_website_pricelists" model="ir.ui.view">
+        <field name="name">res.partner.form.website.pricelists</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="product.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <field name="property_product_pricelist" position="after">
+                <field name="is_ibuysafety_company" invisible="1"/>
+                <field name="website_pricelist_ids"
+                       widget="many2many_tags"
+                       options="{'no_create': True}"
+                       domain="[('company_id', 'in', [False, current_company_id])]"
+                       groups="product.group_product_pricelist"
+                       invisible="not is_ibuysafety_company or (parent_id and not is_company)"/>
+            </field>
+        </field>
+    </record>
+</odoo>
