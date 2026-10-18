@@ -10,10 +10,22 @@ class ProductTemplate(models.Model):
         help="If checked, this product cannot be sold (website add-to-cart disabled and sale order confirmation blocked)."
     )
 
+    website_document = fields.Binary(
+        string="Website Document",
+        attachment=True,
+        help="File shown as a link on the product page of the website, e.g. a datasheet or catalogue.",
+    )
+    website_document_name = fields.Char(string="Website Document Name")
+    is_ibuysafety_company = fields.Boolean(compute="_compute_is_ibuysafety_company")
+
     website_qty_available = fields.Float(
         string="Website Quantity",
         compute='_compute_website_qty_available'
     )
+
+    @api.depends_context("company")
+    def _compute_is_ibuysafety_company(self):
+        self.is_ibuysafety_company = self.env.company.is_ibuysafety_company
 
     def _compute_website_qty_available(self):
         for rec in self:

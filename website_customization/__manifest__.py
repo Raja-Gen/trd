@@ -7,6 +7,8 @@
     "depends": ["website", "website_sale","stock","sale","sale_management"],
     "data": [
         "views/product_template.xml",
+        "views/res_company_views.xml",
+        "views/res_partner_views.xml",
         "views/website_template_views.xml",
         "data/abandoned_cart_items.xml",
         "data/cart_email_template.xml",
