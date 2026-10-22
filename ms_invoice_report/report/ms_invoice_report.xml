@@ -113,6 +113,9 @@
                         <div class="ms-aiw-label">AMOUNT IN WORDS</div>
                         <div class="ms-aiw-value" t-out="o._ms_amount_in_words()"/>
                         <div class="ms-aiw-rule"/>
+                        <!-- the invoice's Terms & Conditions (narration) -->
+                        <div class="ms-terms" t-if="not is_html_empty(o.narration)"
+                             t-field="o.narration"/>
                     </td>
                     <td class="ms-tot-r">
                         <div class="ms-sum">
