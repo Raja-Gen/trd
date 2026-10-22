@@ -18,6 +18,38 @@
         </xpath>
     </template>
 
+    <!-- PART NO. column on the quotation / sale order PDF, Safety Plus World only.
+
+         Printed only when at least one line carries a part number, so an order
+         with none keeps the layout it has today.
+
+         The column is anchored on the QUANTITY cell, not on the description:
+         report_customziation inserts its own Sr. No. and image cells before the
+         description, and which of the two inherited views Odoo applies first is
+         not guaranteed - anchoring here keeps the header and the body cells
+         aligned either way. Section and combo rows span one cell more when the
+         column shows, which is what keeps their totals in the right column. -->
+    <template id="report_saleorder_document_part_number" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-set='address']" position="before">
+            <t t-set="ms_show_part_no"
+               t-value="doc.ms_is_spw_company and any(line.ms_part_number for line in doc.order_line)"/>
+        </xpath>
+        <xpath expr="//th[@name='th_quantity']" position="before">
+            <th t-if="ms_show_part_no" name="ms_th_part_number" class="text-start text-nowrap">Part No.</th>
+        </xpath>
+        <xpath expr="//tr[@name='tr_product']/td[@name='td_product_quantity']" position="before">
+            <td t-if="ms_show_part_no" name="ms_td_part_number" class="text-start">
+                <span t-field="line.ms_part_number"/>
+            </td>
+        </xpath>
+        <xpath expr="//tr[@name='tr_section']/t[@t-set='section_name_colspan'][1]" position="attributes">
+            <attribute name="t-value">3 + (1 if display_discount else 0) + (1 if display_taxes else 0) + (1 if ms_show_part_no else 0)</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_combo_name']" position="attributes">
+            <attribute name="t-att-colspan">3 + (1 if display_discount else 0) + (1 if display_taxes else 0) + (1 if ms_show_part_no else 0)</attribute>
+        </xpath>
+    </template>
+
     <!-- Quantity and Unit Price printed with 2 decimals, Raja group companies only.
 
          DISPLAY ONLY - the stored values keep every decimal they have, and the

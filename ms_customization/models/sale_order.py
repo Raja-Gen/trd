@@ -12,6 +12,10 @@ MS_RAJA_COMPANIES = [
     "RAJA INTERNATIONAL GENERAL TRADING (LLC)",
 ]
 
+# Safety Plus World is a separate company in the same database, not one of the
+# three above, so it needs its own flag - see sale_order_line.ms_part_number.
+MS_SPW_COMPANY = "SAFETY PLUS WORLD (UK) LIMITED"
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -34,6 +38,19 @@ class SaleOrder(models.Model):
     def _compute_ms_is_raja_company(self):
         for order in self:
             order.ms_is_raja_company = order.company_id.name in MS_RAJA_COMPANIES
+
+    ms_is_spw_company = fields.Boolean(
+        compute="_compute_ms_is_spw_company",
+        string="Is Safety Plus World",
+        help="Drives whether Part Number is shown on the lines and printed. Reads "
+             "the order's OWN company, so the column appears on a Safety Plus "
+             "World order whoever is looking at it.",
+    )
+
+    @api.depends("company_id")
+    def _compute_ms_is_spw_company(self):
+        for order in self:
+            order.ms_is_spw_company = order.company_id.name == MS_SPW_COMPANY
 
     def _ms_leads_to_sync(self):
         return self.opportunity_id.filtered(lambda lead: lead.type == "opportunity")
