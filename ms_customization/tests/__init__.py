@@ -8,3 +8,4 @@ from . import test_attn_to
 from . import test_sale_report_footer
 from . import test_crm_inventory_scope
 from . import test_sale_report_decimals
+from . import test_sale_part_number

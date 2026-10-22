@@ -23,4 +23,33 @@
         </field>
     </record>
 
+    <!-- "Part Number" on the order lines, for Safety Plus World only.
+
+         The column is hidden rather than removed, so a line keeps whatever was
+         typed if an order is ever moved to another company. column_invisible
+         reads the ORDER's company through parent, which is why the flag lives
+         on sale.order and is related down to the line for the PDF. -->
+    <record id="view_order_form_part_number" model="ir.ui.view">
+        <field name="name">sale.order.form.part.number</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- parent.ms_is_spw_company only resolves if the flag is in the
+                 order's own view, so put it there first. -->
+            <field name="partner_id" position="after">
+                <field name="ms_is_spw_company" invisible="1"/>
+            </field>
+            <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
+                <field name="ms_part_number"
+                       column_invisible="not parent.ms_is_spw_company"
+                       optional="show"/>
+            </xpath>
+            <!-- The same field in the line's own form, used on small screens
+                 and when a line is opened from the list. -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="before">
+                <field name="ms_part_number" invisible="not parent.ms_is_spw_company"/>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
