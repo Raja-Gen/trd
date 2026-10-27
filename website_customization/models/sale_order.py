@@ -107,3 +107,70 @@ class SaleOrder(models.Model):
                 'is_stock_frozen': False,
                 'freeze_expiry_date': False,
             })
+
+    placed_on_account = fields.Boolean(
+        string="Placed on Account",
+        readonly=True,
+        copy=False,
+        help="The customer placed this website order against their credit limit instead of paying online.",
+    )
+
+    def _get_free_delivery_progress(self):
+        """Free delivery progress shown on the iBuySafety cart page.
+
+        The threshold comes from the delivery method's "Free if order amount is
+        above" setting: the selected method if it has one, else the lowest one
+        available for this order. Before the customer has given an address, the
+        methods published on the website are used, as availability is unknown.
+        """
+        self.ensure_one()
+        order = self.sudo()
+        if not order.website_id.is_ibuysafety_company or order.only_services:
+            return False
+        if order.partner_shipping_id.country_id:
+            carriers = order._get_delivery_methods()
+        else:
+            carriers = self.env['delivery.carrier'].sudo().search([
+                ('website_published', '=', True),
+                *self.env['delivery.carrier']._check_company_domain(order.company_id),
+            ])
+        carriers = order.carrier_id.filtered('free_over') or carriers.filtered('free_over')
+        carriers = carriers.filtered(lambda c: c.delivery_type != 'base_on_rule' and c.amount > 0)
+        if not carriers:
+            return False
+        carrier = min(carriers, key=lambda c: c.amount)
+        threshold = carrier._compute_currency(order, carrier.amount, 'company_to_pricelist')
+        amount = order._compute_amount_total_without_delivery()
+        return {
+            'threshold': threshold,
+            'remaining': max(threshold - amount, 0.0),
+            'percent': min(100.0, max(amount, 0.0) * 100.0 / threshold),
+            'currency': order.currency_id,
+        }
+
+    def _get_pay_on_account_info(self):
+        """Credit details for the "Pay on Account" option of the website checkout.
+
+        Available credit = credit limit - credit used (see
+        `res.partner._get_pay_on_account_credit_used`), in the company currency.
+
+        :return: False when the customer may not buy on account, else a dict.
+        """
+        self.ensure_one()
+        order = self.sudo()
+        company = order.company_id
+        partner = order.partner_id.commercial_partner_id.with_company(company).sudo()
+        if (
+            not order.website_id.is_ibuysafety_company
+            or order.partner_id == order.website_id.user_id.partner_id
+            or not partner.allow_pay_on_account
+        ):
+            return False
+        today = fields.Date.context_today(order)
+        available = partner.credit_limit - partner._get_pay_on_account_credit_used(company)
+        amount = order.currency_id._convert(order.amount_total, company.currency_id, company, today)
+        return {
+            'available': available,
+            'currency': company.currency_id,
+            'enough': partner.credit_limit > 0 and amount <= available,
+        }

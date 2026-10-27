@@ -4,7 +4,7 @@
     "version": "19.0.1.0.0",
     "category": "Website",
     "summary": "Customize the website layout and design",
-    "depends": ["website", "website_sale","stock","sale","sale_management"],
+    "depends": ["website", "website_sale","stock","sale","sale_management","delivery"],
     "data": [
         "views/product_template.xml",
         "views/res_company_views.xml",

@@ -19,4 +19,15 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_order_form_placed_on_account" model="ir.ui.view">
+        <field name="name">sale.order.form.placed.on.account</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="placed_on_account" invisible="not placed_on_account"/>
+            </field>
+        </field>
+    </record>
 </odoo>
