@@ -94,14 +94,22 @@
                 <tbody>
                     <tr t-foreach="lines" t-as="line"
                         t-attf-class="#{'ms-first ' if line_first else ''}#{'ms-last' if line_last else ''}">
-                        <td class="ms-c1"><span t-out="line['seq']"/></td>
-                        <td class="ms-c2">
-                            <div class="ms-ln-title" t-out="line['title']"/>
-                            <div class="ms-ln-desc" t-out="line['desc']"/>
-                        </td>
-                        <td class="ms-c3"><span t-out="line['qty']"/></td>
-                        <td class="ms-c4"><span t-out="'{0:,.{1}f}'.format(line['price'], dp)"/></td>
-                        <td class="ms-c5"><span t-out="'{0:,.{1}f}'.format(line['amount'], dp)"/></td>
+                        <t t-if="line['kind'] == 'section'">
+                            <td class="ms-sec" colspan="5"><span t-out="line['title']"/></td>
+                        </t>
+                        <t t-elif="line['kind'] == 'note'">
+                            <td class="ms-note" colspan="5"><span t-out="line['title']"/></td>
+                        </t>
+                        <t t-else="">
+                            <td class="ms-c1"><span t-out="line['seq']"/></td>
+                            <td class="ms-c2">
+                                <div class="ms-ln-title" t-out="line['title']"/>
+                                <div class="ms-ln-desc" t-out="line['desc']"/>
+                            </td>
+                            <td class="ms-c3"><span t-out="line['qty']"/></td>
+                            <td class="ms-c4"><span t-out="'{0:,.{1}f}'.format(line['price'], dp)"/></td>
+                            <td class="ms-c5"><span t-out="'{0:,.{1}f}'.format(line['amount'], dp)"/></td>
+                        </t>
                     </tr>
                 </tbody>
             </table>

@@ -133,6 +133,22 @@ body.o_body_pdf, body.o_body_html,
 /* min-height keeps the row rhythm when a line has no sub-description */
 .ms-lt .ms-ln-desc  { font-size: 11px; line-height: 16px; min-height: 16px; }
 
+/* section and note rows span the table, so they carry both side borders themselves */
+.ms-lt td.ms-sec {
+    background: #E3F1FA; color: #161F3B; text-align: left;
+    font-family: 'MSPopB', sans-serif; font-size: 12px; line-height: 16px;
+    border-left: 1px solid #C8C7C7;
+    padding: 7px 8px 6px 17px;
+}
+.ms-lt td.ms-note {
+    color: #161F3B; text-align: left; font-style: italic;
+    font-size: 11px; line-height: 16px; white-space: pre-line;
+    border-left: 1px solid #C8C7C7;
+    padding: 7px 8px 6px 17px;
+}
+.ms-lt tr.ms-last td.ms-sec,
+.ms-lt tr.ms-last td.ms-note { border-bottom-left-radius: 9px; border-bottom-right-radius: 9px; }
+
 /* ------------------------------------------------- amount in words + totals */
 .ms-tot { width: 718px; border-collapse: collapse; table-layout: fixed; }
 .ms-tot > tbody > tr > td { vertical-align: top; }
