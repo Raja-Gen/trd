@@ -37,13 +37,22 @@ class AccountMove(models.Model):
         return text or "0"
 
     def _ms_report_lines(self):
-        """Printable lines, in order, numbered from 1."""
+        """Printable rows, in order: sections and notes as typed, products numbered from 1."""
         self.ensure_one()
         res = []
-        lines = self.invoice_line_ids.filtered(lambda l: l.display_type == "product")
-        for index, line in enumerate(lines, start=1):
+        lines = self.invoice_line_ids.filtered(
+            lambda l: l.display_type in ("product", "line_section", "line_subsection", "line_note")
+        ).sorted(lambda l: (l.sequence, l.id))  # the model's own order is by id, not as typed
+        index = 0
+        for line in lines:
+            if line.display_type != "product":
+                kind = "note" if line.display_type == "line_note" else "section"
+                res.append({"kind": kind, "title": line.name or ""})
+                continue
+            index += 1
             title, desc = self._ms_line_text(line)
             res.append({
+                "kind": "product",
                 "seq": index,
                 "title": title,
                 "desc": desc,
@@ -67,8 +76,20 @@ class AccountMove(models.Model):
         }
 
     def _ms_amount_in_words(self):
+        """The client's wording: no commas, and "Kuwaiti Dinars" for KWD.
+
+        Only this report reads that way - the currency's own unit label ("Dinar")
+        is left alone, since other documents use it too. The label is matched in
+        English because the rest of this report is English whatever the user's
+        language.
+        """
         self.ensure_one()
-        return self.currency_id.amount_to_text(self.amount_total)
+        currency = self.currency_id.with_context(lang="en_US")
+        text = currency.amount_to_text(self.amount_total).replace(",", "")
+        if currency.name == "KWD":
+            unit = "Kuwaiti Dinar" if int(self.amount_total) == 1 else "Kuwaiti Dinars"
+            text = text.replace(currency.currency_unit_label, unit, 1)
+        return text
 
     def _ms_partner_lines(self):
         """The BILL TO block: address / phone / email / VAT, blanks dropped."""
