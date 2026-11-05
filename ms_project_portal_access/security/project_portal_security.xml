@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Core lets a portal user in through ANY follower under their commercial
+         partner, so contacts of one customer see each other's tasks. Rules of a
+         group are OR-ed and can only widen that, so narrowing it takes a global
+         rule. Internal users and companies without the flag get an always-true
+         domain and keep Odoo's behaviour; "user.share" is the portal/public test. -->
+    <record id="rule_task_portal_own_access" model="ir.rule">
+        <field name="name">Project/Task: portal users see what was given to them personally (per company flag)</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[(1, '=', 1)] if not user.share else [
+            '|', '|', '|',
+                ('company_id', '=', False),
+                ('company_id.ms_project_portal', '=', False),
+                ('message_partner_ids', 'in', [user.partner_id.id]),
+                ('project_id.collaborator_ids', 'any', [
+                    ('partner_id', '=', user.partner_id.id),
+                    ('limited_access', '=', False),
+                ]),
+        ]</field>
+    </record>
+
+    <record id="rule_project_portal_own_access" model="ir.rule">
+        <field name="name">Project: portal users see what was given to them personally (per company flag)</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[(1, '=', 1)] if not user.share else [
+            '|', '|',
+                ('company_id', '=', False),
+                ('company_id.ms_project_portal', '=', False),
+                ('message_partner_ids', 'in', [user.partner_id.id]),
+        ]</field>
+    </record>
+
+</odoo>

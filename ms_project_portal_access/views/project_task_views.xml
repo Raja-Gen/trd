@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_task_form2_ms_portal" model="ir.ui.view">
+        <field name="name">project.task.form.ms.portal</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_ids'][@options]" position="after">
+                <field name="ms_portal_enabled" invisible="1" groups="project.group_project_user"/>
+                <field name="ms_portal_partner_ids"
+                       widget="many2many_tags"
+                       options="{'no_create': True}"
+                       domain="[('user_ids.share', '=', True)]"
+                       invisible="not ms_portal_enabled or not project_id"
+                       groups="project.group_project_user"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
